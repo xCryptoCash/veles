@@ -656,7 +656,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     result.push_back(Pair("previousblockhash", pblock->hashPrevBlock.GetHex()));
     result.push_back(Pair("transactions", transactions));
     result.push_back(Pair("coinbaseaux", aux));
-    result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0]->vout[0].nValue));
+    result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0]->GetValueOut()));
     result.push_back(Pair("longpollid", chainActive.Tip()->GetBlockHash().GetHex() + i64tostr(nTransactionsUpdatedLast)));
     result.push_back(Pair("target", hashTarget.GetHex()));
     result.push_back(Pair("mintime", (int64_t)pindexPrev->GetMedianTimePast()+1));
@@ -680,7 +680,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
 
     // FXTC BEGIN
-    CAmount founderReward = GetFounderReward(pindexPrev->nHeight+1,GetBlockSubsidy(pblock->nBits, pindexPrev->nHeight+1, consensusParams));
+    CAmount founderReward = GetFounderReward(pindexPrev->nHeight+1,pblock->vtx[0]->GetValueOut());
     if (founderReward > 0) {
         UniValue founderRewardObj(UniValue::VOBJ);
         founderRewardObj.pushKV("founderpayee", Params().FounderAddress().c_str());
