@@ -7,6 +7,7 @@
 #include <validation.h>
 
 #include <arith_uint256.h>
+#include <base58.h>
 #include <chain.h>
 #include <chainparams.h>
 #include <checkpoints.h>
@@ -18,7 +19,6 @@
 #include <cuckoocache.h>
 #include <hash.h>
 #include <init.h>
-#include <key_io.h>
 #include <policy/fees.h>
 #include <policy/policy.h>
 #include <policy/rbf.h>

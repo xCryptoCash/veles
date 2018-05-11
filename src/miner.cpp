@@ -7,6 +7,7 @@
 #include <miner.h>
 
 #include <amount.h>
+#include <base58.h>
 #include <chain.h>
 #include <chainparams.h>
 #include <coins.h>
@@ -15,7 +16,6 @@
 #include <consensus/merkle.h>
 #include <consensus/validation.h>
 #include <hash.h>
-#include <key_io.h>
 #include <net.h>
 #include <policy/feerate.h>
 #include <policy/policy.h>
