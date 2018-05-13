@@ -356,6 +356,7 @@ crypto_libbitcoin_crypto_base_a_SOURCES = \
 
 # crypto algo libraries
 crypto_libbitcoin_crypto_base_a_SOURCES += \
+  crypto/aes_helper.c \
   crypto/blake.c \
   crypto/bmw.c \
   crypto/cubehash.c \
@@ -369,6 +370,7 @@ crypto_libbitcoin_crypto_base_a_SOURCES += \
   crypto/Lyra2.h \
   crypto/Lyra2Z.c \
   crypto/Lyra2Z.h \
+  crypto/nist5.h \
   crypto/scrypt-sse2.cpp \
   crypto/scrypt.cpp \
   crypto/scrypt.h \
@@ -386,7 +388,7 @@ crypto_libbitcoin_crypto_base_a_SOURCES += \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
   crypto/sph_skein.h \
-  crypto/sph_types.h\
+  crypto/sph_types.h \
   crypto/Sponge.c \
   crypto/Sponge.h \
   crypto/x11.h
