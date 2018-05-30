@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2018 The Bitcoin Core developers
+// Copyright (c) 2014-2017 The Dash Core developers
+// Copyright (c) 2018 FXTC developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -83,7 +85,15 @@ public:
     const std::string& Bech32HRP() const { return bech32_hrp; }
     const std::vector<SeedSpec6>& FixedSeeds() const { return vFixedSeeds; }
     const CCheckpointData& Checkpoints() const { return checkpointData; }
+    int PoolMaxTransactions() const { return nPoolMaxTransactions; }
+    int FulfilledRequestExpireTime() const { return nFulfilledRequestExpireTime; }
     const ChainTxData& TxData() const { return chainTxData; }
+    // Dash
+    std::string SporkPubKey() const { return strSporkPubKey; }
+    //
+    // FXTC BEGIN
+    std::string FounderAddress() const { return founderAddress; }
+    // FXTC END
 protected:
     CChainParams() {}
 
@@ -103,8 +113,17 @@ protected:
     bool fRequireStandard;
     bool fMineBlocksOnDemand;
     CCheckpointData checkpointData;
+    int nPoolMaxTransactions;
+    int nFulfilledRequestExpireTime;
     ChainTxData chainTxData;
     bool m_fallback_fee_enabled;
+    // Dash
+    std::string strSporkPubKey;
+    //-//std::string strMasternodePaymentsPubKey;
+    //
+    // FXTC BEGIN
+    std::string founderAddress;
+    // FXTC END
 };
 
 /**
