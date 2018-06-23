@@ -536,7 +536,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageGroup(_("Block creation options:"));
     strUsage += HelpMessageOpt("-blockmaxweight=<n>", strprintf(_("Set maximum BIP141 block weight (default: %d)"), DEFAULT_BLOCK_MAX_WEIGHT));
     strUsage += HelpMessageOpt("-blockmintxfee=<amt>", strprintf(_("Set lowest fee rate (in %s/kB) for transactions to be included in block creation. (default: %s)"), CURRENCY_UNIT, FormatMoney(DEFAULT_BLOCK_MIN_TX_FEE)));
-    strUsage += HelpMessageOpt("-algo=<algo>", strprintf(_("Mining algorithm: sha256d, scrypt, nist5, lyra2z, x11 (default: sha256d)")));
+    strUsage += HelpMessageOpt("-algo=<algo>", strprintf(_("Mining algorithm: sha256d, scrypt, nist5, lyra2z, x11, x16r (default: sha256d)")));
     if (showDebug)
         strUsage += HelpMessageOpt("-blockversion=<n>", "Override block version to test forking scenarios");
 
@@ -1204,6 +1204,8 @@ bool AppInitParameterInteraction()
          miningAlgo = ALGO_LYRA2Z;
     else if (strAlgo == "x11")
          miningAlgo = ALGO_X11;
+    else if (strAlgo == "x16r")
+         miningAlgo = ALGO_X16R;
     else
          miningAlgo = ALGO_SHA256D; // FXTC TODO: we should not be here
 
