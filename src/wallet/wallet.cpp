@@ -2947,7 +2947,7 @@ bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, const CoinEligibil
             utxo_pool.push_back(group);
         }
         bnb_used = false;
-        return KnapsackSolver(nTargetValue, utxo_pool, setCoinsRet, nValueRet);
+        return KnapsackSolver(nTargetValue, utxo_pool, setCoinsRet, nValueRet, fUseInstantSend);
     }
 }
 
@@ -3939,7 +3939,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CTransac
 
 /* FXTC TODO: something wrong here
                 // Dash
-/*                dPriority = wtxNew.tx->ComputePriority(dPriority, nBytes);
+                dPriority = wtxNew.tx->ComputePriority(dPriority, nBytes);
 
                 // Can we complete this as a free transaction?
                 // Note: InstantSend transaction can't be a free one
