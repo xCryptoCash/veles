@@ -37,13 +37,6 @@ static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 45;
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict, in seconds */
 static constexpr int64_t MINIMUM_CONNECT_TIME = 30;
 
-// Dash
-/** Register with a network node to receive its signals */
-///void RegisterNodeSignals(CNodeSignals& nodeSignals);
-/** Unregister a network node */
-///void UnregisterNodeSignals(CNodeSignals& nodeSignals);
-//
-
 class PeerLogicValidation : public CValidationInterface, public NetEventsInterface {
 private:
     CConnman* const connman;
