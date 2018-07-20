@@ -181,18 +181,16 @@ public:
     void Interrupt();
     bool GetNetworkActive() const { return fNetworkActive; };
     void SetNetworkActive(bool active);
-    void OpenNetworkConnection(const CAddress& addrConnect, bool fCountFailure, CSemaphoreGrant *grantOutbound = nullptr, const char *strDest = nullptr, bool fOneShot = false, bool fFeeler = false, bool manual_connection = false);
+    // FXTC BEGIN
+    //void OpenNetworkConnection(const CAddress& addrConnect, bool fCountFailure, CSemaphoreGrant *grantOutbound = nullptr, const char *strDest = nullptr, bool fOneShot = false, bool fFeeler = false, bool manual_connection = false);
+    CNode* OpenNetworkConnection(const CAddress& addrConnect, bool fCountFailure, CSemaphoreGrant *grantOutbound = nullptr, const char *strDest = nullptr, bool fOneShot = false, bool fFeeler = false, bool manual_connection = false, bool fConnectToMasternode = false);
     bool CheckIncomingNonce(uint64_t nonce);
+    // FXTC END
 
     // Dash
-    // fConnectToMasternode should be 'true' only if you want this node to allow to connect to itself
-    // and/or you want it to be disconnected on CMasternodeMan::ProcessMasternodeConnections()
-    // Unfortunately, can't make this method private like in Bitcoin,
-    // because it's used in many Dash-specific places (masternode, privatesend).
-    // FXTC TODO: Masternode need public ConnectNode
-    CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool fCountFailure, bool manual_connection, bool fConnectToMasternode = false);
-    //
-
+    // FXTC BEGIN
+    // ConnectNode() is private because public ConnectNode() is replaced by public OpenNetworkConnection() in Dash functions
+    // FXTC END
     struct CFullyConnectedOnly {
         bool operator() (const CNode* pnode) const {
             return NodeFullyConnected(pnode);
@@ -211,9 +209,12 @@ public:
 
     constexpr static const CAllNodes AllNodes{};
     constexpr static const CAllNodesExceptMasternodes AllNodesExceptMasternodes{};
+    //
 
     bool ForNode(NodeId id, std::function<bool(CNode* pnode)> func);
+    // Dash
     bool ForNode(const CService& addr, std::function<bool(CNode* pnode)> func);
+    //
 
     void PushMessage(CNode* pnode, CSerializedNetMsg&& msg);
 
@@ -439,10 +440,10 @@ private:
     CNode* FindNode(const CService& addr);
 
     bool AttemptToEvictConnection();
-    // Dash
-    // FXTC TODO: Masternode need public ConnectNode
-    //CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool fCountFailure, bool manual_connection, bool fConnectToMasternode);
-    //
+    // FXTC BEGIN
+    //CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool fCountFailure, bool manual_connection);
+    CNode* ConnectNode(CAddress addrConnect, const char *pszDest, bool fCountFailure, bool manual_connection, bool fConnectToMasternode = false);
+    // FXTC END
     bool IsWhitelistedRange(const CNetAddr &addr);
 
     void DeleteNode(CNode* pnode);
@@ -602,17 +603,6 @@ enum
 
     LOCAL_MAX
 };
-
-// Dash
-// Signals for message handling
-struct CNodeSignals
-{
-    boost::signals2::signal<bool (CNode*, CConnman&, std::atomic<bool>&), CombinerAll> ProcessMessages;
-    boost::signals2::signal<bool (CNode*, CConnman&, std::atomic<bool>&), CombinerAll> SendMessages;
-    boost::signals2::signal<void (CNode*, CConnman&)> InitializeNode;
-    boost::signals2::signal<void (NodeId, bool&)> FinalizeNode;
-};
-//
 
 bool IsPeerAddrLocalGood(CNode *pnode);
 void AdvertiseLocal(CNode *pnode);
@@ -793,7 +783,9 @@ public:
     bool fMasternode;
     bool fSentAddr;
     CSemaphoreGrant grantOutbound;
+    // Dash
     CSemaphoreGrant grantMasternodeOutbound;
+    //
     CCriticalSection cs_filter;
     std::unique_ptr<CBloomFilter> pfilter;
     std::atomic<int> nRefCount;
