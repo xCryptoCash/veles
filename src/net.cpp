@@ -2174,7 +2174,10 @@ CNode* CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountF
         // FXTC END
     }
     if (!pszDest) {
-        if (IsLocal(addrConnect) ||
+        // FXTC BEGIN
+        //if (IsLocal(addrConnect) ||
+        if ((IsLocal(addrConnect) && !fConnectToMasternode) ||
+        // FXTC END
             FindNode(static_cast<CNetAddr>(addrConnect)) || IsBanned(addrConnect) ||
             FindNode(addrConnect.ToStringIPPort()))
             // FXTC BEGIN
@@ -2188,9 +2191,9 @@ CNode* CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountF
         // FXTC END
 
     // FXTC BEGIN
-    //CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure);
+    //CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure, manual_connection);
     LogPrint(BCLog::NET, "OpenNetworkConnection -- ConnectNode(addr=%s)\n", addrConnect.ToString());
-    CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure, fConnectToMasternode);
+    CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure, manual_connection, fConnectToMasternode);
     // FXTC END
 
     if (!pnode)
