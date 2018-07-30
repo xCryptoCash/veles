@@ -32,6 +32,7 @@
 #include <utilmoneystr.h>
 #include <utilstrencodings.h>
 
+// Dash
 #include "spork.h"
 #include "governance.h"
 #include "instantx.h"
@@ -42,7 +43,9 @@
 #include "privatesend-client.h"
 #endif // ENABLE_WALLET
 #include "privatesend-server.h"
+//
 
+#include <memory>
 
 #if defined(NDEBUG)
 # error "FxTC cannot be compiled without assertions."
@@ -1477,11 +1480,12 @@ void static ProcessGetData(CNode* pfrom, const Consensus::Params& consensusParam
           }
           //
 
-          // Track requests for our stuff.
-          GetMainSignals().Inventory(inv.hash);
-
+          // FXTC BEGIN
+          // Dash
           if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK || inv.type == MSG_CMPCT_BLOCK || inv.type == MSG_WITNESS_BLOCK)
               break;
+          //
+          // FXTC END
         }
     } // release cs_main
 
@@ -2172,9 +2176,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
                     pfrom->AskFor(inv);
                 }
             }
-
-            // Track requests for our stuff
-            GetMainSignals().Inventory(inv.hash);
         }
         // Dash
         //if (!vToFetch.empty())

@@ -22,12 +22,15 @@
 #include <ui_interface.h>
 #include <utilstrencodings.h>
 
+// Dash
 #include "instantx.h"
 #include "netmessagemaker.h"
 #include "masternode-sync.h"
 #include "masternodeman.h"
 #include "privatesend.h"
+//
 
+#include <memory>
 #ifdef WIN32
 #include <string.h>
 #else

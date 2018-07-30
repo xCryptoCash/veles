@@ -35,6 +35,7 @@
 //
 
 #include <algorithm>
+#include <memory>
 #include <queue>
 #include <utility>
 
