@@ -2143,7 +2143,10 @@ CNode* CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountF
         // FXTC END
     }
     if (!pszDest) {
-        if (IsLocal(addrConnect) ||
+        // FXTC BEGIN
+        //if (IsLocal(addrConnect) ||
+        if ((IsLocal(addrConnect) && !fConnectToMasternode) ||
+        // FXTC END
             FindNode((CNetAddr)addrConnect) || IsBanned(addrConnect) ||
             FindNode(addrConnect.ToStringIPPort()))
             // FXTC BEGIN
