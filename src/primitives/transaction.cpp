@@ -35,6 +35,7 @@ CTxIn::CTxIn(uint256 hashPrevTx, uint32_t nOut, CScript scriptSigIn, uint32_t nS
     nSequence = nSequenceIn;
 }
 
+// Dash
 std::string CTxIn::ToString() const
 {
     std::string str;
@@ -49,6 +50,7 @@ std::string CTxIn::ToString() const
     str += ")";
     return str;
 }
+//
 
 CTxOut::CTxOut(const CAmount& nValueIn, CScript scriptPubKeyIn)
 {

@@ -1030,7 +1030,7 @@ static UniValue getbalance(const JSONRPCRequest& request)
             //
             // Dash
             //return ValueFromAmount(pwallet->GetLegacyBalance(filter, nMinDepth, account));
-            return ValueFromAmount(pwallet->GetLegacyBalance(filter, nMinDepth, account, fAddLockConf));
+            return ValueFromAmount(pwallet->GetLegacyBalance(filter, min_depth, account, fAddLockConf));
             //
         }
     }

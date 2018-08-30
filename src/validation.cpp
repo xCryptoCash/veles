@@ -19,6 +19,9 @@
 #include <cuckoocache.h>
 #include <hash.h>
 #include <index/txindex.h>
+// FXTC BEGIN
+#include <key_io.h>
+// FXTC END
 #include <policy/fees.h>
 #include <policy/policy.h>
 #include <policy/rbf.h>

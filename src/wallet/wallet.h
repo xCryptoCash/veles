@@ -129,7 +129,6 @@ enum AvailableCoinsType
     ONLY_MASTERNODE_COLLATERAL, // find masternode outputs including locked ones (use with caution)
     ONLY_PRIVATESEND_COLLATERAL
 };
-//
 
 struct CompactTallyItem
 {
@@ -141,20 +140,7 @@ struct CompactTallyItem
         nAmount = 0;
     }
 };
-
-enum class OutputType {
-    LEGACY,
-    P2SH_SEGWIT,
-    BECH32,
-
-    /**
-     * Special output type for change outputs only. Automatically choose type
-     * based on address type setting and the types other of non-change outputs
-     * (see -changetype option documentation and implementation in
-     * CWallet::TransactionChangeType for details).
-     */
-    CHANGE_AUTO,
-};
+//
 
 //! Default for -addresstype
 constexpr OutputType DEFAULT_ADDRESS_TYPE{OutputType::P2SH_SEGWIT};
@@ -1012,7 +998,6 @@ public:
 
     bool IsDenominated(const COutPoint& outpoint) const;
     //
->>>>>>> e84db44... dynamic masternodes implemented
 
     bool IsSpent(const uint256& hash, unsigned int n) const;
     std::vector<OutputGroup> GroupOutputs(const std::vector<COutput>& outputs, bool single_coin) const;

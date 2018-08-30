@@ -413,6 +413,15 @@ struct CMutableTransaction
      */
     uint256 GetHash() const;
 
+    // Dash
+    std::string ToString() const;
+
+    friend bool operator==(const CMutableTransaction& a, const CMutableTransaction& b)
+    {
+        return a.GetHash() == b.GetHash();
+    }
+    //
+
     bool HasWitness() const
     {
         for (size_t i = 0; i < vin.size(); i++) {
