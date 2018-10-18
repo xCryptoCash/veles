@@ -1355,21 +1355,35 @@ void static ProcessGetData(CNode* pfrom, const CChainParams& chainparams, CConnm
     {
         LOCK(cs_main);
 
-        while (it != pfrom->vRecvGetData.end())
+        // FXTC BEGIN
+        //while (it != pfrom->vRecvGetData.end())
+        while (it != pfrom->vRecvGetData.end() && (it->type == MSG_TX || it->type == MSG_WITNESS_TX ||
+            it->type == MSG_TXLOCK_REQUEST || it->type == MSG_TXLOCK_VOTE || it->type == MSG_SPORK ||
+            it->type == MSG_MASTERNODE_PAYMENT_VOTE || it->type == MSG_MASTERNODE_PAYMENT_BLOCK || it->type == MSG_MASTERNODE_ANNOUNCE ||
+            it->type == MSG_MASTERNODE_PING || it->type == MSG_DSTX || it->type == MSG_GOVERNANCE_OBJECT ||
+            it->type == MSG_GOVERNANCE_OBJECT_VOTE || it->type == MSG_MASTERNODE_VERIFY))
+        // FXTC END
         {
-          const CInv &inv = *it;
-          LogPrint(BCLog::NET, "ProcessGetData -- inv = %s\n", inv.ToString());
-
-          if (it->type == MSG_TX || it->type == MSG_WITNESS_TX)
-          {
             if (interruptMsgProc)
                 return;
             // Don't bother if send buffer is too full to respond anyway
             if (pfrom->fPauseSend)
                 break;
 
-            //const CInv &inv = *it;
+            const CInv &inv = *it;
             it++;
+
+            // FXTC BEGIN
+            // Dasg
+            LogPrint(BCLog::NET, "ProcessGetData -- inv = %s\n", inv.ToString());
+            //
+
+          // Process non-Dash messages by original Bitcoin Core processor
+          if (!(it->type == MSG_TXLOCK_REQUEST || it->type == MSG_TXLOCK_VOTE || it->type == MSG_SPORK ||
+              it->type == MSG_MASTERNODE_PAYMENT_VOTE || it->type == MSG_MASTERNODE_PAYMENT_BLOCK || it->type == MSG_MASTERNODE_ANNOUNCE ||
+              it->type == MSG_MASTERNODE_PING || it->type == MSG_DSTX || it->type == MSG_GOVERNANCE_OBJECT ||
+              it->type == MSG_GOVERNANCE_OBJECT_VOTE || it->type == MSG_MASTERNODE_VERIFY)) {
+            // FXTC END
 
             // Send stream from relay memory
             bool push = false;
@@ -1390,23 +1404,9 @@ void static ProcessGetData(CNode* pfrom, const CChainParams& chainparams, CConnm
             if (!push) {
                 vNotFound.push_back(inv);
             }
-          // Dash messages
-          } else if (it->type == MSG_TXLOCK_REQUEST || it->type == MSG_TXLOCK_VOTE || it->type == MSG_SPORK ||
-              it->type == MSG_MASTERNODE_PAYMENT_VOTE || it->type == MSG_MASTERNODE_PAYMENT_BLOCK || it->type == MSG_MASTERNODE_ANNOUNCE ||
-              it->type == MSG_MASTERNODE_PING || it->type == MSG_DSTX || it->type == MSG_GOVERNANCE_OBJECT ||
-              it->type == MSG_GOVERNANCE_OBJECT_VOTE || it->type == MSG_MASTERNODE_VERIFY)
-          {
-            //const CInv &inv = *it;
-            //LogPrint(BCLog::NET, "ProcessGetData -- inv = %s\n", inv.ToString());
-
-            if (interruptMsgProc)
-                return;
-            // Don't bother if send buffer is too full to respond anyway
-            if (pfrom->fPauseSend)
-                break;
-
-            it++;
-
+            // FXTC BEGIN
+          } else {
+            // Dash
             {
                 // Send stream from relay memory
                 bool pushed = false;
@@ -1580,6 +1580,7 @@ void static ProcessGetData(CNode* pfrom, const CChainParams& chainparams, CConnm
             }
           }
           //
+          // FXTC END
         }
     } // release cs_main
 
