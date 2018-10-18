@@ -9,6 +9,9 @@
 #define BITCOIN_NET_PROCESSING_H
 
 #include <net.h>
+// FXTC BEGIN
+#include <validation.h>
+// FXTC END
 #include <validationinterface.h>
 #include <consensus/params.h>
 
