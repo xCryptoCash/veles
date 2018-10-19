@@ -1356,7 +1356,7 @@ void static ProcessGetData(CNode* pfrom, const CChainParams& chainparams, CConnm
         LOCK(cs_main);
 
         // FXTC BEGIN
-        //while (it != pfrom->vRecvGetData.end())
+        //while (it != pfrom->vRecvGetData.end() && (it->type == MSG_TX || it->type == MSG_WITNESS_TX))
         while (it != pfrom->vRecvGetData.end() && (it->type == MSG_TX || it->type == MSG_WITNESS_TX ||
             it->type == MSG_TXLOCK_REQUEST || it->type == MSG_TXLOCK_VOTE || it->type == MSG_SPORK ||
             it->type == MSG_MASTERNODE_PAYMENT_VOTE || it->type == MSG_MASTERNODE_PAYMENT_BLOCK || it->type == MSG_MASTERNODE_ANNOUNCE ||
@@ -1374,7 +1374,7 @@ void static ProcessGetData(CNode* pfrom, const CChainParams& chainparams, CConnm
             it++;
 
             // FXTC BEGIN
-            // Dasg
+            // Dash
             LogPrint(BCLog::NET, "ProcessGetData -- inv = %s\n", inv.ToString());
             //
 
