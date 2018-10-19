@@ -5548,6 +5548,11 @@ int CMerkleTx::GetBlocksToMaturity() const
     if (!IsCoinBase())
         return 0;
     int chain_depth = GetDepthInMainChain();
+    // FXTC BEGIN
+    // Dash compatibility
+    if (chain_depth == -1)
+        chain_depth = 0;
+    // FXTC END
     assert(chain_depth >= 0); // coinbase tx should not be conflicted
     return std::max(0, (COINBASE_MATURITY+1) - chain_depth);
 }
