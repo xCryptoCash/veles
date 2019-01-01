@@ -28,8 +28,12 @@
 #include <stdio.h>
 #include <boost/algorithm/string.hpp>
 
+#include <masternodeman.h>
+#include <masternode-payments.h>
+
 #include "validation.h"
 
+static bool fVerboseOutput;
 static std::map<std::string,UniValue> registers;
 static const int CONTINUE_EXECUTION=-1;
 
@@ -41,6 +45,7 @@ static void SetupBlockTesterTxArgs()
     // Basic options
     gArgs.AddArg("-?", "This help message", false, OptionsCategory::OPTIONS);
     gArgs.AddArg("-subsidy", "Calculates subsidy amount for a block with specified parameters.", false, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-verbose", "Output extra debug information", false, OptionsCategory::OPTIONS);
     SetupChainParamsBaseOptions();
 
     // Hidden
@@ -70,6 +75,8 @@ static int AppInitBlockTester(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    fVerboseOutput = gArgs.GetBoolArg("-verbose", false);
+
     if (argc < 2 || HelpRequested(gArgs)) {
         // First part of help message is specific to this utility
         std::string strUsage = PACKAGE_NAME " veles-testblock utility version " + FormatFullVersion() + "\n\n" +
@@ -97,6 +104,29 @@ CAmount TesterGetBlockSubsidy(int nHeight, int nBits)
     return GetBlockSubsidy(nHeight, *header, Params().GetConsensus());
 }
 
+static void TesterPrintBlockSubsidyParams(int nHeight, int nBits)
+{
+    const Consensus::Params& consensusParams = Params().GetConsensus();
+    int alphaActiveOnBlock = 50000;
+    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+
+    fprintf(stderr, "\n%s\n", "Chain parameters:");
+    fprintf(stdout, " Halvings interval: %i (%i occured)\n", consensusParams.nSubsidyHalvingInterval, halvings);
+    fprintf(stderr, "\n%s\n", "Activated hard forks / sporks:");
+    fprintf(
+        stdout, 
+        " Veles FXTC chain start:        %s (block %i)\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) ? "YES" : "NO",
+        (int) sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)
+    );
+    fprintf(
+        stdout, 
+        " Veles alpha reward upgrade:    %s (block %i)\n",
+        (nHeight >= alphaActiveOnBlock) ? "YES" : "NO",
+        alphaActiveOnBlock
+    );
+}
+
 static int CommandLineRawTx(int argc, char* argv[])
 {
     while (argc > 1 && IsSwitchChar(argv[1][0])) {
@@ -106,13 +136,18 @@ static int CommandLineRawTx(int argc, char* argv[])
     std::vector<std::string> args = std::vector<std::string>(&argv[1], &argv[argc]);
 
     if (gArgs.GetBoolArg("-subsidy", false)) {
-        fprintf(stdout, "Calculating subsidy ...\n");
-
         if (args.size() < 2) {
             throw std::runtime_error("too few parameters (need at least block height and number of bits)");
         }
-        fprintf(stdout, "In: %s %s\n", args[0].c_str(), args[1].c_str());
-        fprintf(stdout, "Out: %.8f\n", (double) TesterGetBlockSubsidy(std::stoi(args[0]), std::stoi(args[1])) / COIN);
+        // Debug output
+        if (fVerboseOutput) {
+            fprintf(stdout, "Input parameters:\n Block height: %s\n Block header bytes: %s\n", args[0].c_str(), args[1].c_str());
+            TesterPrintBlockSubsidyParams(std::stoi(args[0]), std::stoi(args[1]));
+            fprintf(stdout, "%s", "\nCalculated subsidy amount VLS: ");
+        }
+
+        // Final reasult
+        fprintf(stdout, "%.8f\n", (double) TesterGetBlockSubsidy(std::stoi(args[0]), std::stoi(args[1])) / COIN);
 
     } else {
         throw std::runtime_error("too few parameters"); // we shouldn't be here
