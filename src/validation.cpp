@@ -1238,8 +1238,9 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     int alphaActiveOnBlock = 50000;
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
 
+    // Veles hard fork to enable Alpha block reward upgrade
     if (nHeight >= alphaActiveOnBlock)
-      halvings = halvings * alphaHalvingIntervalIncrease;
+        halvings = halvings * alphaHalvingIntervalIncrease;
 
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
@@ -1250,49 +1251,44 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     if (nHeight == 1)
         nSubsidy = 50000 * COIN;
 
-
-
     // Subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
     nSubsidy >>= halvings;
 
     if (nHeight >= 1000001)
       nSubsidy = (8 * COIN)/2;  //Static PoW reward of 0.25 Veles until end of PoW (12,5 Million VLS)
 
-  if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
-        if (nHeight >= alphaActiveOnBlock)
-            nSubsidy = nSubsidy * alphaRewardIncrease;  //Static PoW reward of 0.25 Veles until end of PoW (12,5 Million VLS)
+    // First FXTC fork/spork regarding mining rewards
+    if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
+        // Maximul subsidy limit needed until Veles spork 02
+        CAmount nMaxSubsidy = nSubsidy;
 
-    CAmount nMaxSubsidy = nSubsidy;
+        // Calculate the dynamic block reward accordingly to an algo efficiency table
+        nSubsidy = ConvertBitsToDouble(pblock.nBits) * COIN / (49500000 / pblock.GetAlgoEfficiency(nHeight));
+        nSubsidy /= GetHandbrakeForce(pblock.nVersion, nHeight);
 
-  // VELES END
-    // FXTC BEGIN
-    nSubsidy = ConvertBitsToDouble(pblock.nBits) * COIN / (49500000 / pblock.GetAlgoEfficiency(nHeight)); // dynamic block reward by algo efficiency
-    nSubsidy /= GetHandbrakeForce(pblock.nVersion, nHeight);
+        // Veles spork where subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
+        if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START))
+            nSubsidy >>= halvings;
 
-    // Subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START))
-        nSubsidy >>= halvings;
-
-    // Make halvings linear since start block defined in spork
+        // FXTC spork to make halvings linear since the specific block
         if (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START))
-        nSubsidy -= ((nSubsidy >> 1) * (nHeight % consensusParams.nSubsidyHalvingInterval)) / consensusParams.nSubsidyHalvingInterval;
+            nSubsidy -= ((nSubsidy >> 1) * (nHeight % consensusParams.nSubsidyHalvingInterval)) / consensusParams.nSubsidyHalvingInterval;
 
-    // Force minimum subsidy allowed
-    if (nSubsidy < consensusParams.nMinimumSubsidy)
-        nSubsidy = consensusParams.nMinimumSubsidy;
+        // Force minimum subsidy allowed
+        if (nSubsidy < consensusParams.nMinimumSubsidy)
+            nSubsidy = consensusParams.nMinimumSubsidy;
 
-    // FXTC END
-
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START) && nSubsidy > nMaxSubsidy)
-        nSubsidy = nMaxSubsidy;
-
-        if (nHeight >= alphaActiveOnBlock)
-            nSubsidy = nSubsidy * alphaRewardIncrease;
-  }
-  // VELES END
-
+        // Veles spork to disable maximum subsidy limitation, cap the subsidy from top before this spork activates
+        if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START) && nSubsidy > nMaxSubsidy)
+            nSubsidy = nMaxSubsidy;
+    }
+    // Veles hard fork to enable Alpha block reward upgrade,
+    // multiply the calculated reward by the factor of 5 (or as defined above)
+    if (nHeight >= alphaActiveOnBlock)
+        nSubsidy = nSubsidy * alphaRewardIncrease;
+ 
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
-    CAmount nSuperblockPart = (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy/10 : 0;
+    CAmount nSuperblockPart = (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy / 10 : 0;
 
     return fSuperblockPartOnly ? nSuperblockPart : nSubsidy - nSuperblockPart;
 }
