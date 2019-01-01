@@ -1,0 +1,21 @@
+###############################################################################
+# Veles development tools directory
+###############################################################################
+This directory contains additional tools and resources to help with development 
+proccess and testing of Veles Core.
+
+## Patches ##
+Patches are quite useful when merging our changes with the parent branch. These
+patches can be applied to the original code to automatically add some of the 
+changes made by Veles team. If the original code has change too much these
+patches can be still useful to simplify manual update.
+
+configure.ac.patch:	
+ - patch for original configure.ac to compile additional tools (block testing 
+   utility). Usage: patch configure.ac dev/configure.ac.patch
+
+Makefile.am.patch:	
+ - patch for src/Makefile.am to compile additional tools (block testing 
+   utility). Usage: patch src/Makefile.am dev/Makefile.am.patch
+
+ 
