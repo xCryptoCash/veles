@@ -1233,14 +1233,14 @@ double ConvertBitsToDouble(unsigned int nBits)
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
     CAmount nSubsidy = 0;
-    int alphaRewardIncrease = 5;
-    int alphaHalvingIntervalIncrease = 5;
-    int alphaActiveOnBlock = 50000;
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
+    int halvings = nHeight / subsidyHalvingInterval;
 
     // Veles hard fork to enable Alpha block reward upgrade
-    if (nHeight >= alphaActiveOnBlock)
-        halvings = halvings * alphaHalvingIntervalIncrease;
+    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
+        subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+        halvings = (nHeight - consensusParams.nVlsAlphaRewardsStartBlock) / subsidyHalvingInterval;
+    }
 
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
@@ -1254,8 +1254,11 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     // Subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
     nSubsidy >>= halvings;
 
+    // Hard fork after block 1M to limit maximum subsidy amount by half,
+    // TODO: it will have no use if SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START gets
+    // activated earlier, we should consider to remove this.
     if (nHeight >= 1000001)
-      nSubsidy = (8 * COIN)/2;  //Static PoW reward of 0.25 Veles until end of PoW (12,5 Million VLS)
+      nSubsidy = (8 * COIN) / 2;
 
     // First FXTC fork/spork regarding mining rewards
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
@@ -1270,9 +1273,9 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START))
             nSubsidy >>= halvings;
 
-        // FXTC spork to make halvings linear since the specific block
+        // FXTC spork "smooth halvings" to make halvings linear since the specific block
         if (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START))
-            nSubsidy -= ((nSubsidy >> 1) * (nHeight % consensusParams.nSubsidyHalvingInterval)) / consensusParams.nSubsidyHalvingInterval;
+            nSubsidy -= ((nSubsidy >> 1) * (nHeight % subsidyHalvingInterval)) / subsidyHalvingInterval;
 
         // Force minimum subsidy allowed
         if (nSubsidy < consensusParams.nMinimumSubsidy)
@@ -1282,10 +1285,12 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START) && nSubsidy > nMaxSubsidy)
             nSubsidy = nMaxSubsidy;
     }
+
     // Veles hard fork to enable Alpha block reward upgrade,
     // multiply the calculated reward by the factor of 5 (or as defined above)
-    if (nHeight >= alphaActiveOnBlock)
-        nSubsidy = nSubsidy * alphaRewardIncrease;
+    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
+        nSubsidy *= pblock.GetAlgoCostFactor() * consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+    }
  
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
     CAmount nSuperblockPart = (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy / 10 : 0;

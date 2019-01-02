@@ -80,7 +80,7 @@ public:
         consensus.nMinimumSubsidy = 0.00100000 * COIN;
 
         consensus.nMasternodeMinimumConfirmations = 15;
-	consensus.nMasternodePaymentsStartBlock = 50;
+	    consensus.nMasternodePaymentsStartBlock = 50;
         consensus.nMasternodePaymentsIncreaseBlock = 50;
         consensus.nMasternodePaymentsIncreasePeriod = 365 * 576; // 1 common year
         consensus.nMasternodeCollateralMinimum = 2000; // starting MN collateral
@@ -137,6 +137,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+
+        // Veles hard fork to enable Alpha block reward upgrade 
+        consensus.nVlsAlphaRewardsStartBlock = 50000;
+        consensus.nVlsAlphaRewardsHalvingsMultiplier = 10;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000"); // block 0

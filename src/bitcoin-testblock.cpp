@@ -108,9 +108,11 @@ CAmount BlockTestGetSubsidy(int nHeight, uint32_t nBits, uint32_t nVersion)
 static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nVersion)
 {
     const Consensus::Params& consensusParams = Params().GetConsensus();
-    int alphaActiveOnBlock = 50000;
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
     std::string algoMsg = " Algorithm: %s\n";
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
+    int halvings = nHeight / subsidyHalvingInterval;
+    CBlockHeader *header = new CBlockHeader();
+    header->nVersion = nVersion;
 
     fprintf(stderr, "%s\n", "Input parameters:");
     fprintf(stdout, " Height: %i\n", nHeight);
@@ -129,7 +131,22 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     }
 
     fprintf(stderr, "\n%s\n", "Chain parameters:");
-    fprintf(stdout, " Halvings interval: %i (%i already occured)\n", consensusParams.nSubsidyHalvingInterval, halvings);
+
+    // Veles hard fork to enable Alpha block reward upgrade
+    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
+        subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+        halvings = (nHeight - consensusParams.nVlsAlphaRewardsStartBlock) / subsidyHalvingInterval;
+    }
+
+    fprintf(stdout, " Halvings interval: %i (%i already occured)\n", subsidyHalvingInterval, halvings);
+    fprintf(
+        stdout, 
+        (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval)
+            ? " First halving occured on block: %i\n"
+            : " First halving will occur on block: %i\n", 
+        consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval
+        );
+    fprintf(stdout, " Alpha reward algo cost factor: x %.2f\n", header->GetAlgoCostFactor());
     fprintf(stderr, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
         stdout, 
@@ -140,8 +157,8 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     fprintf(
         stdout, 
         " Alpha reward upgrade hard fork:   %s (block %i)\n",
-        (nHeight >= alphaActiveOnBlock) ? "YES" : "NO",
-        alphaActiveOnBlock
+        (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) ? "YES" : "NO",
+        consensusParams.nVlsAlphaRewardsStartBlock
     );
     fprintf(
         stdout, 

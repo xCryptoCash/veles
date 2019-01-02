@@ -56,24 +56,6 @@ uint256 CBlockHeader::GetPoWHash() const
 
 unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
 {
-    int alphaActiveOnBlock = 50000;
-
-    // Veles hard fork to enable Alpha block reward upgrade.
-    // Efficiency table updated according to better match current average cost
-    // of each algo's hashrate.
-    if (nBlockHeight >= alphaActiveOnBlock) {
-        switch (nVersion & ALGO_VERSION_MASK)
-        {
-            case ALGO_SHA256D: return 10;       // 1;
-            case ALGO_SCRYPT:  return 32460;    // 12984;
-            case ALGO_NIST5:   return 746837;   // 2631;
-            case ALGO_LYRA2Z:  return 965510;   // 1973648;
-            case ALGO_X11:     return 513;      // 477;
-            case ALGO_X16R:    return 257849;   // 263100
-            default:           return 1;
-        }
-    }
-
     switch (nVersion & ALGO_VERSION_MASK)
     {
         // VELES BEGIN
@@ -82,7 +64,7 @@ unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
         //case ALGO_SCRYPT:  return   13747;
         case ALGO_SCRYPT:  return   12984;
         //case ALGO_NIST5:   return    2631;
-        case ALGO_NIST5:   return  298735;
+        case ALGO_NIST5:   return     513;     // 298735;
         //case ALGO_LYRA2Z:  return 2014035;
         case ALGO_LYRA2Z:  return 1973648;
         //case ALGO_X11:     return     477;
@@ -94,6 +76,25 @@ unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
     }
 
     return 1; // FXTC TODO: we should not be here
+}
+
+// Used for Veles Alpha rewards upgrade.
+double CBlockHeader::GetAlgoCostFactor()
+{
+    CAmount totalAdjustements = 18.25;   // must match the sum of constants below
+    double factor = 1;
+
+    switch (nVersion & ALGO_VERSION_MASK)
+    {
+        case ALGO_SHA256D: factor = 10.00;  break;
+        case ALGO_SCRYPT:  factor = 3.00;   break;
+        case ALGO_NIST5:   factor = 1.00;   break;
+        case ALGO_LYRA2Z:  factor = 0.50;   break;
+        case ALGO_X11:     factor = 1.25;   break;
+        case ALGO_X16R:    factor = 1.50;   break;
+    }
+
+    return factor / (totalAdjustements / 6);
 }
 
 std::string CBlock::ToString() const

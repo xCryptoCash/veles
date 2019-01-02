@@ -89,6 +89,9 @@ public:
     uint256 GetPoWHash() const;
 
     unsigned int GetAlgoEfficiency(int nBlockHeight) const;
+    
+    // Used for Veles Alpha rewards upgrade.
+    double GetAlgoCostFactor();
 
     int64_t GetBlockTime() const
     {
