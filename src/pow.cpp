@@ -150,8 +150,8 @@ unsigned int GetNextWorkRequiredVLS(const CBlockIndex* pindexLast, const CBlockH
     if (fShift)
         bnNew <<= 1;
 
-        if (bnNew > UintToArith256(params.powLimit))
-            bnNew = UintToArith256(params.powLimit);
+    if (bnNew > UintToArith256(params.powLimit))
+        bnNew = UintToArith256(params.powLimit);
 
         /// debug print
     LogPrintf("GetNextWorkRequired RETARGET\n");
