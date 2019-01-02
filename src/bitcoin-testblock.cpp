@@ -40,7 +40,7 @@ static const int CONTINUE_EXECUTION=-1;
 // From validation.cpp
 double ConvertBitsToDouble(unsigned int nBits);
 
-static void SetupBlockTesterTxArgs()
+static void SetupBlockTestTxArgs()
 {
     // Basic options
     gArgs.AddArg("-?", "This help message", false, OptionsCategory::OPTIONS);
@@ -57,10 +57,10 @@ static void SetupBlockTesterTxArgs()
 // This function returns either one of EXIT_ codes when it's expected to stop the process or
 // CONTINUE_EXECUTION when it's expected to continue further.
 //
-static int AppInitBlockTester(int argc, char* argv[])
+static int AppInitBlockTest(int argc, char* argv[])
 {
     std::string error;
-    SetupBlockTesterTxArgs();
+    SetupBlockTestTxArgs();
     
     if (!gArgs.ParseParameters(argc, argv, error)) {
         fprintf(stderr, "Error parsing command line arguments: %s\n", error.c_str());
@@ -77,16 +77,16 @@ static int AppInitBlockTester(int argc, char* argv[])
 
     fVerboseOutput = gArgs.GetBoolArg("-verbose", false);
 
-    if (argc < 2 || HelpRequested(gArgs)) {
+    if (argc < 3 || HelpRequested(gArgs)) {
         // First part of help message is specific to this utility
         std::string strUsage = PACKAGE_NAME " veles-testblock utility version " + FormatFullVersion() + "\n\n" +
-            "Usage:  veles-testblock [options] -subsidy [height] [bits]\n" +
+            "Usage:  veles-testblock [options] -subsidy [height] [bits] [version]\n" +
             "\n";
         strUsage += gArgs.GetHelpMessage();
 
         fprintf(stdout, "%s", strUsage.c_str());
 
-        if (argc < 2) {
+        if (argc < 3) {
             fprintf(stderr, "Error: too few parameters\n");
             return EXIT_FAILURE;
         }
@@ -95,20 +95,33 @@ static int AppInitBlockTester(int argc, char* argv[])
     return CONTINUE_EXECUTION;
 }
 
-CAmount TesterGetBlockSubsidy(int nHeight, int nBits)
+CAmount BlockTestGetSubsidy(int nHeight, uint32_t nBits, uint32_t nVersion)
 {
     CBlockHeader *header = new CBlockHeader();
-    header->nBits = (uint32_t) nBits;
+    header->nVersion = nVersion;
+    header->nBits = nBits;
    // const CChainParams& chainparams = Params();
 
     return GetBlockSubsidy(nHeight, *header, Params().GetConsensus());
 }
 
-static void TesterPrintBlockSubsidyParams(int nHeight, int nBits)
+static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nVersion)
 {
     const Consensus::Params& consensusParams = Params().GetConsensus();
     int alphaActiveOnBlock = 50000;
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    std::string algoMsg = " Algorithm: %s\n";
+
+    switch (nVersion & ALGO_VERSION_MASK)
+    {
+        case ALGO_SHA256D: fprintf(stdout, algoMsg.c_str(), "Sha256d"); break;
+        case ALGO_SCRYPT:  fprintf(stdout, algoMsg.c_str(), "Scrypt"); break;
+        case ALGO_NIST5:   fprintf(stdout, algoMsg.c_str(), "Nist5"); break;
+        case ALGO_LYRA2Z:  fprintf(stdout, algoMsg.c_str(), "Lyra2z"); break;
+        case ALGO_X11:     fprintf(stdout, algoMsg.c_str(), "X11"); break;
+        case ALGO_X16R:    fprintf(stdout, algoMsg.c_str(), "X16R"); break;
+        default:           fprintf(stdout, algoMsg.c_str(), "* unknown *"); break;
+    }
 
     fprintf(stderr, "\n%s\n", "Chain parameters:");
     fprintf(stdout, " Halvings interval: %i (%i already occured)\n", consensusParams.nSubsidyHalvingInterval, halvings);
@@ -121,15 +134,15 @@ static void TesterPrintBlockSubsidyParams(int nHeight, int nBits)
     );
     fprintf(
         stdout, 
-        " Veles last subsidy halving spork:      %s (block %i)\n", 
-        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) ? "YES" : "NO",
-        (int) sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)
+        " Veles last subsidy halving spork:      %s\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) ? "YES" : "NO"
+    //    (int) sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)
     );
     fprintf(
         stdout, 
-        " FXTC smooth subsidy halving spork:     %s (block %i)\n", 
-        (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)) ? "YES" : "NO",
-        (int) sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
+        " FXTC smooth subsidy halving spork:     %s\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)) ? "YES" : "NO"
+    //    (int) sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
     );
     fprintf(
         stdout, 
@@ -148,18 +161,26 @@ static int CommandLineRawTx(int argc, char* argv[])
     std::vector<std::string> args = std::vector<std::string>(&argv[1], &argv[argc]);
 
     if (gArgs.GetBoolArg("-subsidy", false)) {
-        if (args.size() < 2) {
+        if (args.size() < 3) {
             throw std::runtime_error("too few parameters (need at least block height and number of bits)");
         }
         // Debug output
         if (fVerboseOutput) {
-            fprintf(stdout, "Input parameters:\n Block height: %s\n Block header bytes: %s\n", args[0].c_str(), args[1].c_str());
-            TesterPrintBlockSubsidyParams(std::stoi(args[0]), std::stoi(args[1]));
+            fprintf(stdout, "Input parameters:\n Height: %s\n Bytes: %s\n Version: %s\n", args[0].c_str(), args[1].c_str(), args[2].c_str());
+            BlockTestPrintSubsidyParams(
+                std::stoi(args[0]), 
+                (uint32_t) std::stoi(args[1]), 
+                (uint32_t) std::stoi(args[2])
+                );
             fprintf(stdout, "%s", "\nCalculated subsidy amount VLS: ");
         }
 
         // Final reasult
-        fprintf(stdout, "%.8f\n", (double) TesterGetBlockSubsidy(std::stoi(args[0]), std::stoi(args[1])) / COIN);
+        fprintf(stdout, "%.8f\n", (double) BlockTestGetSubsidy(
+            std::stoi(args[0]), 
+            (uint32_t) std::stoi(args[1]), 
+            (uint32_t) std::stoi(args[2])
+            ) / COIN);
 
     } else {
         throw std::runtime_error("too few parameters"); // we shouldn't be here
@@ -173,15 +194,15 @@ int main(int argc, char* argv[])
     SetupEnvironment();
 
     try {
-        int ret = AppInitBlockTester(argc, argv);
+        int ret = AppInitBlockTest(argc, argv);
         if (ret != CONTINUE_EXECUTION)
             return ret;
     }
     catch (const std::exception& e) {
-        PrintExceptionContinue(&e, "AppInitBlockTester()");
+        PrintExceptionContinue(&e, "AppInitBlockTest()");
         return EXIT_FAILURE;
     } catch (...) {
-        PrintExceptionContinue(nullptr, "AppInitBlockTester()");
+        PrintExceptionContinue(nullptr, "AppInitBlockTest()");
         return EXIT_FAILURE;
     }
 

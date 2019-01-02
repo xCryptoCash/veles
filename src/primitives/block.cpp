@@ -56,7 +56,23 @@ uint256 CBlockHeader::GetPoWHash() const
 
 unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
 {
-  int alphaActiveOnBlock = 50000;
+    int alphaActiveOnBlock = 50000;
+
+    // Veles hard fork to enable Alpha block reward upgrade.
+    // Efficiency table updated according to better match current average cost
+    // of each algo's hashrate.
+    if (nBlockHeight >= alphaActiveOnBlock) {
+        switch (nVersion & ALGO_VERSION_MASK)
+        {
+            case ALGO_SHA256D: return 10;       // 1;
+            case ALGO_SCRYPT:  return 32460;    // 12984;
+            case ALGO_NIST5:   return 746837;   // 2631;
+            case ALGO_LYRA2Z:  return 965510;   // 1973648;
+            case ALGO_X11:     return 513;      // 477;
+            case ALGO_X16R:    return 257849;   // 263100
+            default:           return 1;
+        }
+    }
 
     switch (nVersion & ALGO_VERSION_MASK)
     {
@@ -75,27 +91,6 @@ unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
         case ALGO_X16R:    return  257849;
         // VELES END
         default:           return       1; // FXTC TODO: we should not be here
-    }
-
-    if (nBlockHeight >= alphaActiveOnBlock) {
-        switch (nVersion & ALGO_VERSION_MASK)
-        {
-            // VELES BEGIN
-            //case ALGO_SHA256D: return       1;
-            case ALGO_SHA256D: return       10;
-            //case ALGO_SCRYPT:  return   12984;
-            case ALGO_SCRYPT:  return   32460;
-            //case ALGO_NIST5:   return    2631;
-            case ALGO_NIST5:   return  746837;
-            //case ALGO_LYRA2Z:  return 1973648;
-            case ALGO_LYRA2Z:  return 96551;
-            //case ALGO_X11:     return     477;
-            case ALGO_X11:     return     513;
-            //case ALGO_X16R:    return  263100;
-            case ALGO_X16R:    return  257849;
-            // VELES END
-            default:           return       1; // FXTC TODO: we should not be here
-        }
     }
 
     return 1; // FXTC TODO: we should not be here
