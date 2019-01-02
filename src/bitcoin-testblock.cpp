@@ -80,7 +80,7 @@ static int AppInitBlockTest(int argc, char* argv[])
     if (argc < 3 || HelpRequested(gArgs)) {
         // First part of help message is specific to this utility
         std::string strUsage = PACKAGE_NAME " veles-testblock utility version " + FormatFullVersion() + "\n\n" +
-            "Usage:  veles-testblock [options] -subsidy [height] [bits] [version]\n" +
+            "Usage:  veles-testblock [options] -subsidy [height] [bitsHex] [versionHex]\n" +
             "\n";
         strUsage += gArgs.GetHelpMessage();
 
@@ -112,6 +112,11 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
     std::string algoMsg = " Algorithm: %s\n";
 
+    fprintf(stderr, "%s\n", "Input parameters:");
+    fprintf(stdout, " Height: %i\n", nHeight);
+    fprintf(stdout, " Bits: %04x (%i)\n", nBits, nBits);
+    fprintf(stdout, " Version: %04x (%i)\n", nVersion, nVersion);
+
     switch (nVersion & ALGO_VERSION_MASK)
     {
         case ALGO_SHA256D: fprintf(stdout, algoMsg.c_str(), "Sha256d"); break;
@@ -128,27 +133,39 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     fprintf(stderr, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
         stdout, 
-        " FXTC chain start spork:                %s (block %i)\n", 
+        " FXTC chain start spork:           %s (block %i)\n", 
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) ? "YES" : "NO",
         (int) sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)
     );
     fprintf(
         stdout, 
-        " Veles last subsidy halving spork:      %s\n", 
+        " Alpha reward upgrade hard fork:   %s (block %i)\n",
+        (nHeight >= alphaActiveOnBlock) ? "YES" : "NO",
+        alphaActiveOnBlock
+    );
+    fprintf(
+        stdout, 
+        " Budget/superblock hard fork:      %s (block %i)\n", 
+        (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? "YES" : "NO",
+        consensusParams.nBudgetPaymentsStartBlock
+    );
+    fprintf(
+        stdout, 
+        " No subsidy halving spork:         %s\n", 
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) ? "YES" : "NO"
     //    (int) sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)
     );
     fprintf(
         stdout, 
-        " FXTC smooth subsidy halving spork:     %s\n", 
+        " Smooth subsidy halving spork:     %s\n", 
         (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)) ? "YES" : "NO"
     //    (int) sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
     );
     fprintf(
         stdout, 
-        " Veles alpha reward upgrade hard fork:  %s (block %i)\n",
-        (nHeight >= alphaActiveOnBlock) ? "YES" : "NO",
-        alphaActiveOnBlock
+        " Unlimited block subsidy spork:    %s\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START)) ? "YES" : "NO"
+    //    (int) sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START)
     );
 }
 
@@ -166,20 +183,15 @@ static int CommandLineRawTx(int argc, char* argv[])
         }
         // Debug output
         if (fVerboseOutput) {
-            fprintf(stdout, "Input parameters:\n Height: %s\n Bytes: %s\n Version: %s\n", args[0].c_str(), args[1].c_str(), args[2].c_str());
-            BlockTestPrintSubsidyParams(
-                std::stoi(args[0]), 
-                (uint32_t) std::stoi(args[1]), 
-                (uint32_t) std::stoi(args[2])
-                );
+            BlockTestPrintSubsidyParams(std::stoi(args[0]), (uint32_t) std::stoi(args[1], 0, 16), (uint32_t) std::stoi(args[2], 0, 16));
             fprintf(stdout, "%s", "\nCalculated subsidy amount VLS: ");
         }
 
         // Final reasult
         fprintf(stdout, "%.8f\n", (double) BlockTestGetSubsidy(
             std::stoi(args[0]), 
-            (uint32_t) std::stoi(args[1]), 
-            (uint32_t) std::stoi(args[2])
+            (uint32_t) std::stoi(args[1], 0, 16), 
+            (uint32_t) std::stoi(args[2], 0, 16)
             ) / COIN);
 
     } else {
