@@ -114,7 +114,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     CBlockHeader *header = new CBlockHeader();
     header->nVersion = nVersion;
 
-    fprintf(stderr, "%s\n", "Input parameters:");
+    fprintf(stdout, "%s\n", "Input parameters:");
     fprintf(stdout, " Height: %i\n", nHeight);
     fprintf(stdout, " Bits: %04x (%i)\n", nBits, nBits);
     fprintf(stdout, " Version: %04x (%i)\n", nVersion, nVersion);
@@ -130,7 +130,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
         default:           fprintf(stdout, algoMsg.c_str(), "* unknown *"); break;
     }
 
-    fprintf(stderr, "\n%s\n", "Chain parameters:");
+    fprintf(stdout, "\n%s\n", "Chain parameters:");
 
     // Veles hard fork to enable Alpha block reward upgrade
     if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
@@ -142,12 +142,13 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     fprintf(
         stdout, 
         (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval)
-            ? " First halving occured on block: %i\n"
+            ? " First halving occured on block:    %i\n"
             : " First halving will occur on block: %i\n", 
         consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval
         );
-    fprintf(stdout, " Alpha reward algo cost factor: x %.2f\n", header->GetAlgoCostFactor());
-    fprintf(stderr, "\n%s\n", "Activated hard forks / sporks:");
+    fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", header->GetAlgoCostFactor());
+    fprintf(stdout, " Alpha reward multiplier:           x %i\n", consensusParams.nVlsAlphaRewardsHalvingsMultiplier);
+    fprintf(stdout, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
         stdout, 
         " FXTC chain start spork:           %s (block %i)\n", 
