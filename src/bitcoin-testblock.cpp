@@ -111,17 +111,29 @@ static void TesterPrintBlockSubsidyParams(int nHeight, int nBits)
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
 
     fprintf(stderr, "\n%s\n", "Chain parameters:");
-    fprintf(stdout, " Halvings interval: %i (%i occured)\n", consensusParams.nSubsidyHalvingInterval, halvings);
+    fprintf(stdout, " Halvings interval: %i (%i already occured)\n", consensusParams.nSubsidyHalvingInterval, halvings);
     fprintf(stderr, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
         stdout, 
-        " Veles FXTC chain start:        %s (block %i)\n", 
+        " FXTC chain start spork:                %s (block %i)\n", 
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) ? "YES" : "NO",
         (int) sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)
     );
     fprintf(
         stdout, 
-        " Veles alpha reward upgrade:    %s (block %i)\n",
+        " Veles last subsidy halving spork:      %s (block %i)\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) ? "YES" : "NO",
+        (int) sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)
+    );
+    fprintf(
+        stdout, 
+        " FXTC smooth subsidy halving spork:     %s (block %i)\n", 
+        (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)) ? "YES" : "NO",
+        (int) sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
+    );
+    fprintf(
+        stdout, 
+        " Veles alpha reward upgrade hard fork:  %s (block %i)\n",
         (nHeight >= alphaActiveOnBlock) ? "YES" : "NO",
         alphaActiveOnBlock
     );
