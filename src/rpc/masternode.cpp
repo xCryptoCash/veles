@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2017 The Dash Core developers
 // Copyright (c) 2018 FXTC developers
+// Copytight (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -892,13 +893,14 @@ UniValue sentinelping(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-    { "dash",               "masternode",             &masternode,             {"command"}  },
-    { "dash",               "masternodelist",         &masternodelist,         {"mode", "filter"}  },
-    { "dash",               "masternodebroadcast",    &masternodebroadcast,    {"command"}  },
-    { "dash",               "getpoolinfo",            &getpoolinfo,            {}  },
-    { "dash",               "sentinelping",           &sentinelping,           {"version"}  },
+  //  Veles Core: Category renamed from Dash to Governance 
+    { "masternodes",               "masternode",             &masternode,             {"command"}  },
+    { "masternodes",               "masternodelist",         &masternodelist,         {"mode", "filter"}  },
+    { "masternodes",               "masternodebroadcast",    &masternodebroadcast,    {"command"}  },
+    { "masternodes",               "getpoolinfo",            &getpoolinfo,            {}  },
+    { "masternodes",               "sentinelping",           &sentinelping,           {"version"}  },
 #ifdef ENABLE_WALLET
-// FXTC TODO:    { "dash",               "privatesend",            &privatesend,            {"command"}  },
+// FXTC TODO:    { "masternodes",               "privatesend",            &privatesend,            {"command"}  },
 #endif
 };
 

@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2014-2017 The Dash Core developers
 // Copyright (c) 2018 FXTC developers
+// Copytight (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1232,6 +1233,7 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
+    // VELES BEGIN
     CAmount nSubsidy = 0;
     int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
     int halvings = nHeight / subsidyHalvingInterval;
@@ -1258,7 +1260,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     // TODO: it will have no use if SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START gets
     // activated earlier, we should consider to remove this.
     if (nHeight >= 1000001)
-      nSubsidy = (8 * COIN) / 2;
+        nSubsidy = (8 * COIN) / 2;
 
     // First FXTC fork/spork regarding mining rewards
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
@@ -1287,7 +1289,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     }
 
     // Veles hard fork to enable Alpha block reward upgrade,
-    // multiply the calculated reward by the factor of 5 (or as defined above)
+    // multiply the calculated reward by the factor of X (or as defined above)
     if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
         nSubsidy *= pblock.GetAlgoCostFactor() * consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
     }
@@ -1296,6 +1298,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     CAmount nSuperblockPart = (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy / 10 : 0;
 
     return fSuperblockPartOnly ? nSuperblockPart : nSubsidy - nSuperblockPart;
+    // VELES END
 }
 
 //FXTC BEGIN

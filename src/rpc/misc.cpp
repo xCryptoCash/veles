@@ -617,8 +617,8 @@ static const CRPCCommand commands[] =
     { "hidden",             "getinfo",                &getinfo_deprecated,     {}},
 
     // Dash
-    { "dash",               "mnsync",                 &mnsync,                 {"status-next-reset"}  },
-    { "dash",               "spork",                  &spork,                  {"name", "value"}  },
+    { "masternodes",        "mnsync",                 &mnsync,                 {"status-next-reset"}  },
+    { "masternodes",        "spork",                  &spork,                  {"name", "value"}  },
     //
 };
 

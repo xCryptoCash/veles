@@ -1,6 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2018 FXTC developers
+// Copyright (c) 2018-2019 Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -78,6 +79,7 @@ unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
     return 1; // FXTC TODO: we should not be here
 }
 
+// VELES BEGIN
 // Used for Veles Alpha rewards upgrade.
 double CBlockHeader::GetAlgoCostFactor()
 {
@@ -96,6 +98,7 @@ double CBlockHeader::GetAlgoCostFactor()
 
     return factor / (totalAdjustements / 6);
 }
+// VELES END
 
 std::string CBlock::ToString() const
 {

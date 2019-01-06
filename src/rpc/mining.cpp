@@ -138,6 +138,28 @@ static UniValue getnetworkhashps(const JSONRPCRequest& request)
     return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, !request.params[2].isNull() ? GetAlgoId(request.params[2].get_str()) : miningAlgo);
 }
 
+
+// VELES BEGIN
+/**
+ * Returns correct difficulty value for the current algo, fixes FCTC "bug"
+ * where getmininginfo returns the difficulty of the last algo that has
+ * been used to find last block, hence returning entirely different value
+ * each time a new block has been found on a different algo, instead of
+ * returning the difficulty of urrent algo that is set in the config.
+ * 
+ */
+static double GetLastAlgoDifficulty(int32_t nAlgo) {
+    CBlockIndex *pb = chainActive.Tip();
+
+    // Look up last block mined by the current algo
+    while ((pb->nVersion & ALGO_VERSION_MASK) != nAlgo && pb->pprev) {
+        pb = pb->pprev;
+    }
+
+   return (double)GetDifficulty(pb);
+}
+// VELES END
+
 UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGenerate, uint64_t nMaxTries, bool keepScript)
 {
     static const int nInnerLoopCount = 0x10000;
@@ -250,7 +272,7 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
     obj.pushKV("blocks",           (int)chainActive.Height());
     obj.pushKV("currentblockweight", (uint64_t)nLastBlockWeight);
     obj.pushKV("currentblocktx",   (uint64_t)nLastBlockTx);
-    obj.pushKV("difficulty",       (double)GetDifficulty(chainActive.Tip()));
+    obj.pushKV("difficulty",       GetLastAlgoDifficulty(miningAlgo));
     obj.pushKV("algo",             GetAlgoName(miningAlgo));
     obj.pushKV("networkhashps",    getnetworkhashps(request));
     obj.pushKV("pooledtx",         (uint64_t)mempool.size());
