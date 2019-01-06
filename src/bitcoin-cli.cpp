@@ -24,6 +24,10 @@
 #include <support/events.h>
 
 #include <univalue.h>
+// Veles
+#include "veleslogo.h"
+//
+
 
 static const char DEFAULT_RPCCONNECT[] = "127.0.0.1";
 static const int DEFAULT_HTTP_CLIENT_TIMEOUT=900;
@@ -482,6 +486,12 @@ static int CommandLineRPC(int argc, char *argv[])
                         strPrint = result.get_str();
                     else
                         strPrint = result.write(2);
+
+                    // VELES BEGIN
+                    // Show fancy ASCII logo when displaying main help page
+                    if (method == "help" && args.size() < 1)
+                        strPrint = strVelesCoreLogoAscii.c_str() + strPrint;
+                    // VELES END
                 }
                 // Connection succeeded, no need to retry.
                 break;

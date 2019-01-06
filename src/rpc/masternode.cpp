@@ -893,12 +893,13 @@ UniValue sentinelping(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-  //  Veles Core: Category renamed from Dash to Governance 
+  //  Veles Core: Category renamed from Dash to Masternodes 
     { "masternodes",               "masternode",             &masternode,             {"command"}  },
     { "masternodes",               "masternodelist",         &masternodelist,         {"mode", "filter"}  },
     { "masternodes",               "masternodebroadcast",    &masternodebroadcast,    {"command"}  },
-    { "masternodes",               "getpoolinfo",            &getpoolinfo,            {}  },
     { "masternodes",               "sentinelping",           &sentinelping,           {"version"}  },
+// VELES TODO: Pool info is not relevant when PrivateSend is disabled.
+//    { "masternodes",               "getpoolinfo",            &getpoolinfo,            {}  },
 #ifdef ENABLE_WALLET
 // FXTC TODO:    { "masternodes",               "privatesend",            &privatesend,            {"command"}  },
 #endif

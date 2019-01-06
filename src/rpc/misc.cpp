@@ -617,8 +617,10 @@ static const CRPCCommand commands[] =
     { "hidden",             "getinfo",                &getinfo_deprecated,     {}},
 
     // Dash
+    // Veles Core: Category renamed from Dash to Masternodes
     { "masternodes",        "mnsync",                 &mnsync,                 {"status-next-reset"}  },
-    { "masternodes",        "spork",                  &spork,                  {"name", "value"}  },
+    // Doesn't fit into the mn category
+    { "util",               "spork",                  &spork,                  {"name", "value"}  },
     //
 };
 

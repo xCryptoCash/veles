@@ -53,7 +53,7 @@
 #include <stdio.h>
 
 // FXTC BEGIN
-// Dasg
+// Dash
 #include "activemasternode.h"
 #include "dsnotificationinterface.h"
 #include "flat-database.h"
@@ -78,6 +78,9 @@
 //
 //
 // FXTC END
+// Veles
+#include "veleslogo.h"
+// 
 
 #ifndef WIN32
 #include <signal.h>
@@ -905,6 +908,14 @@ void InitLogging()
 #endif
     LogPrintf(PACKAGE_NAME " version %s\n", version_string);
 }
+
+// VELES BEGIN
+void DisplayBootLogo()
+{
+    if (g_logger->m_print_to_console)
+        fprintf(stdout, "%s\n", strVelesCoreLogoAscii.c_str());
+}
+// VELES END
 
 namespace { // Variables internal to initialization process only
 

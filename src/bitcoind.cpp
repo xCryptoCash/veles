@@ -119,6 +119,9 @@ static bool AppInit(int argc, char* argv[])
         gArgs.SoftSetBoolArg("-server", true);
         // Set this early so that parameter interactions go to console
         InitLogging();
+        // VELES BEGIN
+        DisplayBootLogo();
+        // VELES END
         InitParameterInteraction();
         if (!AppInitBasicSetup())
         {
