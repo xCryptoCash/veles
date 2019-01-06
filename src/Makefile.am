@@ -319,6 +319,9 @@ libbitcoin_server_a_SOURCES += \
   spork.cpp \
   sporkdb.cpp
 
+# veles server
+libbitcoin_server_a_SOURCES += \
+  rpc/vpn.cpp
 
 if ENABLE_ZMQ
 libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)

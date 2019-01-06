@@ -29,6 +29,11 @@ void RegisterDashMasternodeRPCCommands(CRPCTable &tableRPC);
 void RegisterDashGovernanceRPCCommands(CRPCTable &tableRPC);
 //
 
+// Veles
+/** Register dVPN management commands **/
+void RegisterVpnRPCCommands(CRPCTable &t);
+// 
+
 static inline void RegisterAllCoreRPCCommands(CRPCTable &t)
 {
     RegisterBlockchainRPCCommands(t);
@@ -38,6 +43,7 @@ static inline void RegisterAllCoreRPCCommands(CRPCTable &t)
     RegisterRawTransactionRPCCommands(t);
     RegisterDashMasternodeRPCCommands(t);
     RegisterDashGovernanceRPCCommands(t);
+    RegisterVpnRPCCommands(t);
 }
 
 #endif // BITCOIN_RPC_REGISTER_H

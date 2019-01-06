@@ -145,7 +145,13 @@ static UniValue getnetworkhashps(const JSONRPCRequest& request)
  * where getmininginfo returns the difficulty of the last algo that has
  * been used to find last block, hence returning entirely different value
  * each time a new block has been found on a different algo, instead of
- * returning the difficulty of urrent algo that is set in the config.
+ * returning the difficulty of currently selected algo (eg. in the config).
+ *
+ * Since networkhashps always returns hashrate related to the currently
+ * selected algo, difficulty shown should also be relevant to the current
+ * algo, hence in Veles Core we consider this inconsistend information a bug,
+ * hence the function below is designed to return last difficulty of algo
+ * defined by nAlgo parameter.
  * 
  */
 static double GetLastAlgoDifficulty(int32_t nAlgo) {
