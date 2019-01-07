@@ -110,6 +110,10 @@ static int AppInitRPC(int argc, char* argv[])
     }
     if (argc < 2 || HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
         std::string strUsage = PACKAGE_NAME " RPC client version " + FormatFullVersion() + "\n";
+        // VELES BEGIN
+        // Show ASCII logo header on the top
+        strUsage += strVelesCoreLogoAscii;
+        // VELES END
         if (!gArgs.IsArgSet("-version")) {
             strUsage += "\n"
                 "Usage:  veles-cli [options] <command> [params]  Send command to " PACKAGE_NAME "\n"
@@ -488,9 +492,9 @@ static int CommandLineRPC(int argc, char *argv[])
                         strPrint = result.write(2);
 
                     // VELES BEGIN
-                    // Show fancy ASCII logo when displaying main help page
+                    // Show ASCII logo header over the main help page
                     if (method == "help" && args.size() < 1)
-                        strPrint = strVelesCoreLogoAscii.c_str() + strPrint;
+                        strPrint = strVelesCoreLogoAscii + strPrint;
                     // VELES END
                 }
                 // Connection succeeded, no need to retry.
