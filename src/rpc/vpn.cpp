@@ -51,7 +51,11 @@ static UniValue getvpntotals(const JSONRPCRequest& request)
             + HelpExampleRpc("getvpntotals", "")
         );
 
-    throw JSONRPCError(RPC_INTERNAL_ERROR, "Error: dVPN functionality has not been activated yet");
+    UniValue obj(UniValue::VOBJ);
+    obj.pushKV("totalbytesrecv", 0);
+    obj.pushKV("totalbytessent", 0);
+    obj.pushKV("timemillis", GetTimeMillis());
+    return obj;
 }
 
 
