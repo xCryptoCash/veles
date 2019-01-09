@@ -1231,18 +1231,53 @@ double ConvertBitsToDouble(unsigned int nBits)
 }
 //FXTC END
 
+// VELES BEGIN
+int GetHalvingCount(int nHeight, const Consensus::Params& consensusParams)
+{
+    // No halvings occuring until Veles alpha reward fork
+    if (nHeight < consensusParams.nVlsAlphaRewardsStartBlock)
+        return 0;
+
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+    int halvings = 0;
+
+    // Restart halving counter on Veles alpha reward fork
+    nHeight -= consensusParams.nVlsAlphaRewardsStartBlock;
+
+    // Calculate the number of halvins that occured, while taking into 
+    // the consideration the halving interval doubles with each halving.
+    while(nHeight >= subsidyHalvingInterval) {
+        nHeight -= subsidyHalvingInterval;
+        subsidyHalvingInterval *= 2;
+        halvings++;
+    }
+
+    return halvings;
+}
+
+int GetHalvingInterval(int nHeight, int nHalvings, const Consensus::Params& consensusParams)
+{
+    // No change in halving interval until Veles alpha reward fork
+    if (nHeight < consensusParams.nVlsAlphaRewardsStartBlock)
+        return consensusParams.nSubsidyHalvingInterval;
+
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+
+    // Restart halving counter on Veles alpha reward fork
+    nHeight -= consensusParams.nVlsAlphaRewardsStartBlock;
+    // Multiply halving interval by 2 the number of times that halving occured
+    subsidyHalvingInterval <<= nHalvings;
+
+    return subsidyHalvingInterval;
+}
+// VELES END
+
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
     // VELES BEGIN
     CAmount nSubsidy = 0;
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    int halvings = nHeight / subsidyHalvingInterval;
-
-    // Veles hard fork to enable Alpha block reward upgrade
-    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
-        subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
-        halvings = (nHeight - consensusParams.nVlsAlphaRewardsStartBlock) / subsidyHalvingInterval;
-    }
+    int halvings = GetHalvingCount(nHeight, consensusParams);
+    int subsidyHalvingInterval = GetHalvingInterval(nHeight, halvings, consensusParams);
 
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
@@ -1253,7 +1288,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     if (nHeight == 1)
         nSubsidy = 50000 * COIN;
 
-    // Subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
+    // Subsidy is cut on each halving that has occured
     nSubsidy >>= halvings;
 
     // Hard fork after block 1M to limit maximum subsidy amount by half,
@@ -1275,8 +1310,10 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START))
             nSubsidy >>= halvings;
 
-        // FXTC spork "smooth halvings" to make halvings linear since the specific block
-        if (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START))
+        // Veles hard fork to enable Alpha block reward upgrade
+        // merged from FXTC spork "smooth halvings" to make halvings linear 
+        // since the specific block PORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START
+        if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock)
             nSubsidy -= ((nSubsidy >> 1) * (nHeight % subsidyHalvingInterval)) / subsidyHalvingInterval;
 
         // Force minimum subsidy allowed

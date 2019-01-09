@@ -1,6 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2018 FXTC developers
+// Copyright (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -24,9 +25,9 @@
 #include <support/events.h>
 
 #include <univalue.h>
-// Veles
+// VELES BEGIN
 #include "veleslogo.h"
-//
+// VELES END
 
 
 static const char DEFAULT_RPCCONNECT[] = "127.0.0.1";

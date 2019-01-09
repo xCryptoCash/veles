@@ -109,9 +109,10 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
 {
     const Consensus::Params& consensusParams = Params().GetConsensus();
     std::string algoMsg = " Algorithm: %s\n";
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    int halvings = nHeight / subsidyHalvingInterval;
+    int halvings = GetHalvingCount(nHeight, consensusParams);
+    int subsidyHalvingInterval = GetHalvingInterval(nHeight, halvings, consensusParams);
     CBlockHeader *header = new CBlockHeader();
+
     header->nVersion = nVersion;
 
     fprintf(stdout, "%s\n", "Input parameters:");
@@ -131,13 +132,6 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     }
 
     fprintf(stdout, "\n%s\n", "Chain parameters:");
-
-    // Veles hard fork to enable Alpha block reward upgrade
-    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
-        subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
-        halvings = (nHeight - consensusParams.nVlsAlphaRewardsStartBlock) / subsidyHalvingInterval;
-    }
-
     fprintf(stdout, " Halvings interval: %i (%i already occured)\n", subsidyHalvingInterval, halvings);
     fprintf(
         stdout, 
