@@ -32,7 +32,7 @@ static const int SPORK_FXTC_END                                      = 94680031;
 // FXTC END
 // VELES BEGIN
 static const int SPORK_VELES_START                                    = 94690010;
-static const int SPORK_VELES_END                                      = 94690030;
+static const int SPORK_VELES_END                                      = 94690050;
 // VELES END
 
 static const int SPORK_2_INSTANTSEND_ENABLED                            = 10001;
@@ -44,6 +44,7 @@ static const int SPORK_10_MASTERNODE_PAY_UPDATED_NODES                  = 10009;
 static const int SPORK_12_RECONSIDER_BLOCKS                             = 10011;
 static const int SPORK_13_OLD_SUPERBLOCK_FLAG                           = 10012;
 static const int SPORK_14_REQUIRE_SENTINEL_FLAG                         = 10013;
+
 // FXTC BEGIN
 static const int SPORK_FXTC_01_HANDBRAKE_HEIGHT                      = 94680010;
 static const int SPORK_FXTC_01_HANDBRAKE_FORCE_SHA256D               = 94680011;
@@ -52,26 +53,33 @@ static const int SPORK_FXTC_01_HANDBRAKE_FORCE_NIST5                 = 94680013;
 static const int SPORK_FXTC_01_HANDBRAKE_FORCE_LYRA2Z                = 94680014;
 static const int SPORK_FXTC_01_HANDBRAKE_FORCE_X11                   = 94680015;
 static const int SPORK_FXTC_01_HANDBRAKE_FORCE_X16R                  = 94680016;
-
 static const int SPORK_FXTC_02_IGNORE_SLIGHTLY_HIGHER_COINBASE       = 94680021;
 static const int SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_CHECK           = 94680022;
 static const int SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_VALUE           = 94680023;
 static const int SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_VALUE        = 94680024;
 static const int SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_PAYEE        = 94680025;
-
 static const int SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START     = 94680031;
 // FXTC END
+
 // VELES BEGIN
-static const int SPORK_VELES_01_FXTC_CHAIN_START                      = 94690010;
-static const int SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START         = 94690020;
-static const int SPORK_VELES_03_NO_SUBSIDY_HALVING_START              = 94690030;
-static const int SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START            = 94690031;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D            = 94680032;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT             = 94680033;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5              = 94680034;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z             = 94680035;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_X11                = 94680036;
-static const int SPORK_VELES_05_ADJUST_COST_FACTOR_X16R               = 94680037;
+static const int SPORK_VELES_01_FXTC_CHAIN_START                       = 94690010;
+static const int SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START          = 94690020;
+static const int SPORK_VELES_03_NO_SUBSIDY_HALVING_START               = 94690030;
+static const int SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START             = 94690031;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_START              = 94690032;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D            = 94690033;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT             = 94690034;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5              = 94690035;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z             = 94690036;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_X11                = 94690037;
+static const int SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R               = 94690038;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_START              = 94690039;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_SHA256D            = 94690040;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_SCRYPT             = 94690041;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_NIST5              = 94690042;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_LYRA2Z             = 94690043;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_X11                = 94690044;
+static const int SPORK_VELES_05B_ADJUST_COST_FACTOR_X16R               = 94690045;
 // VELES END
 
 static const int64_t SPORK_2_INSTANTSEND_ENABLED_DEFAULT                = 0;            // ON
@@ -83,6 +91,7 @@ static const int64_t SPORK_10_MASTERNODE_PAY_UPDATED_NODES_DEFAULT      = 407090
 static const int64_t SPORK_12_RECONSIDER_BLOCKS_DEFAULT                 = 0;            // 0 BLOCKS
 static const int64_t SPORK_13_OLD_SUPERBLOCK_FLAG_DEFAULT               = 4070908800ULL;// OFF
 static const int64_t SPORK_14_REQUIRE_SENTINEL_FLAG_DEFAULT             = 4070908800ULL;// OFF
+
 // FXTC BEGIN
 static const int64_t SPORK_FXTC_01_HANDBRAKE_HEIGHT_DEFAULT             = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_SHA256D_DEFAULT      = 1;            // 1x
@@ -91,26 +100,33 @@ static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_NIST5_DEFAULT        = 1;    
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_LYRA2Z_DEFAULT       = 1;            // 1x
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_X11_DEFAULT          = 1;            // 1x
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_X16R_DEFAULT         = 1;            // 1x
-
 static const int64_t SPORK_FXTC_02_IGNORE_SLIGHTLY_HIGHER_COINBASE_DEFAULT  = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_CHECK_DEFAULT      = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_VALUE_DEFAULT      = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_VALUE_DEFAULT   = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_PAYEE_DEFAULT   = 4070908800ULL;// OFF
-
 static const int64_t SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START_DEFAULT  = 4070908800ULL;// OFF
 // FXTC END
+
 // VELES BEGIN
-static const int64_t SPORK_VELES_01_FXTC_CHAIN_START_DEFAULT                 = 11;// OFF
-static const int64_t SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START_DEFAULT    = 4070908800ULL;// OFF
-static const int64_t SPORK_VELES_03_NO_SUBSIDY_HALVING_START_DEFAULT         = 4070908800ULL;// OFF
-static const int64_t SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START_DEFAULT       = 50000;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D_DEFAULT       = 900;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT_DEFAULT        = 250;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5_DEFAULT         = 100;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT        = 50;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_X11_DEFAULT           = 125;
-static const int64_t SPORK_VELES_05_ADJUST_COST_FACTOR_X16R_DEFAULT          = 150;
+static const int64_t SPORK_VELES_01_FXTC_CHAIN_START_DEFAULT                  = 11;// OFF
+static const int64_t SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START_DEFAULT     = 4070908800ULL;// OFF
+static const int64_t SPORK_VELES_03_NO_SUBSIDY_HALVING_START_DEFAULT          = 4070908800ULL;// OFF
+static const int64_t SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START_DEFAULT        = 50000;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_START_DEFAULT         = 4070908800ULL;// OFF
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT       = 900;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT        = 250;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT         = 100;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT        = 50;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT           = 125;
+static const int64_t SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT          = 150;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_START_DEFAULT         = 4070908800ULL;// OFF
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_SHA256D_DEFAULT       = 900;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_SCRYPT_DEFAULT        = 250;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_NIST5_DEFAULT         = 100;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT        = 50;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_X11_DEFAULT           = 125;
+static const int64_t SPORK_VELES_05B_ADJUST_COST_FACTOR_X16R_DEFAULT          = 150;
 // VELES END
 
 extern std::map<uint256, CSporkMessage> mapSporks;

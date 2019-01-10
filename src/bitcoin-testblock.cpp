@@ -109,8 +109,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
 {
     const Consensus::Params& consensusParams = Params().GetConsensus();
     std::string algoMsg = " Algorithm: %s\n";
-    int halvings = GetHalvingCount(nHeight, consensusParams);
-    int subsidyHalvingInterval = GetHalvingInterval(nHeight, halvings, consensusParams);
+    SubsidyHalvingParameters *halvingParams = GethalvingParams(nHeight, consensusParams);
     CBlockHeader *header = new CBlockHeader();
 
     header->nVersion = nVersion;
@@ -132,15 +131,15 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     }
 
     fprintf(stdout, "\n%s\n", "Chain parameters:");
-    fprintf(stdout, " Halvings interval: %i (%i already occured)\n", subsidyHalvingInterval, halvings);
+    fprintf(stdout, " Halvings interval: %i (%i already occured)\n", halvingParams->nHalvingInterval, halvingParams->nHalvingCount);
     fprintf(
         stdout, 
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval)
             ? " First halving occured on block:    %i\n"
             : " First halving will occur on block: %i\n", 
-        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval
+        (int) sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval
         );
-    fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", header->GetAlgoCostFactor());
+    fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", GetAlgoCostFactor(nHeight, *header));
     fprintf(stdout, " Alpha reward multiplier:           x %i\n", consensusParams.nVlsRewardsAlphaMultiplier);
     fprintf(stdout, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
@@ -153,7 +152,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
         stdout, 
         " Alpha reward upgrade hard fork:   %s (block %i)\n",
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) ? "YES" : "NO",
-        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)
+        (int) sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)
     );
     fprintf(
         stdout, 
@@ -167,12 +166,15 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
         (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) ? "YES" : "NO"
     //    (int) sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)
     );
+    /*
     fprintf(
         stdout, 
         " Smooth subsidy halving spork:     %s\n", 
-        (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)) ? "YES" : "NO"
+        (nHeight >= sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
+            || sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))  ? "YES" : "NO"
     //    (int) sporkManager.GetSporkValue(SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START)
     );
+    */
     fprintf(
         stdout, 
         " Unlimited block subsidy spork:    %s\n", 

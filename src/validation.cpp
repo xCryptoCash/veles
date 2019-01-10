@@ -1232,77 +1232,139 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
-int GetHalvingCount(int nHeight, const Consensus::Params& consensusParams)
+SubsidyHalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
+    SubsidyHalvingParameters *params = new SubsidyHalvingParameters();
+    params->nHalvingCount = 0;
+    params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
+    params->nBlocksToNextHalving = consensusParams.nSubsidyHalvingInterval - nHeight;
+
     // No halvings occuring until Veles alpha reward fork
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
-        return 0;
-
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    int halvings = 0;
+        return params;
 
     // Restart halving counter on Veles alpha reward fork
     nHeight -= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
 
     // Calculate the number of halvins that occured, while taking into 
     // the consideration the halving interval doubles with each halving.
-    while(nHeight >= subsidyHalvingInterval) {
-        nHeight -= subsidyHalvingInterval;
-        subsidyHalvingInterval *= 2;
-        halvings++;
+    while(nHeight >= params->nHalvingInterval) {
+        nHeight -= params->nHalvingInterval;
+        params->nHalvingInterval *= 2;
+        params->nHalvingCount++;
     }
 
-    return halvings;
+    return params;
 }
 
-int GetHalvingInterval(int nHeight, int nHalvings, const Consensus::Params& consensusParams)
+SubsidyHalvingParameters *GetSubsidyHalvingParameters(int nHeight)
 {
-    // No change in halving interval until Veles alpha reward fork
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
-        return consensusParams.nSubsidyHalvingInterval;
-
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-
-    // Restart halving counter on Veles alpha reward fork
-    nHeight -= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
-    // Multiply halving interval by 2 the number of times that halving occured
-    subsidyHalvingInterval <<= nHalvings;
-
-    return subsidyHalvingInterval;
+    return GetSubsidyHalvingParameters(nHeight, Params().GetConsensus());
 }
 
-double GetAlgoCostFactor(CBlockHeader pblock)
+SubsidyHalvingParameters *GetSubsidyHalvingParameters()
+{
+    return GetSubsidyHalvingParameters((int)chainActive.Height());
+}
+
+double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
 {
     double factor = 100;
+    CAmount totalAdjustements = 0;
 
-    switch (pblock.nVersion & ALGO_VERSION_MASK)
-    {
-        case ALGO_SHA256D:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D);  
-            break;
-        case ALGO_SCRYPT:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT);  
-            break;
-        case ALGO_LYRA2Z:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z);  
-            break;
-        case ALGO_X11:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X11);  
-            break;
-        case ALGO_X16R:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X16R);  
-            break;
-        case ALGO_NIST5:
-            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5);  
-            break;
+    // We have a possibility to perform 2 more cost factor adjustements, taking 
+    // advantage of spork protocol.
+    if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_START)) {
+        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        {
+            case ALGO_SHA256D:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_SHA256D);  
+                break;
+            case ALGO_SCRYPT:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_SCRYPT);  
+                break;
+            case ALGO_LYRA2Z:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_LYRA2Z);  
+                break;
+            case ALGO_X11:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_X11);  
+                break;
+            case ALGO_X16R:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_X16R);  
+                break;
+            case ALGO_NIST5:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_NIST5);  
+                break;
+        }
+
+        totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_SHA256D)
+            + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_SCRYPT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_LYRA2Z)
+            + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_X11)
+            + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_X16R)
+            + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_NIST5);
+
+    } else if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_START)) {
+        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        {
+            case ALGO_SHA256D:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D);  
+                break;
+            case ALGO_SCRYPT:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT);  
+                break;
+            case ALGO_LYRA2Z:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z);  
+                break;
+            case ALGO_X11:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11);  
+                break;
+            case ALGO_X16R:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R);  
+                break;
+            case ALGO_NIST5:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);  
+                break;
+        }
+
+        totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);
+
+    // Apply default cost factor values if the sporks are not activated yed
+    } else {
+        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        {
+            case ALGO_SHA256D:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT);  
+                break;
+            case ALGO_SCRYPT:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT);  
+                break;
+            case ALGO_LYRA2Z:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT);  
+                break;
+            case ALGO_X11:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT);  
+                break;
+            case ALGO_X16R:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT);  
+                break;
+            case ALGO_NIST5:
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT);  
+                break;
+        }
+
+        totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT)
+            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT);
     }
-
-    CAmount totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D)
-        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT)
-        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z)
-        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X11)
-        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X16R)
-        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5);
 
     return (factor / 100) / (totalAdjustements / 6);
 }
@@ -1312,11 +1374,10 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
 {
     // VELES BEGIN
     CAmount nSubsidy = 0;
-    int halvings = GetHalvingCount(nHeight, consensusParams);
-    int subsidyHalvingInterval = GetHalvingInterval(nHeight, halvings, consensusParams);
+    SubsidyHalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
 
     // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
+    if (halvingParams->nHalvingCount >= 64)
         return 0;
 
     nSubsidy = 8 * COIN;
@@ -1325,7 +1386,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         nSubsidy = 50000 * COIN;
 
     // Subsidy is cut on each halving that has occured
-    nSubsidy >>= halvings;
+    nSubsidy >>= halvingParams->nHalvingCount;
 
     // First FXTC fork/spork regarding mining rewards
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
@@ -1338,13 +1399,13 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
 
         // Cut subsidy a half on each halving
         // removed plan for SPORK_VELES_03_NO_SUBSIDY_HALVING_START.
-        nSubsidy >>= halvings;
+        nSubsidy >>= halvingParams->nHalvingCount;
 
         // Veles hard fork to enable Alpha block reward upgrade
-        // merged from FXTC spork "smooth halvings" to make halvings linear 
+        // merged from FXTC spork "smooth halvingParams->nHalvingCount" to make halvingParams->nHalvingCount linear 
         // since the specific block PORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START
         if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
-            nSubsidy -= ((nSubsidy >> 1) * (nHeight % subsidyHalvingInterval)) / subsidyHalvingInterval;
+            nSubsidy -= ((nSubsidy >> 1) * (nHeight % halvingParams->nHalvingInterval)) / halvingParams->nHalvingInterval;
 
         // Force minimum subsidy allowed
         if (nSubsidy < consensusParams.nMinimumSubsidy)
@@ -1358,7 +1419,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     // Veles hard fork to enable Alpha block reward upgrade,
     // multiply the calculated reward by the factor of X (or as defined above)
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) {
-        nSubsidy *= GetAlgoCostFactor(pblock) * consensusParams.nVlsRewardsAlphaMultiplier;
+        nSubsidy *= GetAlgoCostFactor(nHeight, pblock) * consensusParams.nVlsRewardsAlphaMultiplier;
     }
  
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
