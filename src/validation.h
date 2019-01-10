@@ -291,6 +291,7 @@ bool ActivateBestChain(CValidationState& state, const CChainParams& chainparams,
 // VELES BEGIN
 int GetHalvingCount(int nHeight, const Consensus::Params& consensusParams);
 int GetHalvingInterval(int nHeight, int nHalvings, const Consensus::Params& consensusParams);
+double GetAlgoCostFactor(CBlockHeader header);
 // VELES END
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly = false);
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue);

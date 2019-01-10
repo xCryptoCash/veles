@@ -55,6 +55,7 @@ uint256 CBlockHeader::GetPoWHash() const
     return powHash;
 }
 
+// FXTC BEGIN
 unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
 {
     switch (nVersion & ALGO_VERSION_MASK)
@@ -78,27 +79,7 @@ unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
 
     return 1; // FXTC TODO: we should not be here
 }
-
-// VELES BEGIN
-// Used for Veles Alpha rewards upgrade.
-double CBlockHeader::GetAlgoCostFactor()
-{
-    CAmount totalAdjustements = 18.25;   // must match the sum of constants below
-    double factor = 1;
-
-    switch (nVersion & ALGO_VERSION_MASK)
-    {
-        case ALGO_SHA256D: factor = 10.00;  break;
-        case ALGO_SCRYPT:  factor = 3.00;   break;
-        case ALGO_NIST5:   factor = 1.00;   break;
-        case ALGO_LYRA2Z:  factor = 0.50;   break;
-        case ALGO_X11:     factor = 1.25;   break;
-        case ALGO_X16R:    factor = 1.50;   break;
-    }
-
-    return factor / (totalAdjustements / 6);
-}
-// VELES END
+// FXTC END
 
 std::string CBlock::ToString() const
 {

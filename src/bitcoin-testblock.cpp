@@ -135,13 +135,13 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     fprintf(stdout, " Halvings interval: %i (%i already occured)\n", subsidyHalvingInterval, halvings);
     fprintf(
         stdout, 
-        (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval)
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval)
             ? " First halving occured on block:    %i\n"
             : " First halving will occur on block: %i\n", 
-        consensusParams.nVlsAlphaRewardsStartBlock + subsidyHalvingInterval
+        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval
         );
     fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", header->GetAlgoCostFactor());
-    fprintf(stdout, " Alpha reward multiplier:           x %i\n", consensusParams.nVlsAlphaRewardsHalvingsMultiplier);
+    fprintf(stdout, " Alpha reward multiplier:           x %i\n", consensusParams.nVlsRewardsAlphaMultiplier);
     fprintf(stdout, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
         stdout, 
@@ -152,8 +152,8 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
     fprintf(
         stdout, 
         " Alpha reward upgrade hard fork:   %s (block %i)\n",
-        (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) ? "YES" : "NO",
-        consensusParams.nVlsAlphaRewardsStartBlock
+        (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) ? "YES" : "NO",
+        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)
     );
     fprintf(
         stdout, 

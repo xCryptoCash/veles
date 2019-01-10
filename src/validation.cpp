@@ -1235,14 +1235,14 @@ double ConvertBitsToDouble(unsigned int nBits)
 int GetHalvingCount(int nHeight, const Consensus::Params& consensusParams)
 {
     // No halvings occuring until Veles alpha reward fork
-    if (nHeight < consensusParams.nVlsAlphaRewardsStartBlock)
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
         return 0;
 
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
     int halvings = 0;
 
     // Restart halving counter on Veles alpha reward fork
-    nHeight -= consensusParams.nVlsAlphaRewardsStartBlock;
+    nHeight -= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
 
     // Calculate the number of halvins that occured, while taking into 
     // the consideration the halving interval doubles with each halving.
@@ -1258,17 +1258,53 @@ int GetHalvingCount(int nHeight, const Consensus::Params& consensusParams)
 int GetHalvingInterval(int nHeight, int nHalvings, const Consensus::Params& consensusParams)
 {
     // No change in halving interval until Veles alpha reward fork
-    if (nHeight < consensusParams.nVlsAlphaRewardsStartBlock)
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
         return consensusParams.nSubsidyHalvingInterval;
 
-    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval / consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+    int subsidyHalvingInterval = consensusParams.nSubsidyHalvingInterval;
 
     // Restart halving counter on Veles alpha reward fork
-    nHeight -= consensusParams.nVlsAlphaRewardsStartBlock;
+    nHeight -= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     // Multiply halving interval by 2 the number of times that halving occured
     subsidyHalvingInterval <<= nHalvings;
 
     return subsidyHalvingInterval;
+}
+
+double GetAlgoCostFactor(CBlockHeader pblock)
+{
+    double factor = 100;
+
+    switch (pblock.nVersion & ALGO_VERSION_MASK)
+    {
+        case ALGO_SHA256D:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D);  
+            break;
+        case ALGO_SCRYPT:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT);  
+            break;
+        case ALGO_LYRA2Z:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z);  
+            break;
+        case ALGO_X11:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X11);  
+            break;
+        case ALGO_X16R:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X16R);  
+            break;
+        case ALGO_NIST5:
+            factor = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5);  
+            break;
+    }
+
+    CAmount totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SHA256D)
+        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_SCRYPT)
+        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_LYRA2Z)
+        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X11)
+        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_X16R)
+        + sporkManager.GetSporkValue(SPORK_VELES_05_ADJUST_COST_FACTOR_NIST5);
+
+    return (factor / 100) / (totalAdjustements / 6);
 }
 // VELES END
 
@@ -1291,12 +1327,6 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     // Subsidy is cut on each halving that has occured
     nSubsidy >>= halvings;
 
-    // Hard fork after block 1M to limit maximum subsidy amount by half,
-    // TODO: it will have no use if SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START gets
-    // activated earlier, we should consider to remove this.
-    if (nHeight >= 1000001)
-        nSubsidy = (8 * COIN) / 2;
-
     // First FXTC fork/spork regarding mining rewards
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START)) {
         // Maximul subsidy limit needed until Veles spork 02
@@ -1306,29 +1336,29 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         nSubsidy = ConvertBitsToDouble(pblock.nBits) * COIN / (49500000 / pblock.GetAlgoEfficiency(nHeight));
         nSubsidy /= GetHandbrakeForce(pblock.nVersion, nHeight);
 
-        // Veles spork where subsidy is cut in half every 865,000 blocks which will occur approximately every 3 years.
-        if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START))
-            nSubsidy >>= halvings;
+        // Cut subsidy a half on each halving
+        // removed plan for SPORK_VELES_03_NO_SUBSIDY_HALVING_START.
+        nSubsidy >>= halvings;
 
         // Veles hard fork to enable Alpha block reward upgrade
         // merged from FXTC spork "smooth halvings" to make halvings linear 
         // since the specific block PORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START
-        if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock)
+        if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
             nSubsidy -= ((nSubsidy >> 1) * (nHeight % subsidyHalvingInterval)) / subsidyHalvingInterval;
 
         // Force minimum subsidy allowed
         if (nSubsidy < consensusParams.nMinimumSubsidy)
             nSubsidy = consensusParams.nMinimumSubsidy;
 
-        // Veles spork to disable maximum subsidy limitation, cap the subsidy from top before this spork activates
+        // Veles spork to disable maximum subsidy limitation
         if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START) && nSubsidy > nMaxSubsidy)
             nSubsidy = nMaxSubsidy;
     }
 
     // Veles hard fork to enable Alpha block reward upgrade,
     // multiply the calculated reward by the factor of X (or as defined above)
-    if (nHeight >= consensusParams.nVlsAlphaRewardsStartBlock) {
-        nSubsidy *= pblock.GetAlgoCostFactor() * consensusParams.nVlsAlphaRewardsHalvingsMultiplier;
+    if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) {
+        nSubsidy *= GetAlgoCostFactor(pblock) * consensusParams.nVlsRewardsAlphaMultiplier;
     }
  
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)

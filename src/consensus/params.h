@@ -117,9 +117,10 @@ struct Params {
     int nlastValidPowHashHeight;
     // FXTC EMD
     
+    // VLS BEGIN
     // Veles hard fork to enable Alpha block reward upgrade 
-    int nVlsAlphaRewardsStartBlock;
-    int nVlsAlphaRewardsHalvingsMultiplier;
+    int nVlsRewardsAlphaMultiplier;
+    // VLS END
 };
 } // namespace Consensus
 
