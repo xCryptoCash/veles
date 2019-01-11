@@ -109,7 +109,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
 {
     const Consensus::Params& consensusParams = Params().GetConsensus();
     std::string algoMsg = " Algorithm: %s\n";
-    SubsidyHalvingParameters *halvingParams = GethalvingParams(nHeight, consensusParams);
+    HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
     CBlockHeader *header = new CBlockHeader();
 
     header->nVersion = nVersion;

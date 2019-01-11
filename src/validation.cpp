@@ -1232,12 +1232,13 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
-SubsidyHalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
+HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
-    SubsidyHalvingParameters *params = new SubsidyHalvingParameters();
+    HalvingParameters *params = new HalvingParameters();
     params->nHalvingCount = 0;
     params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    params->nBlocksToNextHalving = consensusParams.nSubsidyHalvingInterval - nHeight;
+    params->nBlocksToNextHalving = consensusParams.nSubsidyHalvingInterval 
+        + GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) - nHeight;
 
     // No halvings occuring until Veles alpha reward fork
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
@@ -1253,16 +1254,17 @@ SubsidyHalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consens
         params->nHalvingInterval *= 2;
         params->nHalvingCount++;
     }
+    params->nBlocksToNextHalving = nHeight;
 
     return params;
 }
 
-SubsidyHalvingParameters *GetSubsidyHalvingParameters(int nHeight)
+HalvingParameters *GetSubsidyHalvingParameters(int nHeight)
 {
     return GetSubsidyHalvingParameters(nHeight, Params().GetConsensus());
 }
 
-SubsidyHalvingParameters *GetSubsidyHalvingParameters()
+HalvingParameters *GetSubsidyHalvingParameters()
 {
     return GetSubsidyHalvingParameters((int)chainActive.Height());
 }
@@ -1374,7 +1376,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
 {
     // VELES BEGIN
     CAmount nSubsidy = 0;
-    SubsidyHalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
+    HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
 
     // Force block reward to zero when right shift is undefined.
     if (halvingParams->nHalvingCount >= 64)

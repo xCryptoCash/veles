@@ -289,15 +289,15 @@ bool GetTransaction(const uint256& hash, CTransactionRef& tx, const Consensus::P
  */
 bool ActivateBestChain(CValidationState& state, const CChainParams& chainparams, std::shared_ptr<const CBlock> pblock = std::shared_ptr<const CBlock>());
 // VELES BEGIN
-struct SubsidyHalvingParameters
+struct HalvingParameters
 {
     int nHalvingCount;
     int nHalvingInterval;
     int nBlocksToNextHalving;
 };
-SubsidyHalvingParameters *GetHalvingParameters(int nHeight, const Consensus::Params& consensusParams);
-SubsidyHalvingParameters *GetHalvingParameters(int nHeight);
-SubsidyHalvingParameters *GetHalvingParameters();
+HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams);
+HalvingParameters *GetSubsidyHalvingParameters(int nHeight);
+HalvingParameters *GetSubsidyHalvingParameters();
 double GetAlgoCostFactor(int nHeight, CBlockHeader header);
 // VELES END
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly = false);

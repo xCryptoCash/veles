@@ -107,8 +107,8 @@ public:
         consensus.BIP66Height = 30; // block 1000000
         // VELES END
         consensus.powLimit = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowTargetTimespan = 4 * 60 * 60; // 4 hours
-        consensus.nPowTargetSpacing = 2 * 60; // 2 minutes
+        consensus.nPowTargetTimespan = 4 * 60 * 60;     // 4 hours
+        consensus.nPowTargetSpacing = 2 * 60;           // 2 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
