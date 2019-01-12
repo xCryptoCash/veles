@@ -171,7 +171,7 @@ static double GetLastAlgoDifficulty(int32_t nAlgo) {
 }
 
 /* Returns last block mined by the given algo */
-CAmount CoutAlgoBlockRewards(int32_t nAlgo, int nBlocks) {
+CAmount CountAlgoBlockRewards(int32_t nAlgo, int nBlocks) {
     CBlockIndex *pb = chainActive.Tip();
     CAmount nRewards = 0;
 
@@ -415,19 +415,19 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
         x16rObj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_X16R));
         nist5Obj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_NIST5));
 
-        sha256dObj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_SHA256D, nBlocks24h));
-        scryptObj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_SCRYPT, nBlocks24h));
-        lyra2zObj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_LYRA2Z, nBlocks24h));
-        x11Obj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_X11, nBlocks24h));
-        x16rObj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_X16R, nBlocks24h));
-        nist5Obj.pushKV("block_rewards_24h", CoutAlgoBlockRewards(ALGO_NIST5, nBlocks24h));
+        sha256dObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_SHA256D, nBlocks24h)));
+        scryptObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_SCRYPT, nBlocks24h)));
+        lyra2zObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_LYRA2Z, nBlocks24h)));
+        x11Obj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_X11, nBlocks24h)));
+        x16rObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_X16R, nBlocks24h)));
+        nist5Obj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_NIST5, nBlocks24h)));
 
-        sha256dObj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_SHA256D, nBlocks7d));
-        scryptObj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_SCRYPT, nBlocks7d));
-        lyra2zObj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_LYRA2Z, nBlocks7d));
-        x11Obj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_X11, nBlocks7d));
-        x16rObj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_X16R, nBlocks7d));
-        nist5Obj.pushKV("block_rewards_7d", CoutAlgoBlockRewards(ALGO_NIST5, nBlocks7d));
+        sha256dObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_SHA256D, nBlocks7d)));
+        scryptObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_SCRYPT, nBlocks7d)));
+        lyra2zObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_LYRA2Z, nBlocks7d)));
+        x11Obj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_X11, nBlocks7d)));
+        x16rObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_X16R, nBlocks7d)));
+        nist5Obj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_NIST5, nBlocks7d)));
         
     }
 
