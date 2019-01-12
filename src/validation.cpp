@@ -1342,22 +1342,22 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
         switch (nAlgo)
         {
             case ALGO_SHA256D:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT;  
                 break;
             case ALGO_SCRYPT:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT;  
                 break;
             case ALGO_LYRA2Z:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT;  
                 break;
             case ALGO_X11:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT;  
                 break;
             case ALGO_X16R:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT;  
                 break;
             case ALGO_NIST5:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT);  
+                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;  
                 break;
         }
 
