@@ -1361,12 +1361,12 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
                 break;
         }
 
-        totalAdjustements = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT)
-            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT)
-            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT)
-            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT)
-            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT)
-            + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT);
+        totalAdjustements = SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT
+            + SPORK_VELES_05A_ADJUST_COST_FACTOR_SCRYPT_DEFAULT
+            + SPORK_VELES_05A_ADJUST_COST_FACTOR_LYRA2Z_DEFAULT
+            + SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT
+            + SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT
+            + SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;
     }
 
     return (factor / (totalAdjustements / 6)) / 100;
