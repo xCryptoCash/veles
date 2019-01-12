@@ -242,6 +242,7 @@ bool fPruneMode = false;
 bool fIsBareMultisigStd = DEFAULT_PERMIT_BAREMULTISIG;
 bool fRequireStandard = true;
 bool fCheckBlockIndex = false;
+
 bool fCheckpointsEnabled = DEFAULT_CHECKPOINTS_ENABLED;
 size_t nCoinCacheUsage = 5000 * 300;
 uint64_t nPruneTarget = 0;
@@ -1368,7 +1369,7 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
             + sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT);
     }
 
-    return (factor / 100) / (totalAdjustements / 6);
+    return (factor / (totalAdjustements / 6)) / 100;
 }
 
 double GetAlgoCostFactor(int32_t nAlgo)
