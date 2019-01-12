@@ -1238,7 +1238,7 @@ HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Par
     params->nHalvingCount = 0;
     params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
     params->nBlocksToNextHalving = consensusParams.nSubsidyHalvingInterval 
-        + GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) - nHeight;
+        + sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) - nHeight;
 
     // No halvings occuring until Veles alpha reward fork
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
@@ -1269,7 +1269,7 @@ HalvingParameters *GetSubsidyHalvingParameters()
     return GetSubsidyHalvingParameters((int)chainActive.Height());
 }
 
-double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
+double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
 {
     double factor = 100;
     CAmount totalAdjustements = 0;
@@ -1277,7 +1277,7 @@ double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
     // We have a possibility to perform 2 more cost factor adjustements, taking 
     // advantage of spork protocol.
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_START)) {
-        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        switch (nAlgo)
         {
             case ALGO_SHA256D:
                 factor = sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_SHA256D);  
@@ -1307,7 +1307,7 @@ double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
             + sporkManager.GetSporkValue(SPORK_VELES_05B_ADJUST_COST_FACTOR_NIST5);
 
     } else if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_START)) {
-        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        switch (nAlgo)
         {
             case ALGO_SHA256D:
                 factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D);  
@@ -1338,7 +1338,7 @@ double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
 
     // Apply default cost factor values if the sporks are not activated yed
     } else {
-        switch (pblock.nVersion & ALGO_VERSION_MASK)
+        switch (nAlgo)
         {
             case ALGO_SHA256D:
                 factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_SHA256D_DEFAULT);  
@@ -1369,6 +1369,17 @@ double GetAlgoCostFactor(int nHeight, CBlockHeader pblock)
     }
 
     return (factor / 100) / (totalAdjustements / 6);
+}
+
+double GetAlgoCostFactor(int32_t nAlgo)
+{
+    return GetAlgoCostFactor(nAlgo, (int)chainActive.Height());
+}
+
+
+double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight)
+{
+    return GetAlgoCostFactor(pblock->nVersion & ALGO_VERSION_MASK, nHeight);
 }
 // VELES END
 
@@ -1421,7 +1432,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     // Veles hard fork to enable Alpha block reward upgrade,
     // multiply the calculated reward by the factor of X (or as defined above)
     if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) {
-        nSubsidy *= GetAlgoCostFactor(nHeight, pblock) * consensusParams.nVlsRewardsAlphaMultiplier;
+        nSubsidy *= GetBlockAlgoCostFactor(&pblock, nHeight) * consensusParams.nVlsRewardsAlphaMultiplier;
     }
  
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)

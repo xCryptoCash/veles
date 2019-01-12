@@ -298,7 +298,9 @@ struct HalvingParameters
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams);
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight);
 HalvingParameters *GetSubsidyHalvingParameters();
-double GetAlgoCostFactor(int nHeight, CBlockHeader header);
+double GetAlgoCostFactor(int32_t nAlgo, int nHeight);
+double GetAlgoCostFactor(int32_t nAlgo);
+double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight);
 // VELES END
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly = false);
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue);

@@ -59,12 +59,12 @@ static UniValue getvpntotals(const JSONRPCRequest& request)
 }
 
 
-
+// Preparation
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
-    { "vpn",                "getvpninfo",             &getvpninfo,             {} },
-    { "vpn",                "getvpntotals",           &getvpntotals,           {} },
+   // { "vpn",                "getvpninfo",             &getvpninfo,             {} },
+   // { "vpn",                "getvpntotals",           &getvpntotals,           {} },
 };
 
 void RegisterVpnRPCCommands(CRPCTable &t)

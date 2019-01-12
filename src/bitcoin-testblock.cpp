@@ -139,7 +139,7 @@ static void BlockTestPrintSubsidyParams(int nHeight, uint32_t nBits, uint32_t nV
             : " First halving will occur on block: %i\n", 
         (int) sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) + consensusParams.nSubsidyHalvingInterval
         );
-    fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", GetAlgoCostFactor(nHeight, *header));
+    fprintf(stdout, " Alpha reward algo cost factor:     x %.2f\n", GetBlockAlgoCostFactor(header, nHeight));
     fprintf(stdout, " Alpha reward multiplier:           x %i\n", consensusParams.nVlsRewardsAlphaMultiplier);
     fprintf(stdout, "\n%s\n", "Activated hard forks / sporks:");
     fprintf(
