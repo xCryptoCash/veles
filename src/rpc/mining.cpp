@@ -339,15 +339,15 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     //LOCK(cs_main);
     FlushStateToDisk();
 
-    obj.pushKV("halvings_occured",           halvingParams->nHalvingCount);
+    obj.pushKV("halvings_occured",           halvingParams->nHalvingCount);/*
     obj.pushKV("halving_interval",           halvingParams->nHalvingInterval);
-    obj.pushKV("last_halving_on_block",      halvingParams->nNextHalvingBlockHeight - chainActive.Height());
+    obj.pushKV("last_halving_on_block",      halvingParams->nLastHalvingBlockHeight);
     obj.pushKV("next_halving_on_block",      halvingParams->nNextHalvingBlockHeight);
     obj.pushKV("blocks_to_next_halving",     halvingParams->nNextHalvingBlockHeight - chainActive.Height());
     obj.pushKV("released_supply_last_epoch", ValueFromAmount(halvingParams->nSupplyLastEpoch));
     obj.pushKV("max_supply_last_epoch",      ValueFromAmount(halvingParams->nMaxSupplyLastEpoch));
     obj.pushKV("max_supply_current_epoch",   ValueFromAmount(halvingParams->nMaxSupplyCurrentEpoch));
-    obj.pushKV("times_halving_delayed",      halvingParams->nHalvingDelayed);
+    obj.pushKV("times_halving_delayed",      halvingParams->nHalvingDelayed);*/
 
     return obj;
 }

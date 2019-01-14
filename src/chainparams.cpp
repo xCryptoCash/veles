@@ -76,7 +76,7 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 50000;
+        consensus.nSubsidyHalvingInterval = 2000; //50000;
         consensus.nMinimumSubsidy = 0.00100000 * COIN;
 
         consensus.nMasternodeMinimumConfirmations = 15;

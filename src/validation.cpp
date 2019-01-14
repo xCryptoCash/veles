@@ -1240,7 +1240,6 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
-//! Calculate statistics about the unspent transaction output set
 CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
 {
     std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
@@ -1292,71 +1291,58 @@ CAmount GetTotalSupply(int nHeight/* = 0*/)
 
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
-    HalvingParameters *params = new HalvingParameters();
-    //HalvingEpoch *epoch = new HalvingEpoch();
+    const double nMinSupplyTarget = 0.5;
+
     int nHeightOffset = (int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
-
-    // first default epoch before halvings
-    /*
-    epoch->nStartBlock = 1;
-    epoch->nEndBlock = nHeightOffset - 1;
-    epoch->nStartSupply = 0;
-    epoch->nEndSupply = 0;
-    */
-    // initial parameters before halvening
-    params->nMaxBlockSubsidy = 8 * COIN * consensusParams.nVlsRewardsAlphaMultiplier;
-    params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    params->nNextHalvingBlockHeight = nHeightOffset + consensusParams.nSubsidyHalvingInterval - nHeight;
-    //params->epochs.push_back(epoch);
-
-    // No halvings occuring until Veles alpha reward fork, or we're before first halving.
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)
-        || params->nNextHalvingBlockHeight > 0)
-        return params;
-
+    int nCurrentEpoch = 0;
+    HalvingParameters *params = new HalvingParameters();
+    CAmount nCurrentMaxSupply = 0;
+    CAmount nCurrentRealSupply = 0;
     CAmount nBlocksToProccess = nHeight - nHeightOffset;
-    CAmount nLastEndSupply;   // remove when entity vector gets uncommented
-    HalvingEpoch *epoch = new HalvingEpoch();
 
-    //epoch->nStartBlock = nHeightOffset + params->nHalvingInterval;
-    //epoch->nEndBlock = epoch->nStartBlock - 1 + params->nHalvingInterval * 2;
-    epoch->nStartSupply = GetTotalSupply(nHeightOffset);
-    //CAmount nEpochMaxReleasedSupply = params->nMaxBlockSubsidy * params->nHalvingInterval;
-    params->nLastHalvingBlockHeight = nHeightOffset + params->nHalvingInterval;
-    //params->nLastEpochBlockHeight = nHeightOffset;
+    // default halving settings for first epoch
+    params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
 
-    // Calculate the number of halvings that has occured, while taking into 
-    // the consideration the halving interval doubles with each halving.
+    // the frst epoch before first halving
+    //params->epochs[nCurrentEpoch] = new HalvingEpoch();
+    params->epochs[nCurrentEpoch].nMaxBlockSubsidy = 8 * COIN;
+    params->epochs[nCurrentEpoch].nEndBlock = nHeightOffset + params->nHalvingInterval - 1;
+
+    // we're still before the first halving is supposed to occur
+    if (nHeight <= params->epochs[nCurrentEpoch].nEndBlock)
+        return params; 
+
+    // at least one epoch has already ended
     while(nBlocksToProccess >= params->nHalvingInterval) {
         nBlocksToProccess -= params->nHalvingInterval;
-        //params->nLastEpochBlockHeight += params->nHalvingInterval;
-        params->nMaxSupplyCurrentEpoch = params->nMaxBlockSubsidy * params->nHalvingInterval;
-        epoch->nEndSupply = GetTotalSupply(params->nLastHalvingBlockHeight);   
+        nCurrentEpoch++;
+        // let's finish the old epoch
+        params->epochs[nCurrentEpoch - 1].fHasEnded = true;
+        params->epochs[nCurrentEpoch - 1].nEndSupply = GetTotalSupply(params->epochs[nCurrentEpoch - 1].nEndBlock);
+        // initialize new epoch struct
+        //params->epochs[nCurrentEpoch] = new HalvingEpoch();
+        params->epochs[nCurrentEpoch].nStartBlock = params->epochs[nCurrentEpoch - 1].nEndBlock + 1;
+        params->epochs[nCurrentEpoch].nStartSupply = params->epochs[nCurrentEpoch - 1].nEndSupply;
+        params->epochs[nCurrentEpoch].nMaxBlockSubsidy = params->epochs[nCurrentEpoch - 1].nMaxBlockSubsidy;
 
-        // Delay this halving one more time if less than half of planned
-        // supply was released.
-        if (epoch->nEndSupply - epoch->nStartSupply < params->nMaxSupplyCurrentEpoch / 2) {
-            params->nHalvingDelayed++;
+        nCurrentMaxSupply = params->epochs[nCurrentEpoch - 1].nMaxBlockSubsidy * params->nHalvingInterval;
+        nCurrentRealSupply += params->epochs[nCurrentEpoch - 1].nEndSupply - params->epochs[nCurrentEpoch - 1].nStartSupply;
 
-        } else {
-            // Halving has occured
-            params->nHalvingCount++;
-            //  Recalculate values related to next halving
-            params->nLastHalvingBlockHeight += (params->nHalvingInterval * (params->nHalvingDelayed + 1));
+        // let's check whether we have released enough coins to the circulation,
+        // then halve the subsidy and double the halving interval
+        if (nCurrentRealSupply >= nCurrentMaxSupply * nMinSupplyTarget) {
             params->nHalvingInterval *= 2;
-            params->nSupplyLastEpoch = epoch->nEndSupply - epoch->nStartSupply;
-            params->nMaxSupplyLastEpoch = params->nMaxSupplyCurrentEpoch;
+            params->nHalvingCount++;
+            params->epochs[nCurrentEpoch].nMaxBlockSubsidy >>= 1;
+            params->epochs[nCurrentEpoch].fIsSubsidyHalved = true;
+            nCurrentRealSupply = 0;
+            // update indexes
+            //params->nLastHalvingBlockHeight = params->epochs[nCurrentEpoch].nStartBlock;
+            //params->nLastHalvingBlockHeight = params->epochs[nCurrentEpoch].nStartBlock;
         }
-        //params->epochs.push_back(epoch);
-        // Next newest epoch
-        nLastEndSupply = epoch->nEndSupply;
-        epoch = new HalvingEpoch();
-        //epoch->nStartBlock = params->nLastEpochBlockHeight + 1;
-        //epoch->nEndBlock = epoch->nStartBlock + params->nHalvingInterval - 1;
-        epoch->nStartSupply = nLastEndSupply; //params->epochs.last.nStartSupply;
+        // complete the next epoch struct
+        params->epochs[nCurrentEpoch].nEndBlock = params->epochs[nCurrentEpoch - 1].nEndBlock + params->nHalvingInterval;
     }
-    params->nNextHalvingBlockHeight = params->nLastHalvingBlockHeight + params->nHalvingInterval;
-    //params->epochs.push_back(epoch);
 
     return params;
 }
@@ -1483,11 +1469,9 @@ double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight)
 {
     return GetAlgoCostFactor(pblock->nVersion & ALGO_VERSION_MASK, nHeight);
 }
-// VELES END
 
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
 {
-    // VELES BEGIN
     CAmount nSubsidy = 0;
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
 
@@ -1541,9 +1525,48 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     CAmount nSuperblockPart = (nHeight >= consensusParams.nBudgetPaymentsStartBlock) ? nSubsidy / 10 : 0;
 
     return fSuperblockPartOnly ? nSuperblockPart : nSubsidy - nSuperblockPart;
-    // VELES END
 }
 
+double GetSmoothPaymentFactor(CAmount nBlockValue, int nHeight, int nStartHeight, int nEndHeight, double nStartFactor, double nEndFactor)
+{
+    return nStartFactor + (nEndFactor - nStartFactor) / ((nEndHeight - nStartHeight) / (nHeight - nStartHeight));
+}
+
+CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
+{
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
+        return blockValue * 0.40;
+
+    return blockValue * GetSmoothPaymentFactor(
+        blockValue,
+        nHeight,
+        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START),
+        Params().GetConsensus().nMasternodePaymentsIncreasePeriod * 5,
+        0.05,
+        0.60
+        );
+}
+
+CAmount GetFounderReward(int nHeight, CAmount blockValue)
+{
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START))
+        return (CAmount)0;
+
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
+        return blockValue * 0.05;
+
+    return blockValue * GetSmoothPaymentFactor(
+        blockValue,
+        nHeight,
+        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START),
+        Params().GetConsensus().nMasternodePaymentsIncreasePeriod * 5,
+        0.05,
+        0.00
+        );
+}
+// VELES END
+
+/*
 //FXTC BEGIN
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
@@ -1576,6 +1599,7 @@ CAmount GetFounderReward(int nHeight, CAmount blockValue)
         return ret;
 }
 //FXTC END
+*/
 
 bool IsInitialBlockDownload()
 {

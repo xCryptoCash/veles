@@ -291,30 +291,25 @@ bool ActivateBestChain(CValidationState& state, const CChainParams& chainparams,
 // VELES BEGIN
 struct HalvingEpoch
 {
-	int nStartBlock;
-	int nEndBlock;
-	int nHalvingDelayed = 0;
+	int nStartBlock = 0;
+	int nEndBlock = 0;
+//	int nTimesHalvingDelayed = 0;
 	bool fHasEnded = false;
-	bool fIsSubsidyHalved = true;
-	CAmount nStartSupply;
-	CAmount nEndSupply;
-	//CAmount nMaxSupply;
+	bool fIsSubsidyHalved = false;
+	CAmount nMaxBlockSubsidy = 0;
+	CAmount nStartSupply = 0;
+	CAmount nEndSupply = 0;
+//	CAmount nMaxSupply;
 };
 CAmount GetTotalSupply(CCoinsView *view, int nHeight = 0);
 CAmount GetTotalSupply(int nHeight = 0);
 struct HalvingParameters
 {
     int nHalvingCount = 0;
-    int nHalvingInterval;
-    int nNextHalvingBlockHeight;
-    int nLastHalvingBlockHeight = 0;
-    int nLastEpochBlockHeight = 0;
-    int nHalvingDelayed = 0;
-    CAmount nMaxBlockSubsidy;
-    CAmount nSupplyLastEpoch = 0;
-    CAmount nMaxSupplyLastEpoch = 0;
-    CAmount nMaxSupplyCurrentEpoch = 450000;
-//    std::vector<int, HalvingEpoch> epochs;
+    int nHalvingInterval = 0;
+//    int nNextHalvingBlockHeight = 0;
+//    int nLastHalvingBlockHeight = 0;
+    std::vector<HalvingEpoch> epochs;
 };
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams);
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight);
