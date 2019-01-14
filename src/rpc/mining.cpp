@@ -21,6 +21,12 @@
 #include <rpc/blockchain.h>
 #include <rpc/mining.h>
 #include <rpc/server.h>
+//
+#include <script/descriptor.h>
+#include <streams.h>
+#include <sync.h>
+#include <txdb.h>
+//
 #include <shutdown.h>
 #include <txmempool.h>
 #include <util.h>
@@ -330,16 +336,18 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
     UniValue obj(UniValue::VOBJ);
 
-    LOCK(cs_main);
+    //LOCK(cs_main);
+    FlushStateToDisk();
 
-    obj.pushKV("halvings_occured",   halvingParams->nHalvingCount);
-    obj.pushKV("halving_interval",   halvingParams->nHalvingInterval);
-    obj.pushKV("blocks_to_halving",  halvingParams->nBlocksToNextHalving);
-
-    if (sporkManager.IsSporkActive(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
-        obj.pushKV("smooth_halvings_factor", (double)(halvingParams->nHalvingInterval / halvingParams->nBlocksToNextHalving));
-    else
-        obj.pushKV("smooth_halvings_factor", (double)0);
+    obj.pushKV("halvings_occured",           halvingParams->nHalvingCount);
+    obj.pushKV("halving_interval",           halvingParams->nHalvingInterval);
+    obj.pushKV("last_halving_on_block",      halvingParams->nNextHalvingBlockHeight - chainActive.Height());
+    obj.pushKV("next_halving_on_block",      halvingParams->nNextHalvingBlockHeight);
+    obj.pushKV("blocks_to_next_halving",     halvingParams->nNextHalvingBlockHeight - chainActive.Height());
+    obj.pushKV("released_supply_last_epoch", ValueFromAmount(halvingParams->nSupplyLastEpoch));
+    obj.pushKV("max_supply_last_epoch",      ValueFromAmount(halvingParams->nMaxSupplyLastEpoch));
+    obj.pushKV("max_supply_current_epoch",   ValueFromAmount(halvingParams->nMaxSupplyCurrentEpoch));
+    obj.pushKV("times_halving_delayed",      halvingParams->nHalvingDelayed);
 
     return obj;
 }
@@ -347,11 +355,12 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
     if (request.fHelp && !request.params.size())
-            throw std::runtime_error("getmultialgostatus  *** NEW: Experimental feature added in Veles Core 0.17, use at your own risk ***");
+            throw std::runtime_error("getmultialgostatus  *** NEW: Experimental ***");
 
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "getmultialgostatus\n"
+            "\n*** Experimental: Use at your own risk, might be a subject to change any time. ***\n"
             "\nReturns a json object containing information related to multi-algo mining.\n"
             "\nResult:\n"
             "{\n"
@@ -1240,7 +1249,7 @@ static const CRPCCommand commands[] =
     { "mining",             "getnetworkhashps",       &getnetworkhashps,       {"nblocks","height"} },
     { "mining",             "getmininginfo",          &getmininginfo,          {} },
 // VELES BEGIN
-    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {} },
+    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {"nblocks"} },
     { "mining",             "getmultialgostatus",     &getmultialgostatus,     {} },
     { "hidden",             "devmultialgostatus",     &getmultialgostatus,     {} },
 // VELES END

@@ -52,6 +52,9 @@
 
 #include <future>
 #include <sstream>
+// VELES BEGIN
+#include <vector>
+// VELES END
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/thread.hpp>
@@ -267,6 +270,10 @@ std::atomic_bool g_is_mempool_loaded{false};
 // Dash
 map<uint256, int64_t> mapRejectedBlocks GUARDED_BY(cs_main);
 //
+
+// VELES BEGIN
+std::map<int, CAmount> totalSupplyIndex;
+// VELES END
 
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
@@ -1233,29 +1240,123 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
+//! Calculate statistics about the unspent transaction output set
+CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
+{
+    std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
+
+    if (it != totalSupplyIndex.end())
+        return it->second;
+
+    CAmount nTotalAmount = 0;
+    std::unique_ptr<CCoinsViewCursor> pcursor(view->Cursor());
+    uint256 prevkey;
+    std::map<uint32_t, Coin> outputs;
+    Coin coin;
+    assert(pcursor);
+
+    while (pcursor->Valid()) {
+        boost::this_thread::interruption_point();
+        COutPoint key;
+        if (pcursor->GetKey(key) && pcursor->GetValue(coin)) {
+            if (!outputs.empty() && key.hash != prevkey) {
+                for (const auto& output : outputs) {
+                    if (!nHeight || (int)coin.nHeight <= nHeight)
+                        nTotalAmount += output.second.out.nValue;
+                }
+                outputs.clear();
+            }
+            prevkey = key.hash;
+            outputs[key.n] = std::move(coin);
+        } else {
+            return error("%s: unable to read value", __func__);
+        }
+        pcursor->Next();
+    }
+    if (!outputs.empty()) {
+        for (const auto& output : outputs) {
+            if (!nHeight || (int)coin.nHeight <= nHeight)
+                nTotalAmount += output.second.out.nValue;
+        }
+    }
+    // Save result to the index
+    totalSupplyIndex[nHeight] = nTotalAmount;
+
+    return nTotalAmount;
+}
+
+CAmount GetTotalSupply(int nHeight/* = 0*/)
+{
+    return GetTotalSupply(pcoinsdbview.get());
+}
+
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
     HalvingParameters *params = new HalvingParameters();
-    params->nHalvingCount = 0;
-    params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    params->nBlocksToNextHalving = consensusParams.nSubsidyHalvingInterval 
-        + sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START) - nHeight;
+    //HalvingEpoch *epoch = new HalvingEpoch();
+    int nHeightOffset = (int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
 
-    // No halvings occuring until Veles alpha reward fork
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
+    // first default epoch before halvings
+    /*
+    epoch->nStartBlock = 1;
+    epoch->nEndBlock = nHeightOffset - 1;
+    epoch->nStartSupply = 0;
+    epoch->nEndSupply = 0;
+    */
+    // initial parameters before halvening
+    params->nMaxBlockSubsidy = 8 * COIN * consensusParams.nVlsRewardsAlphaMultiplier;
+    params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
+    params->nNextHalvingBlockHeight = nHeightOffset + consensusParams.nSubsidyHalvingInterval - nHeight;
+    //params->epochs.push_back(epoch);
+
+    // No halvings occuring until Veles alpha reward fork, or we're before first halving.
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)
+        || params->nNextHalvingBlockHeight > 0)
         return params;
 
-    // Restart halving counter on Veles alpha reward fork
-    nHeight -= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
+    CAmount nBlocksToProccess = nHeight - nHeightOffset;
+    CAmount nLastEndSupply;   // remove when entity vector gets uncommented
+    HalvingEpoch *epoch = new HalvingEpoch();
 
-    // Calculate the number of halvins that occured, while taking into 
+    //epoch->nStartBlock = nHeightOffset + params->nHalvingInterval;
+    //epoch->nEndBlock = epoch->nStartBlock - 1 + params->nHalvingInterval * 2;
+    epoch->nStartSupply = GetTotalSupply(nHeightOffset);
+    //CAmount nEpochMaxReleasedSupply = params->nMaxBlockSubsidy * params->nHalvingInterval;
+    params->nLastHalvingBlockHeight = nHeightOffset + params->nHalvingInterval;
+    //params->nLastEpochBlockHeight = nHeightOffset;
+
+    // Calculate the number of halvings that has occured, while taking into 
     // the consideration the halving interval doubles with each halving.
-    while(nHeight >= params->nHalvingInterval) {
-        nHeight -= params->nHalvingInterval;
-        params->nHalvingInterval *= 2;
-        params->nHalvingCount++;
+    while(nBlocksToProccess >= params->nHalvingInterval) {
+        nBlocksToProccess -= params->nHalvingInterval;
+        //params->nLastEpochBlockHeight += params->nHalvingInterval;
+        params->nMaxSupplyCurrentEpoch = params->nMaxBlockSubsidy * params->nHalvingInterval;
+        epoch->nEndSupply = GetTotalSupply(params->nLastHalvingBlockHeight);   
+
+        // Delay this halving one more time if less than half of planned
+        // supply was released.
+        if (epoch->nEndSupply - epoch->nStartSupply < params->nMaxSupplyCurrentEpoch / 2) {
+            params->nHalvingDelayed++;
+
+        } else {
+            // Halving has occured
+            params->nHalvingCount++;
+            //  Recalculate values related to next halving
+            params->nLastHalvingBlockHeight += (params->nHalvingInterval * (params->nHalvingDelayed + 1));
+            params->nHalvingInterval *= 2;
+            params->nSupplyLastEpoch = epoch->nEndSupply - epoch->nStartSupply;
+            params->nMaxSupplyLastEpoch = params->nMaxSupplyCurrentEpoch;
+        }
+        //params->epochs.push_back(epoch);
+        // Next newest epoch
+        nLastEndSupply = epoch->nEndSupply;
+        epoch = new HalvingEpoch();
+        //epoch->nStartBlock = params->nLastEpochBlockHeight + 1;
+        //epoch->nEndBlock = epoch->nStartBlock + params->nHalvingInterval - 1;
+        epoch->nStartSupply = nLastEndSupply; //params->epochs.last.nStartSupply;
     }
-    params->nBlocksToNextHalving = nHeight;
+    params->nNextHalvingBlockHeight = params->nLastHalvingBlockHeight + params->nHalvingInterval;
+    //params->epochs.push_back(epoch);
 
     return params;
 }
@@ -1369,7 +1470,7 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
             + SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;
     }
 
-    return (factor / (totalAdjustements / 6)) / 100;
+    return factor / (totalAdjustements / 6);
 }
 
 double GetAlgoCostFactor(int32_t nAlgo)

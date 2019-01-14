@@ -289,11 +289,32 @@ bool GetTransaction(const uint256& hash, CTransactionRef& tx, const Consensus::P
  */
 bool ActivateBestChain(CValidationState& state, const CChainParams& chainparams, std::shared_ptr<const CBlock> pblock = std::shared_ptr<const CBlock>());
 // VELES BEGIN
+struct HalvingEpoch
+{
+	int nStartBlock;
+	int nEndBlock;
+	int nHalvingDelayed = 0;
+	bool fHasEnded = false;
+	bool fIsSubsidyHalved = true;
+	CAmount nStartSupply;
+	CAmount nEndSupply;
+	//CAmount nMaxSupply;
+};
+CAmount GetTotalSupply(CCoinsView *view, int nHeight = 0);
+CAmount GetTotalSupply(int nHeight = 0);
 struct HalvingParameters
 {
-    int nHalvingCount;
+    int nHalvingCount = 0;
     int nHalvingInterval;
-    int nBlocksToNextHalving;
+    int nNextHalvingBlockHeight;
+    int nLastHalvingBlockHeight = 0;
+    int nLastEpochBlockHeight = 0;
+    int nHalvingDelayed = 0;
+    CAmount nMaxBlockSubsidy;
+    CAmount nSupplyLastEpoch = 0;
+    CAmount nMaxSupplyLastEpoch = 0;
+    CAmount nMaxSupplyCurrentEpoch = 450000;
+//    std::vector<int, HalvingEpoch> epochs;
 };
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams);
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight);
