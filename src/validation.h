@@ -294,6 +294,7 @@ struct HalvingEpoch
 	int nStartBlock = 0;
 	int nEndBlock = 0;
 //	int nTimesHalvingDelayed = 0;
+	double nDynamicRewardsBoostFactor = 0;
 	bool fHasEnded = false;
 	bool fIsSubsidyHalved = false;
 	CAmount nMaxBlockSubsidy = 0;
@@ -307,6 +308,7 @@ struct HalvingParameters
 {
     int nHalvingCount = 0;
     int nHalvingInterval = 0;
+    double nDynamicRewardsBoostFactor = 0; 
 //    int nNextHalvingBlockHeight = 0;
 //    int nLastHalvingBlockHeight = 0;
     std::vector<HalvingEpoch> epochs;
@@ -318,7 +320,7 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight);
 double GetAlgoCostFactor(int32_t nAlgo);
 double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight);
 // VELES END
-CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly = false);
+CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly = false, HalvingParameters *halvingParams = nullptr);
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue);
 CAmount GetFounderReward(int nHeight, CAmount blockValue);
 

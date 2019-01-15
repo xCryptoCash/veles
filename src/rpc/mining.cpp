@@ -334,20 +334,61 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
         );
 
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
+    std::vector<std::string> knownEpochs = { "PREMINE", "BOOTSTRAP", "ALPHA" };
+    char *epochName;
+    int halvings = 0;
+    int epochsAfterHalving = 0;
     UniValue obj(UniValue::VOBJ);
+    UniValue childObj(UniValue::VOBJ);
+    UniValue childArr(UniValue::VARR);
 
     //LOCK(cs_main);
     FlushStateToDisk();
 
-    obj.pushKV("halvings_occured",           halvingParams->nHalvingCount);/*
-    obj.pushKV("halving_interval",           halvingParams->nHalvingInterval);
-    obj.pushKV("last_halving_on_block",      halvingParams->nLastHalvingBlockHeight);
-    obj.pushKV("next_halving_on_block",      halvingParams->nNextHalvingBlockHeight);
-    obj.pushKV("blocks_to_next_halving",     halvingParams->nNextHalvingBlockHeight - chainActive.Height());
-    obj.pushKV("released_supply_last_epoch", ValueFromAmount(halvingParams->nSupplyLastEpoch));
-    obj.pushKV("max_supply_last_epoch",      ValueFromAmount(halvingParams->nMaxSupplyLastEpoch));
-    obj.pushKV("max_supply_current_epoch",   ValueFromAmount(halvingParams->nMaxSupplyCurrentEpoch));
-    obj.pushKV("times_halving_delayed",      halvingParams->nHalvingDelayed);*/
+    obj.pushKV("halvings_occured", halvingParams->nHalvingCount);
+    obj.pushKV("epochs_occured", halvingParams->epochs.size());
+    obj.pushKV("halving_interval", halvingParams->nHalvingInterval);
+
+    if (request.strMethod == "devhalvingstatus")
+        obj.pushKV("total_supply", ValueFromAmount(GetTotalSupply()));
+
+    for (int i = 0; i < (int)halvingParams->epochs.size(); i++) {
+        if (halvingParams->epochs[i].fIsSubsidyHalved) {
+            halvings++;
+            epochsAfterHalving = 0;
+        } else
+            epochsAfterHalving++;
+
+        childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
+        childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
+        childObj.pushKV("start_supply", ValueFromAmount(halvingParams->epochs[i].nStartSupply));
+        childObj.pushKV("end_supply", (halvingParams->epochs[i].fHasEnded)
+            ? ValueFromAmount(halvingParams->epochs[i].nEndSupply)
+            : false);
+        childObj.pushKV("max_block_subsidy", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
+        childObj.pushKV("is_subsidy_halved", halvingParams->epochs[i].fIsSubsidyHalved);
+        childObj.pushKV("has_ended", halvingParams->epochs[i].fHasEnded);
+
+        if (request.strMethod == "devhalvingstatus") {
+            childObj.pushKV("max_supply", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy * (halvingParams->epochs[i].nEndBlock - halvingParams->epochs[i].nStartBlock + 1)));
+            childObj.pushKV("real_supply", (halvingParams->epochs[i].fHasEnded)
+                ? ValueFromAmount(halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply)
+                : false);
+            childObj.pushKV("dynamic_rewards_boost", halvingParams->epochs[i].nDynamicRewardsBoostFactor);
+        }
+
+        if (i < (int)knownEpochs.size()) {
+            epochName = (char*)knownEpochs[i].c_str();
+        } else {
+            sprintf(epochName, "ALPHA_H%iE%i", halvings, epochsAfterHalving);
+        }
+        childObj.pushKV("epoch_name", epochName);
+
+        childArr.push_back(childObj);
+        //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)
+        //childObj.clear();
+    }
+    obj.push_back(Pair("epochs", childArr));
 
     return obj;
 }
@@ -1249,7 +1290,8 @@ static const CRPCCommand commands[] =
     { "mining",             "getnetworkhashps",       &getnetworkhashps,       {"nblocks","height"} },
     { "mining",             "getmininginfo",          &getmininginfo,          {} },
 // VELES BEGIN
-    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {"nblocks"} },
+    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {} },
+    { "mining",             "devhalvingstatus",       &gethalvingstatus,       {} },
     { "mining",             "getmultialgostatus",     &getmultialgostatus,     {} },
     { "hidden",             "devmultialgostatus",     &getmultialgostatus,     {} },
 // VELES END

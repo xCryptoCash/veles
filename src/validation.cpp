@@ -1240,6 +1240,31 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
+
+CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *halvingParams)
+{
+    CBlockIndex *pb = chainActive.Tip();
+    CAmount nRewards = 0;
+
+    // Look up last block mined by the current algo
+    while (pb->pprev) {
+        if (pb->nHeight < nStartBlock) {
+            pb = pb->pprev;
+            break;
+        }
+
+        if (pb->nHeight < nEndBlock) {
+            pb = pb->pprev;
+            continue;
+        }
+
+        nRewards += GetBlockSubsidy(pb->nHeight, pb->GetBlockHeader(), Params().GetConsensus(), false, halvingParams);
+        pb = pb->pprev;
+    }
+
+   return nRewards;
+}
+
 CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
 {
     std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
@@ -1284,28 +1309,59 @@ CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
     return nTotalAmount;
 }
 
-CAmount GetTotalSupply(int nHeight/* = 0*/)
+CAmount GetTotalSupply(int nHeight)
 {
-    return GetTotalSupply(pcoinsdbview.get());
+   // return GetTotalSupply(pcoinsdbview.get());
+   return CountBlockRewards(0, nHeight, GetSubsidyHalvingParameters(nHeight, Params().GetConsensus()));
 }
 
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
-    const double nMinSupplyTarget = 0.5;
+    const double nMinSupplyTarget = 0.75;
+    const double nMinBoostTarget = 0.50;
 
-    int nHeightOffset = (int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
+    int nHeightOffset = 10000;  //(int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     int nCurrentEpoch = 0;
+    double nMaxBoostFactorStep = 0.5;
     HalvingParameters *params = new HalvingParameters();
     CAmount nCurrentMaxSupply = 0;
-    CAmount nCurrentRealSupply = 0;
+    CAmount nCurrentHalvingRealSupply = 0;
+    CAmount nCurrentEpochRealSupply = 0;
     CAmount nBlocksToProccess = nHeight - nHeightOffset;
 
     // default halving settings for first epoch
     params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
 
-    // the frst epoch before first halving
-    //params->epochs[nCurrentEpoch] = new HalvingEpoch();
+    // premine epoch
+    params->epochs.push_back (HalvingEpoch{});
+    params->epochs[nCurrentEpoch].nMaxBlockSubsidy = 50000 * COIN;
+    params->epochs[nCurrentEpoch].nStartBlock = 1;
+    params->epochs[nCurrentEpoch].nEndBlock = 1;
+    params->epochs[nCurrentEpoch].nStartSupply = 0;
+    params->epochs[nCurrentEpoch].nEndSupply = 50000 * COIN;
+    params->epochs[nCurrentEpoch].fHasEnded = true;
+    nCurrentEpoch++;
+    // bootstrap epoch
+    params->epochs.push_back (HalvingEpoch{});
     params->epochs[nCurrentEpoch].nMaxBlockSubsidy = 8 * COIN;
+    params->epochs[nCurrentEpoch].nStartBlock = 2;
+    params->epochs[nCurrentEpoch].nStartSupply = 50000 * COIN;
+    params->epochs[nCurrentEpoch].nEndBlock = nHeightOffset - 1;
+
+    // we're still in the bootstrap epoch
+    if (nHeight < nHeightOffset) {
+
+        return params; 
+    }
+    params->epochs[nCurrentEpoch].fHasEnded = true;
+    params->epochs[nCurrentEpoch].nEndSupply = params->epochs[nCurrentEpoch].nStartSupply
+        + CountBlockRewards(params->epochs[nCurrentEpoch].nStartBlock, params->epochs[nCurrentEpoch].nEndBlock - 1, params);
+    nCurrentEpoch++;
+    // first VCIP01 epoch before first halving
+    params->epochs.push_back (HalvingEpoch{});
+    params->epochs[nCurrentEpoch].nMaxBlockSubsidy = 8 * COIN * consensusParams.nVlsRewardsAlphaMultiplier;
+    params->epochs[nCurrentEpoch].nStartBlock = nHeightOffset;
+    params->epochs[nCurrentEpoch].nStartSupply = params->epochs[nCurrentEpoch - 1].nEndSupply;
     params->epochs[nCurrentEpoch].nEndBlock = nHeightOffset + params->nHalvingInterval - 1;
 
     // we're still before the first halving is supposed to occur
@@ -1318,30 +1374,48 @@ HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Par
         nCurrentEpoch++;
         // let's finish the old epoch
         params->epochs[nCurrentEpoch - 1].fHasEnded = true;
-        params->epochs[nCurrentEpoch - 1].nEndSupply = GetTotalSupply(params->epochs[nCurrentEpoch - 1].nEndBlock);
+        //params->epochs[nCurrentEpoch - 1].nEndSupply = GetTotalSupply(params->epochs[nCurrentEpoch - 1].nEndBlock);
+        params->epochs[nCurrentEpoch - 1].nEndSupply = params->epochs[nCurrentEpoch - 1].nStartSupply
+            + CountBlockRewards(params->epochs[nCurrentEpoch - 1].nStartBlock, params->epochs[nCurrentEpoch - 1].nEndBlock - 1, params);
         // initialize new epoch struct
-        //params->epochs[nCurrentEpoch] = new HalvingEpoch();
+        //params->epochs[nCurrentEpoch] = HalvingEpoch;   //*(new HalvingEpoch());
+        params->epochs.push_back (HalvingEpoch{});
         params->epochs[nCurrentEpoch].nStartBlock = params->epochs[nCurrentEpoch - 1].nEndBlock + 1;
         params->epochs[nCurrentEpoch].nStartSupply = params->epochs[nCurrentEpoch - 1].nEndSupply;
         params->epochs[nCurrentEpoch].nMaxBlockSubsidy = params->epochs[nCurrentEpoch - 1].nMaxBlockSubsidy;
+        params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor = params->epochs[nCurrentEpoch - 1].nDynamicRewardsBoostFactor;
 
         nCurrentMaxSupply = params->epochs[nCurrentEpoch - 1].nMaxBlockSubsidy * params->nHalvingInterval;
-        nCurrentRealSupply += params->epochs[nCurrentEpoch - 1].nEndSupply - params->epochs[nCurrentEpoch - 1].nStartSupply;
+        nCurrentEpochRealSupply = params->epochs[nCurrentEpoch - 1].nEndSupply - params->epochs[nCurrentEpoch - 1].nStartSupply;
+        nCurrentHalvingRealSupply += nCurrentEpochRealSupply;
 
         // let's check whether we have released enough coins to the circulation,
         // then halve the subsidy and double the halving interval
-        if (nCurrentRealSupply >= nCurrentMaxSupply * nMinSupplyTarget) {
+        if (nCurrentHalvingRealSupply >= nCurrentMaxSupply * nMinSupplyTarget) {
             params->nHalvingInterval *= 2;
             params->nHalvingCount++;
             params->epochs[nCurrentEpoch].nMaxBlockSubsidy >>= 1;
             params->epochs[nCurrentEpoch].fIsSubsidyHalved = true;
-            nCurrentRealSupply = 0;
-            // update indexes
-            //params->nLastHalvingBlockHeight = params->epochs[nCurrentEpoch].nStartBlock;
-            //params->nLastHalvingBlockHeight = params->epochs[nCurrentEpoch].nStartBlock;
+            nCurrentHalvingRealSupply = 0;
+            // slow down the dynamic reward boost
+            if (params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor > nMaxBoostFactorStep)
+                params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor /= 2;
+            else
+                params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor = 0;
+
+        } else {
+            // boost dynamic rewards if we're far from target supply
+            if (nCurrentEpochRealSupply < nCurrentMaxSupply * nMinBoostTarget) {
+                if (params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor)
+                    params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor *= 2;
+                else
+                    params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor = nMaxBoostFactorStep;
+            }
         }
         // complete the next epoch struct
         params->epochs[nCurrentEpoch].nEndBlock = params->epochs[nCurrentEpoch - 1].nEndBlock + params->nHalvingInterval;
+        // update halving params
+        params->nDynamicRewardsBoostFactor = params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor;
     }
 
     return params;
@@ -1470,10 +1544,12 @@ double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight)
     return GetAlgoCostFactor(pblock->nVersion & ALGO_VERSION_MASK, nHeight);
 }
 
-CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly)
+CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly, HalvingParameters *halvingParams)
 {
     CAmount nSubsidy = 0;
-    HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
+    //HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
+    if (halvingParams == nullptr)
+        halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
 
     // Force block reward to zero when right shift is undefined.
     if (halvingParams->nHalvingCount >= 64)
@@ -1503,22 +1579,41 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         // Veles hard fork to enable Alpha block reward upgrade
         // merged from FXTC spork "smooth halvingParams->nHalvingCount" to make halvingParams->nHalvingCount linear 
         // since the specific block PORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START
-        if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
-            nSubsidy -= ((nSubsidy >> 1) * (nHeight % halvingParams->nHalvingInterval)) / halvingParams->nHalvingInterval;
+        // Proposal removed in VCIP01
+        //if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
+        //    nSubsidy -= ((nSubsidy >> 1) * (nHeight % halvingParams->nHalvingInterval)) / halvingParams->nHalvingInterval;
 
-        // Force minimum subsidy allowed
+        // VCIP01 adjust the rewards accordingly as per algo
+        if (nHeight >= 10000) {//sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
+            nSubsidy *= GetBlockAlgoCostFactor(&pblock, nHeight);
+            nSubsidy *= 1 + halvingParams->nDynamicRewardsBoostFactor;
+            nSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
+            nMaxSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
+
+            // Sporks to manage emergency situations when dynamic rewards neneds to be adjusted
+            ////
+            int nDynamicSubsidyCorrectionFactor = 200;
+
+            if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_START))
+                nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_FACTOR);
+
+            if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06B_DYNAMIC_REWARD_BOOST2_START))
+                nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06B_DYNAMIC_REWARD_BOOST2_FACTOR);
+
+            if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_START))
+                nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_FACTOR);
+
+            nSubsidy *= nDynamicSubsidyCorrectionFactor / 100;
+        }
+        ////
+
+        // Ensure minimum subsidy
         if (nSubsidy < consensusParams.nMinimumSubsidy)
             nSubsidy = consensusParams.nMinimumSubsidy;
 
-        // Veles spork to disable maximum subsidy limitation
-        if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START) && nSubsidy > nMaxSubsidy)
+        // Ensure maximum subsidy
+        if (nSubsidy > nMaxSubsidy) //nHeight < sporkManager.GetSporkValue(SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START))
             nSubsidy = nMaxSubsidy;
-    }
-
-    // Veles hard fork to enable Alpha block reward upgrade,
-    // multiply the calculated reward by the factor of X (or as defined above)
-    if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) {
-        nSubsidy *= GetBlockAlgoCostFactor(&pblock, nHeight) * consensusParams.nVlsRewardsAlphaMultiplier;
     }
  
     // Hard fork to reduce the block reward by 10 extra percent (allowing budget/superblocks)
@@ -1527,41 +1622,45 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
     return fSuperblockPartOnly ? nSuperblockPart : nSubsidy - nSuperblockPart;
 }
 
-double GetSmoothPaymentFactor(CAmount nBlockValue, int nHeight, int nStartHeight, int nEndHeight, double nStartFactor, double nEndFactor)
+double GetSmoothPaymentFactor(int nHeight, int nStartHeight, int nEndHeight, double nStartFactor, double nEndFactor)
 {
     return nStartFactor + (nEndFactor - nStartFactor) / ((nEndHeight - nStartHeight) / (nHeight - nStartHeight));
 }
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
-        return blockValue * 0.40;
+    int nIncreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
+    const Consensus::Params consensus = Params().GetConsensus();
+
+    if (nHeight < nIncreaseStartHeight) 
+        return blockValue * consensus.nMasternodePaymentsLegacyPercent * 0.01;
 
     return blockValue * GetSmoothPaymentFactor(
-        blockValue,
         nHeight,
-        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START),
-        Params().GetConsensus().nMasternodePaymentsIncreasePeriod * 5,
-        0.05,
-        0.60
+        nIncreaseStartHeight,
+        nIncreaseStartHeight + consensus.nMasternodePaymentsIncreasePeriod,
+        consensus.nMasternodePaymentsStartPercent / 100,
+        consensus.nMasternodePaymentsFinalPercent / 100
         );
 }
 
 CAmount GetFounderReward(int nHeight, CAmount blockValue)
 {
+    int nDecreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
+    const Consensus::Params consensus = Params().GetConsensus();
+
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START))
         return (CAmount)0;
 
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
-        return blockValue * 0.05;
+        return blockValue * consensus.nDevFundPaymentsLegacyPercent * 0.01;
 
     return blockValue * GetSmoothPaymentFactor(
-        blockValue,
         nHeight,
-        sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START),
-        Params().GetConsensus().nMasternodePaymentsIncreasePeriod * 5,
-        0.05,
-        0.00
+        nDecreaseStartHeight,
+        nDecreaseStartHeight + consensus.nDevFundPaymentsDecreasePeriod,
+        consensus.nDevFundPaymentsStartPercent / 100,
+        consensus.nDevFundPaymentsFinalPercent / 100
         );
 }
 // VELES END

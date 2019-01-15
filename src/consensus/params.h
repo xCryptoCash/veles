@@ -68,11 +68,19 @@ struct Params {
 
     int nMasternodeMinimumConfirmations;
     int nMasternodePaymentsStartBlock;
-    int nMasternodePaymentsIncreaseBlock;
+//  int nMasternodePaymentsIncreaseBlock;
     int nMasternodePaymentsIncreasePeriod; // in blocks
     int nMasternodeCollateralMinimum; // in coins
     int nMasternodeCollateralMaximum; // in coins
-
+    // VELES BEGIN
+    int nMasternodePaymentsStartPercent;
+    int nMasternodePaymentsFinalPercent;
+    int nMasternodePaymentsLegacyPercent;
+    int nDevFundPaymentsDecreasePeriod;
+    int nDevFundPaymentsStartPercent;
+    int nDevFundPaymentsFinalPercent;
+    int nDevFundPaymentsLegacyPercent;
+    // VELES END
     int nInstantSendKeepLock; // in blocks
 
     int nBudgetPaymentsStartBlock;
@@ -117,10 +125,10 @@ struct Params {
     int nlastValidPowHashHeight;
     // FXTC EMD
     
-    // VLS BEGIN
+    // VELES BEGIN
     // Veles hard fork to enable Alpha block reward upgrade 
     int nVlsRewardsAlphaMultiplier;
-    // VLS END
+    // VELES END
 };
 } // namespace Consensus
 
