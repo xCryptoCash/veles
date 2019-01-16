@@ -318,28 +318,25 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 // VELES BEGIN
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
-    if (request.fHelp && request.params.size() == 1)
-        throw std::runtime_error("gethalvingstatus      *** NEW: Experimental ***");
-
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "gethalvingstatus\n"
+            "gethalvingstatus      *** NEW: Experimental ***\n"
             "\nReturns a json object containing dynamic reward-related information."
             "\nResult:\n"
             "{\n"
             "  \"halvings_occured\": nnn,       (numeric) The number of halvings that has already occured\n"
             "  \"epochs_occured\": nnn,         (numeric) The number of intervals that halving might occour\n"
             "  \"halving_interval\": nnn,       (numeric) Interval between the last halving and the next\n"
-            "  \"epochs\" : [                     (array) Experimental.\n"
+            "  \"epochs\" : [                     (array) Halving epoch is time between start and end of block subsidy halving interval, where maximum block reward is the same for all the blocks within the epoch. If not enough coins are mined during the epoch, the halving will not occur and the epoch will repeat again. If the halving occurs, the lenght of next epoch is doubled.\n"
             "     {\n" 
-            "       \"start_block\": nnn,       (numeric)\n"
-            "       \"end_block\": nnn,         (numeric)\n"
-            "       \"start_supply\": nnn,      (numeric)\n"
-            "       \"end_supply\": nnn,  (numeric|false)\n"
-            "       \"max_block_subsidy\": nnn, (numeric)\n"
-            "       \"is_subsidy_halved\": nnn, (boolean)\n"
-            "       \"has_ended\": nnn,         (boolean)\n"
-            "       \"epoch_name\": nnn,         (string)\n"
+            "       \"start_block\": nnn,       (numeric) Fist block of the halving epoch\n"
+            "       \"end_block\": nnn,         (numeric) Last block of the epoch\n"
+            "       \"start_supply\": nnn,      (numeric) Total supply of VLS before fist block of the epoch\n"
+            "       \"end_supply\": nnn,  (numeric|false) Total supply of VLS at the last vlock of the epoch \n"
+            "       \"max_block_subsidy\": nnn, (numeric) Maximum possible number of new coins mined within a single block, the sum of PoW, Masternode and Dev fund reward.\n"
+            "       \"is_subsidy_halved\": nnn, (boolean) If true, the amount of block reward has been halved at the start of current epoch\n"
+            "       \"has_ended\": nnn,         (boolean) Whehther the epoch has already ended\n"
+            "       \"epoch_name\": nnn,         (string) Unique name of the epoch\n"
             "     },"
             "     ...\n"
             "   ]\n"
@@ -411,12 +408,9 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
-    if (request.fHelp && request.params.size() == 0)
-         throw std::runtime_error("getmultialgostatus    *** NEW: Experimental ***");
-
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getmultialgostatus\n"
+            "getmultialgostatus    *** NEW: Experimental ***\n"
             "\n*** Experimental: Use at your own risk, might be a subject to change any time. ***\n"
             "\nReturns a json object containing information related to multi-algo mining.\n"
             "\nResult:\n"
