@@ -1584,14 +1584,14 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         //    nSubsidy -= ((nSubsidy >> 1) * (nHeight % halvingParams->nHalvingInterval)) / halvingParams->nHalvingInterval;
 
         // VCIP01 adjust the rewards accordingly as per algo
-        if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
+        if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) {
             nSubsidy *= GetBlockAlgoCostFactor(&pblock, nHeight);
             nSubsidy *= 1 + halvingParams->nDynamicRewardsBoostFactor;
             nSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
             nMaxSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
 
             // Sporks to manage emergency situations when dynamic rewards neneds to be adjusted
-            ////
+            //// BEGIN dirty hack if VCIP01 fucks-up
             int nDynamicSubsidyCorrectionFactor = 300;
 
             if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_START))
@@ -1604,8 +1604,8 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_FACTOR);
 
             nSubsidy *= nDynamicSubsidyCorrectionFactor / 100;
+            //// END dirty hack if VCIP01 fucks-up
         }
-        ////
 
         // Ensure minimum subsidy
         if (nSubsidy < consensusParams.nMinimumSubsidy)
