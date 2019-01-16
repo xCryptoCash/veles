@@ -1320,7 +1320,7 @@ HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Par
     const double nMinSupplyTarget = 0.75;
     const double nMinBoostTarget = 0.50;
 
-    int nHeightOffset = 10000;  //(int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
+    int nHeightOffset = (int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     int nCurrentEpoch = 0;
     double nMaxBoostFactorStep = 0.5;
     HalvingParameters *params = new HalvingParameters();
@@ -1584,7 +1584,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
         //    nSubsidy -= ((nSubsidy >> 1) * (nHeight % halvingParams->nHalvingInterval)) / halvingParams->nHalvingInterval;
 
         // VCIP01 adjust the rewards accordingly as per algo
-        if (nHeight >= 10000) {//sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
+        if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
             nSubsidy *= GetBlockAlgoCostFactor(&pblock, nHeight);
             nSubsidy *= 1 + halvingParams->nDynamicRewardsBoostFactor;
             nSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
@@ -1592,7 +1592,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
 
             // Sporks to manage emergency situations when dynamic rewards neneds to be adjusted
             ////
-            int nDynamicSubsidyCorrectionFactor = 200;
+            int nDynamicSubsidyCorrectionFactor = 300;
 
             if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_START))
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_FACTOR);

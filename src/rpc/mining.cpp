@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2014-2017 The Dash Core developers
 // Copyright (c) 2018 FXTC developers
+// Copyright (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -317,16 +318,31 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 // VELES BEGIN
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
+    if (request.fHelp && !request.params.size())
+        throw std::runtime_error("gethalvingstatus  *** NEW: Experimental ***");
+
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "gethalvingstatus\n"
             "\nReturns a json object containing dynamic reward-related information."
             "\nResult:\n"
             "{\n"
-            "  \"halvings_occured\": nnn,        (numeric) The number of halvings that has already occured\n"
-            "  \"halving_interval\": nnn,        (numeric) Interval between the last halving and the next\n"
-            "  \"blocks_to_halving\": nnn,       (numeric) The number of blocks until next halving will occur\n"
-            "  \"smooth_halving_factor\": xx,    (numeric) Equals to true if smooth halvings are enabled\n"
+            "  \"halvings_occured\": nnn,       (numeric) The number of halvings that has already occured\n"
+            "  \"epochs_occured\": nnn,         (numeric) The number of intervals that halving might occour\n"
+            "  \"halving_interval\": nnn,       (numeric) Interval between the last halving and the next\n"
+            "  \"epochs\" : [                     (array) Experimental.\n"
+            "     {\n" 
+            "       \"start_block\": nnn,       (numeric)\n"
+            "       \"end_block\": nnn,         (numeric)\n"
+            "       \"start_supply\": nnn,      (numeric)\n"
+            "       \"end_supply\": nnn,  (numeric|false)\n"
+            "       \"max_block_subsidy\": nnn, (numeric)\n"
+            "       \"is_subsidy_halved\": nnn, (boolean)\n"
+            "       \"has_ended\": nnn,         (boolean)\n"
+            "       \"epoch_name\": nnn,         (string)\n"
+            "     },"
+            "     ...\n"
+            "   ]\n"
             "}\n"
             "\nExamples:\n"
             + HelpExampleCli("gethalvingstatus", "")
@@ -335,7 +351,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
     std::vector<std::string> knownEpochs = { "PREMINE", "BOOTSTRAP", "ALPHA" };
-    char *epochName;
+    std::string epochName;
     int halvings = 0;
     int epochsAfterHalving = 0;
     UniValue obj(UniValue::VOBJ);
@@ -371,19 +387,19 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
         if (request.strMethod == "devhalvingstatus") {
             childObj.pushKV("max_supply", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy * (halvingParams->epochs[i].nEndBlock - halvingParams->epochs[i].nStartBlock + 1)));
-            childObj.pushKV("real_supply", (halvingParams->epochs[i].fHasEnded)
-                ? ValueFromAmount(halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply)
-                : false);
+            //childObj.pushKV("real_supply", (halvingParams->epochs[i].fHasEnded)
+            //    ? ValueFromAmount(halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply)
+            //    : false);
             childObj.pushKV("dynamic_rewards_boost", halvingParams->epochs[i].nDynamicRewardsBoostFactor);
         }
 
         if (i < (int)knownEpochs.size()) {
-            epochName = (char*)knownEpochs[i].c_str();
+            childObj.pushKV("epoch_name", knownEpochs[i]);
+            epochsAfterHalving = 0; // make sure first numbered epoch starts after special epochs
         } else {
-            sprintf(epochName, "ALPHA_H%iE%i", halvings, epochsAfterHalving);
+            sprintf(const_cast<char*>(epochName.c_str()), "ALPHA_H%iE%i", halvings, epochsAfterHalving);
+            childObj.pushKV("epoch_name", epochName);
         }
-        childObj.pushKV("epoch_name", epochName);
-
         childArr.push_back(childObj);
         //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)
         //childObj.clear();
@@ -404,14 +420,15 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
             "\n*** Experimental: Use at your own risk, might be a subject to change any time. ***\n"
             "\nReturns a json object containing information related to multi-algo mining.\n"
             "\nResult:\n"
-            "{\n"
-            "  \"xxxxxx\" : {                 (json object)  PoW algorithm algorithm name.\n"
+            "[\n"
+            "  {\n"                
+            "    \"algo\": xxxxxx                  (string)  PoW algorithm algorithm name.\n"
             "    \"difficulty\": xxx.xxxxx,        (numeric) The current difficulty\n"
             "    \"networkhashps\": nnn,           (numeric) The network hashes per second\n"
-            "    \"blocks\" : n                    (numeric) Number of the last block generated by this algorithm\n"
+            "    \"last_block_index\" : n          (numeric) Number of the last block generated by the algorithm\n"
             "  },\n"
             "   ..."
-            "}\n"
+            "]\n"
             "\nSupported algorithms:\n"
             "  sha256d, scrypt, lyra2z, x11, x16, nist5.\n"
             "\nExamples:\n"
@@ -421,14 +438,30 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
 
     LOCK(cs_main);
 
-    UniValue obj(UniValue::VOBJ);
+    UniValue arr(UniValue::VARR);
+    UniValue algoObj(UniValue::VOBJ);
+    /*
     UniValue sha256dObj(UniValue::VOBJ);
     UniValue scryptObj(UniValue::VOBJ);
     UniValue lyra2zObj(UniValue::VOBJ);
     UniValue x11Obj(UniValue::VOBJ);
     UniValue x16rObj(UniValue::VOBJ);
     UniValue nist5Obj(UniValue::VOBJ);
+    */
 
+    std::vector<int32_t> algos = {ALGO_SHA256D, ALGO_SCRYPT, ALGO_LYRA2Z, ALGO_X11, ALGO_X16R, ALGO_NIST5};
+
+    for(int i = 0; i < (int)algos.size(); i++) {
+        algoObj.pushKV("algo", GetAlgoName(i));
+        algoObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(algos[i]));
+        algoObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, algos[i]));
+        algoObj.pushKV("last_block_index", (int)GetLastAlgoBlock(algos[i])->nHeight);
+        arr.push_back(algoObj);  
+    }
+
+    return arr;
+
+/*
     sha256dObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_SHA256D));
     sha256dObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_SHA256D));
     sha256dObj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_SHA256D)->nHeight);
@@ -481,14 +514,15 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
         
     }
 
-    obj.push_back(Pair("sha256d", sha256dObj));
-    obj.push_back(Pair("scrypt", scryptObj));
-    obj.push_back(Pair("lyra2z", lyra2zObj));
-    obj.push_back(Pair("x11", x11Obj));
-    obj.push_back(Pair("x16r", x16rObj));
-    obj.push_back(Pair("nist5", nist5Obj));
+    obj.push_back(Pair(sha256dObj));
+    obj.push_back(Pair(scryptObj));
+    obj.push_back(Pair(lyra2zObj));
+    obj.push_back(Pair(x11Obj));
+    obj.push_back(Pair(x16rObj));
+    obj.push_back(Pair(nist5Obj));
 
     return obj;
+*/
 }
 // VELES END
 

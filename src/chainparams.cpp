@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2014-2017 The Dash Core developers
 // Copyright (c) 2018 FXTC developers
+// Copyright (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -76,43 +77,39 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 2000; //50000;
+        consensus.nSubsidyHalvingInterval = 2000;           // initial halving interval starting from VCIP01 activation block
         consensus.nMinimumSubsidy = 0.00100000 * COIN;
-
         consensus.nMasternodeMinimumConfirmations = 15;
 	    consensus.nMasternodePaymentsStartBlock = 50;
-        consensus.nMasternodeCollateralMinimum = 2000;      // starting MN collateral
-        consensus.nMasternodeCollateralMaximum = 2000;      // MN collateral at infinity
+        consensus.nMasternodeCollateralMinimum = 2000;
+        consensus.nMasternodeCollateralMaximum = 2000;
 //      consensus.nMasternodePaymentsIncreaseBlock = 50;    // In Veles is VCIP01 block
-        consensus.nMasternodePaymentsIncreasePeriod = 365 * 576 * 5; // 5 years
+        consensus.nMasternodePaymentsIncreasePeriod = 365 * 576 * 5; // 5 years, activated with VCIP01
         // VELES BEGIN
-        consensus.nMasternodePaymentsStartPercent =  5;
-        consensus.nMasternodePaymentsFinalPercent =  60;    // will be reached in ca 5 yrs
-        consensus.nMasternodePaymentsLegacyPercent = 40;    // value used until VCIP01
-        consensus.nDevFundPaymentsDecreasePeriod =   365 * 576 * 5;   // 5 years
-        consensus.nDevFundPaymentsStartPercent =  5;
-        consensus.nDevFundPaymentsFinalPercent =  0;        // no more dev rewards after 5 years
-        consensus.nDevFundPaymentsLegacyPercent = 5;
+        consensus.nMasternodePaymentsStartPercent =  5;     // at VCIP01 this should equal to approx same VLS amount as before
+        consensus.nMasternodePaymentsFinalPercent =  60;    // will be reached in ca 5 years
+        consensus.nMasternodePaymentsLegacyPercent = 40;    // bootstrap stage default until VCIP01
+        consensus.nDevFundPaymentsDecreasePeriod =   365 * 576 * 5;   // 5 years of decreasing dev reward
+        consensus.nDevFundPaymentsStartPercent =  5;        // 5% dev rewards at VCIP01
+        consensus.nDevFundPaymentsFinalPercent =  0;        // no dev reward at all 5 years after VCIP01
+        consensus.nDevFundPaymentsLegacyPercent = 5;        // bootstrap stage default until VCIP01
+        consensus.nVlsRewardsAlphaMultiplier = 10;          // correction factor for block rewards since VCIP01
         // VELES END
         consensus.nInstantSendKeepLock = 24;
-
-        consensus.nBudgetPaymentsStartBlock = 999 * 365 * 576; // 999 common years
-        consensus.nBudgetPaymentsCycleBlocks = 10958; // weekly
+        consensus.nBudgetPaymentsStartBlock = 999 * 365 * 576;  // 999 common years
+        consensus.nBudgetPaymentsCycleBlocks = 10958;           // weekly
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nBudgetProposalEstablishingTime = 86400; // 1 day
-
-        consensus.nSuperblockStartBlock = 999 * 365 * 576; // 999 common years
-        consensus.nSuperblockCycle = 10958; // weekly
-
+        consensus.nBudgetProposalEstablishingTime = 86400;      // 1 day
+        consensus.nSuperblockStartBlock = 999 * 365 * 576;      // 999 common years
+        consensus.nSuperblockCycle = 10958;                     // weekly
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
-
         // VELES BEGIN
         consensus.BIP16Exception = uint256();
-        consensus.BIP34Height = 20; // block 710000
-        consensus.BIP34Hash = uint256S("0x001"); // block 710000
-        consensus.BIP65Height = 30; // block 1000000
-        consensus.BIP66Height = 30; // block 1000000
+        consensus.BIP34Height = 20;
+        consensus.BIP34Hash = uint256S("0x001");
+        consensus.BIP65Height = 30;
+        consensus.BIP66Height = 30;
         // VELES END
         consensus.powLimit = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 4 * 60 * 60;     // 4 hours
@@ -145,10 +142,6 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
-
-        // VLS BEGIN
-        consensus.nVlsRewardsAlphaMultiplier = 10;
-        // VLS END
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000"); // block 0
