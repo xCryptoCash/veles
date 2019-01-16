@@ -452,7 +452,7 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
     std::vector<int32_t> algos = {ALGO_SHA256D, ALGO_SCRYPT, ALGO_LYRA2Z, ALGO_X11, ALGO_X16R, ALGO_NIST5};
 
     for(int i = 0; i < (int)algos.size(); i++) {
-        algoObj.pushKV("algo", GetAlgoName(i));
+        algoObj.pushKV("algo", GetAlgoName(algos[i]));
         algoObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(algos[i]));
         algoObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, algos[i]));
         algoObj.pushKV("last_block_index", (int)GetLastAlgoBlock(algos[i])->nHeight);
