@@ -13,22 +13,12 @@
   <property name="windowTitle">
    <string>Signatures - Sign / Verify a Message</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(56, 56, 56);;
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <property name="modal">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -59,11 +49,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <widget class="QValidatedLineEdit" name="addressIn_SM">
            <property name="toolTip">
             <string>The Veles address to sign the message with</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
           </widget>
          </item>
@@ -114,11 +99,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          <property name="toolTip">
           <string>Enter the message you want to sign here</string>
          </property>
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -140,17 +120,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <widget class="QLineEdit" name="signatureOut_SM">
            <property name="font">
             <font>
-             <family>Uroob</family>
-             <pointsize>12</pointsize>
-             <weight>9</weight>
-             <italic>false</italic>
-             <bold>false</bold>
+             <italic>true</italic>
             </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -229,11 +200,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <widget class="QLabel" name="statusLabel_SM">
            <property name="font">
             <font>
-             <family>Uroob</family>
-             <pointsize>12</pointsize>
-             <weight>9</weight>
-             <italic>false</italic>
-             <bold>false</bold>
+             <weight>75</weight>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -292,11 +260,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>The Veles address the message was signed with</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
           </widget>
          </item>
          <item>
@@ -322,22 +285,10 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         </layout>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="messageIn_VM">
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
-        </widget>
+        <widget class="QPlainTextEdit" name="messageIn_VM"/>
        </item>
        <item>
-        <widget class="QValidatedLineEdit" name="signatureIn_VM">
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
-        </widget>
+        <widget class="QValidatedLineEdit" name="signatureIn_VM"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2_VM">
@@ -392,11 +343,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <widget class="QLabel" name="statusLabel_VM">
            <property name="font">
             <font>
-             <family>Uroob</family>
-             <pointsize>12</pointsize>
-             <weight>9</weight>
-             <italic>false</italic>
-             <bold>false</bold>
+             <weight>75</weight>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">

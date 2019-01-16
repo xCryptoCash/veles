@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(56, 56, 56);;
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="topLayout">
    <item>
     <widget class="QLabel" name="labelAlerts">
@@ -44,11 +39,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QFrame" name="frame">
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -62,11 +52,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="label_5">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -92,7 +79,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="../bitcoin.qrc">
                 <normaloff>:/icons/warning</normaloff>
                 <disabledoff>:/icons/warning</disabledoff>:/icons/warning</iconset>
               </property>
@@ -131,11 +118,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelWatchPending">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -159,11 +143,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelUnconfirmed">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -187,11 +168,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelWatchImmature">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -248,11 +226,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelImmature">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -296,11 +271,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelTotal">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -324,11 +296,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelWatchTotal">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -369,11 +338,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelBalance">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -397,11 +363,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="labelWatchAvailable">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="cursor">
@@ -462,11 +425,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QFrame" name="frame_2">
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -480,11 +438,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <widget class="QLabel" name="label_4">
               <property name="font">
                <font>
-                <family>Uroob</family>
-                <pointsize>12</pointsize>
-                <weight>9</weight>
-                <italic>false</italic>
-                <bold>false</bold>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -510,7 +465,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="../bitcoin.qrc">
                 <normaloff>:/icons/warning</normaloff>
                 <disabledoff>:/icons/warning</disabledoff>:/icons/warning</iconset>
               </property>
@@ -543,9 +498,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <item>
            <widget class="QListView" name="listTransactions">
             <property name="styleSheet">
-             <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
+             <string notr="true">QListView { background: transparent; }</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>

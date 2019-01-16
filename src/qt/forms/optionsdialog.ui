@@ -13,24 +13,14 @@
   <property name="windowTitle">
    <string>Options</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(56, 56, 56);;
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <property name="modal">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-     </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabMain">
       <attribute name="title">
@@ -61,20 +51,20 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_Main_Prune">
-         <item>
-          <widget class="QCheckBox" name="prune">
-           <property name="toolTip">
-            <string>Disables some advanced features but all blocks will still be fully validated. Reverting this setting requires re-downloading the entire blockchain. Actual disk usage may be somewhat higher.</string>
-           </property>
-           <property name="text">
-            <string>Prune &amp;block storage to</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="pruneSize"/>
-         </item>
+       <layout class="QHBoxLayout" name="horizontalLayout_Main_Prune">
+        <item>
+         <widget class="QCheckBox" name="prune">
+          <property name="toolTip">
+           <string>Disables some advanced features but all blocks will still be fully validated. Reverting this setting requires re-downloading the entire blockchain. Actual disk usage may be somewhat higher.</string>
+          </property>
+          <property name="text">
+           <string>Prune &amp;block storage to</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="pruneSize"/>
+        </item>
          <item>
           <widget class="QLabel" name="pruneSizeUnitLabel">
            <property name="text">
@@ -226,6 +216,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             </property>
            </widget>
           </item>
+          <!-- Dash -->
           <item>
            <widget class="QCheckBox" name="showMasternodesTab">
             <property name="toolTip">
@@ -236,6 +227,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             </property>
            </widget>
           </item>
+          <!--      -->
           <item>
            <widget class="QCheckBox" name="spendZeroConfChange">
             <property name="toolTip">
@@ -331,11 +323,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
           </widget>
          </item>
          <item>
@@ -367,11 +354,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
            <property name="toolTip">
             <string>Port of the proxy (e.g. 9050)</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
           </widget>
          </item>
@@ -410,9 +392,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
            <property name="text">
             <string/>
            </property>
@@ -436,9 +415,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
            <property name="text">
             <string/>
            </property>
@@ -461,9 +437,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
            <property name="toolTip">
             <string>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
            </property>
            <property name="text">
             <string/>
@@ -537,11 +510,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
           </widget>
          </item>
          <item>
@@ -573,11 +541,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
            <property name="toolTip">
             <string>Port of the proxy (e.g. 9050)</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
           </widget>
          </item>
@@ -686,11 +649,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>The user interface language can be set here. This setting will take effect after restarting %1.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
           </widget>
          </item>
         </layout>
@@ -715,11 +673,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            <property name="toolTip">
             <string>Choose the default subdivision unit to show in the interface and when sending coins.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
           </widget>
          </item>
         </layout>
@@ -743,11 +696,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <widget class="QLineEdit" name="thirdPartyTxUrls">
            <property name="toolTip">
             <string>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
           </widget>
          </item>
@@ -825,11 +773,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          <property name="toolTip">
           <string>Open the %1 configuration file from the working directory.</string>
          </property>
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-         </property>
          <property name="text">
           <string>Open Configuration File</string>
          </property>
@@ -842,11 +785,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QPushButton" name="resetButton">
          <property name="toolTip">
           <string>Reset all client options to default.</string>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
          </property>
          <property name="text">
           <string>&amp;Reset Options</string>
@@ -881,11 +819,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        </property>
        <property name="font">
         <font>
-         <family>Uroob</family>
-         <pointsize>12</pointsize>
-         <weight>9</weight>
-         <italic>false</italic>
-         <bold>false</bold>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -931,11 +866,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="okButton">
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
            <property name="text">
             <string>&amp;OK</string>
            </property>
@@ -949,11 +879,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          </item>
          <item>
           <widget class="QPushButton" name="cancelButton">
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
            <property name="text">
             <string>&amp;Cancel</string>
            </property>

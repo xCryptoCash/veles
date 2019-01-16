@@ -6,14 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
+    <width>487</width>
     <height>597</height>
    </rect>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -32,11 +27,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="toolTip">
       <string>QR Code</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -63,11 +53,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <height>50</height>
       </size>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -86,11 +71,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="btnCopyURI">
-       <property name="styleSheet">
-        <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-       </property>
        <property name="text">
         <string>Copy &amp;URI</string>
        </property>
@@ -101,11 +81,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
      </item>
      <item>
       <widget class="QPushButton" name="btnCopyAddress">
-       <property name="styleSheet">
-        <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-       </property>
        <property name="text">
         <string>Copy &amp;Address</string>
        </property>
@@ -116,11 +91,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
      </item>
      <item>
       <widget class="QPushButton" name="btnSaveAs">
-       <property name="styleSheet">
-        <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-       </property>
        <property name="text">
         <string>&amp;Save Image...</string>
        </property>
@@ -144,9 +114,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="standardButtons">
         <set>QDialogButtonBox::Close</set>
        </property>

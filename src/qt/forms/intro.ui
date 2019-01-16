@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>Welcome</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="welcomeLabel">
@@ -111,13 +106,7 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="dataDirectory">
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="dataDirectory"/>
          </item>
          <item>
           <widget class="QPushButton" name="ellipsisButton">
@@ -132,11 +121,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
              <width>30</width>
              <height>16777215</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
            </property>
            <property name="text">
             <string notr="true">…</string>

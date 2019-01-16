@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>395</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,9 +50,9 @@
       <item>
        <widget class="QWidget" name="contentWidget" native="true">
         <property name="styleSheet">
-         <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
+         <string notr="true">#contentWidget { background: rgba(255,255,255,240); border-radius: 6px; }
+
+QLabel { color: rgb(40,40,40);  }</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayoutSub" stretch="1,0,0,0">
          <property name="spacing">
@@ -144,11 +144,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
               <widget class="QLabel" name="infoTextStrong">
                <property name="font">
                 <font>
-                 <family>Uroob</family>
-                 <pointsize>12</pointsize>
-                 <weight>9</weight>
-                 <italic>false</italic>
-                 <bold>false</bold>
+                 <weight>75</weight>
+                 <bold>true</bold>
                 </font>
                </property>
                <property name="text">
@@ -210,11 +207,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <widget class="QLabel" name="labelNumberOfBlocksLeft">
              <property name="font">
               <font>
-               <family>Uroob</family>
-               <pointsize>12</pointsize>
-               <weight>9</weight>
-               <italic>false</italic>
-               <bold>false</bold>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -233,11 +227,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <widget class="QLabel" name="labelLastBlockTime">
              <property name="font">
               <font>
-               <family>Uroob</family>
-               <pointsize>12</pointsize>
-               <weight>9</weight>
-               <italic>false</italic>
-               <bold>false</bold>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -262,11 +253,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <widget class="QLabel" name="labelSyncDone">
              <property name="font">
               <font>
-               <family>Uroob</family>
-               <pointsize>12</pointsize>
-               <weight>9</weight>
-               <italic>false</italic>
-               <bold>false</bold>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -299,11 +287,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <widget class="QLabel" name="labelProgressIncrease">
              <property name="font">
               <font>
-               <family>Uroob</family>
-               <pointsize>12</pointsize>
-               <weight>9</weight>
-               <italic>false</italic>
-               <bold>false</bold>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -322,11 +307,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <widget class="QLabel" name="labelEstimatedTimeLeft">
              <property name="font">
               <font>
-               <family>Uroob</family>
-               <pointsize>12</pointsize>
-               <weight>9</weight>
-               <italic>false</italic>
-               <bold>false</bold>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
              </property>
              <property name="text">
@@ -366,16 +348,11 @@ font: 75 12pt &quot;Uroob&quot;;</string>
            </item>
            <item>
             <widget class="QPushButton" name="closeButton">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-             </property>
              <property name="text">
               <string>Hide</string>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
              </property>
              <property name="default">
               <bool>true</bool>

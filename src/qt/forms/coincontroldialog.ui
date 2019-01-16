@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>Coin Selection</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayoutTop" stretch="0,0,0,0">
@@ -45,11 +40,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QLabel" name="labelCoinControlQuantityText">
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -77,11 +69,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QLabel" name="labelCoinControlBytesText">
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -125,11 +114,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QLabel" name="labelCoinControlAmountText">
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -160,11 +146,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          </property>
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -211,11 +194,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QLabel" name="labelCoinControlFeeText">
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -259,11 +239,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
         <widget class="QLabel" name="labelCoinControlAfterFeeText">
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -294,11 +271,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          </property>
          <property name="font">
           <font>
-           <family>Uroob</family>
-           <pointsize>12</pointsize>
-           <weight>9</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -423,11 +397,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
     <widget class="CoinControlTreeWidget" name="treeWidget">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="sortingEnabled">
       <bool>false</bool>

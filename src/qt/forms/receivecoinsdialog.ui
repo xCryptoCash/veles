@@ -10,11 +10,6 @@
     <height>396</height>
    </rect>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(56, 56, 56);;
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
    <item>
     <widget class="QFrame" name="frame2">
@@ -23,11 +18,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -75,11 +65,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
           <property name="toolTip">
            <string>An optional label to associate with the new receiving address.</string>
           </property>
-          <property name="styleSheet">
-           <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-          </property>
          </widget>
         </item>
         <item row="2" column="2">
@@ -109,11 +94,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
          <widget class="QLineEdit" name="reqMessage">
           <property name="toolTip">
            <string>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Veles network.</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
           </property>
          </widget>
         </item>
@@ -206,11 +186,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
             <property name="toolTip">
              <string>An optional amount to request. Leave this empty or zero to not request a specific amount.</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-            </property>
            </widget>
           </item>
           <item>
@@ -279,11 +254,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -295,11 +265,8 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <widget class="QLabel" name="label_6">
         <property name="font">
          <font>
-          <family>Uroob</family>
-          <pointsize>12</pointsize>
-          <weight>9</weight>
-          <italic>false</italic>
-          <bold>false</bold>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -311,11 +278,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
        <widget class="QTableView" name="recentRequestsView">
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
         </property>
         <property name="tabKeyNavigation">
          <bool>false</bool>

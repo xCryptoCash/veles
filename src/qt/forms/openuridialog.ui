@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>Open URI</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:rgb(70, 81, 86);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label_2">
@@ -36,23 +31,12 @@ font: 75 12pt &quot;Uroob&quot;;</string>
       </widget>
      </item>
      <item>
-      <widget class="QValidatedLineEdit" name="uriEdit">
-       <property name="styleSheet">
-        <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-       </property>
-      </widget>
+      <widget class="QValidatedLineEdit" name="uriEdit"/>
      </item>
      <item>
       <widget class="QPushButton" name="selectFileButton">
        <property name="toolTip">
         <string>Select payment request file</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
        </property>
        <property name="text">
         <string notr="true">…</string>
@@ -79,11 +63,6 @@ font: 75 12pt &quot;Uroob&quot;;</string>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(98, 104, 118);
-color:rgb(211, 215, 207);
-font: 75 12pt &quot;Uroob&quot;;</string>
-     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
