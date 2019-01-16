@@ -396,8 +396,6 @@ CPPFLAGS="$CPPFLAGS -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS"
 
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
-  # Veles Core block testing utility disabled in public release
-  #[build bitcoin-cli bitcoin-tx bitcoin-testblock (default=yes)])],
   [build bitcoin-cli bitcoin-tx (default=yes)])],
   [build_bitcoin_utils=$withval],
   [build_bitcoin_utils=yes])
@@ -1190,8 +1188,6 @@ AC_MSG_CHECKING([whether to build velesd])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_bitcoind = xyes])
 AC_MSG_RESULT($build_bitcoind)
 
-# Veles block testing utility disabled in public release
-#AC_MSG_CHECKING([whether to build utils (veles-cli veles-tx veles-testblock)])
 AC_MSG_CHECKING([whether to build utils (veles-cli veles-tx)])
 AM_CONDITIONAL([BUILD_BITCOIN_UTILS], [test x$build_bitcoin_utils = xyes])
 AC_MSG_RESULT($build_bitcoin_utils)
