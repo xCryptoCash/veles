@@ -85,9 +85,9 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const PlatformStyle *_platformSty
         move(QApplication::desktop()->availableGeometry().center() - frameGeometry().center());
     }
 
-    // Veles style upgrade
-    QMainWindow *mainWindow = (QMainWindow *)this;
-    mainWindow->setStyleSheet("background-color: rgb(56, 56, 56); color: rgb(211, 215, 207); font: 75 12pt 'Uroob';");
+    // Veles style upgrade - uncomment to ignore platform style's window  color
+    //QMainWindow *mainWindow = (QMainWindow *)this;
+    //mainWindow->setStyleSheet("background-color: rgb(56, 56, 56); color: rgb(211, 215, 207); font: 75 12pt 'Uroob';");
 
 
     QString windowTitle = tr(PACKAGE_NAME) + " - ";
