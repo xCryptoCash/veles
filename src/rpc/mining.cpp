@@ -318,8 +318,8 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 // VELES BEGIN
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
-    if (request.fHelp && !request.params.size())
-        throw std::runtime_error("gethalvingstatus  *** NEW: Experimental ***");
+    if (request.fHelp && request.params.size() == 1)
+        throw std::runtime_error("gethalvingstatus      *** NEW: Experimental ***");
 
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -387,9 +387,9 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
         if (request.strMethod == "devhalvingstatus") {
             childObj.pushKV("max_supply", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy * (halvingParams->epochs[i].nEndBlock - halvingParams->epochs[i].nStartBlock + 1)));
-            //childObj.pushKV("real_supply", (halvingParams->epochs[i].fHasEnded)
-            //    ? ValueFromAmount(halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply)
-            //    : false);
+            childObj.pushKV("real_supply", (halvingParams->epochs[i].fHasEnded)
+                ? ValueFromAmount(halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply)
+                : false);
             childObj.pushKV("dynamic_rewards_boost", halvingParams->epochs[i].nDynamicRewardsBoostFactor);
         }
 
@@ -411,8 +411,8 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
-    if (request.fHelp && !request.params.size())
-            throw std::runtime_error("getmultialgostatus  *** NEW: Experimental ***");
+    if (request.fHelp && request.params.size() == 0)
+         throw std::runtime_error("getmultialgostatus    *** NEW: Experimental ***");
 
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -440,15 +440,8 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
 
     UniValue arr(UniValue::VARR);
     UniValue algoObj(UniValue::VOBJ);
-    /*
-    UniValue sha256dObj(UniValue::VOBJ);
-    UniValue scryptObj(UniValue::VOBJ);
-    UniValue lyra2zObj(UniValue::VOBJ);
-    UniValue x11Obj(UniValue::VOBJ);
-    UniValue x16rObj(UniValue::VOBJ);
-    UniValue nist5Obj(UniValue::VOBJ);
-    */
-
+    int nBlocks24h = (24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
+    int nBlocks7d = (7 * 24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
     std::vector<int32_t> algos = {ALGO_SHA256D, ALGO_SCRYPT, ALGO_LYRA2Z, ALGO_X11, ALGO_X16R, ALGO_NIST5};
 
     for(int i = 0; i < (int)algos.size(); i++) {
@@ -456,73 +449,16 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
         algoObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(algos[i]));
         algoObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, algos[i]));
         algoObj.pushKV("last_block_index", (int)GetLastAlgoBlock(algos[i])->nHeight);
+        // Yet undocumented extended info, experimental
+        if (request.strMethod == "devmultialgostatus") {
+            algoObj.pushKV("cost_factor", GetAlgoCostFactor(algos[i]));
+            algoObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks24h)));
+            algoObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks7d)));
+        }
         arr.push_back(algoObj);  
     }
 
     return arr;
-
-/*
-    sha256dObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_SHA256D));
-    sha256dObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_SHA256D));
-    sha256dObj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_SHA256D)->nHeight);
-
-    scryptObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_SCRYPT));
-    scryptObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_SCRYPT));
-    scryptObj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_SCRYPT)->nHeight);
-
-    lyra2zObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_LYRA2Z));
-    lyra2zObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_LYRA2Z));
-    lyra2zObj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_LYRA2Z)->nHeight);
-
-    x11Obj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_X11));
-    x11Obj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_X11));
-    x11Obj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_X11)->nHeight);
-
-    x16rObj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_X16R));
-    x16rObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_X16R));
-    x16rObj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_X16R)->nHeight);
-
-    nist5Obj.pushKV("difficulty", (double)GetLastAlgoDifficulty(ALGO_NIST5));
-    nist5Obj.pushKV("hashrate",   GetNetworkHashPS(120, -1, ALGO_NIST5));
-    nist5Obj.pushKV("last_block_index", (int)GetLastAlgoBlock(ALGO_NIST5)->nHeight);
-
-    // Yet undocumented extended info, experimental
-    if (request.strMethod == "devmultialgostatus") {
-        int nBlocks24h = (24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
-        int nBlocks7d = (7 * 24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
-
-        sha256dObj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_SHA256D));
-        scryptObj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_SCRYPT));
-        lyra2zObj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_LYRA2Z));
-        x11Obj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_X11));
-        x16rObj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_X16R));
-        nist5Obj.pushKV("cost_factor", GetAlgoCostFactor(ALGO_NIST5));
-
-        sha256dObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_SHA256D, nBlocks24h)));
-        scryptObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_SCRYPT, nBlocks24h)));
-        lyra2zObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_LYRA2Z, nBlocks24h)));
-        x11Obj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_X11, nBlocks24h)));
-        x16rObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_X16R, nBlocks24h)));
-        nist5Obj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(ALGO_NIST5, nBlocks24h)));
-
-        sha256dObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_SHA256D, nBlocks7d)));
-        scryptObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_SCRYPT, nBlocks7d)));
-        lyra2zObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_LYRA2Z, nBlocks7d)));
-        x11Obj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_X11, nBlocks7d)));
-        x16rObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_X16R, nBlocks7d)));
-        nist5Obj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(ALGO_NIST5, nBlocks7d)));
-        
-    }
-
-    obj.push_back(Pair(sha256dObj));
-    obj.push_back(Pair(scryptObj));
-    obj.push_back(Pair(lyra2zObj));
-    obj.push_back(Pair(x11Obj));
-    obj.push_back(Pair(x16rObj));
-    obj.push_back(Pair(nist5Obj));
-
-    return obj;
-*/
 }
 // VELES END
 

@@ -23,6 +23,7 @@
 
 #include <univalue.h>
 
+/*
 static UniValue getvpninfo(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
@@ -57,7 +58,7 @@ static UniValue getvpntotals(const JSONRPCRequest& request)
     obj.pushKV("timemillis", GetTimeMillis());
     return obj;
 }
-
+*/
 
 // Preparation
 static const CRPCCommand commands[] =
