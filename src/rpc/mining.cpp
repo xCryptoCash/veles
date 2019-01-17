@@ -320,8 +320,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
 #if defined(MAC_OSX)
     throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
-#endif
-/*
+#else
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "gethalvingstatus      *** NEW: Experimental ***\n"
@@ -352,7 +351,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
             + HelpExampleCli("gethalvingstatus", "")
             + HelpExampleRpc("gethalvingstatus", "")
         );
-*/
+
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
     std::vector<std::string> knownEpochs = { "PREMINE", "BOOTSTRAP", "ALPHA" };
     std::string epochName;
@@ -411,6 +410,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     obj.push_back(Pair("epochs", childArr));
 
     return obj;
+#endif
 }
 
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
