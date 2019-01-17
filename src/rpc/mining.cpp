@@ -318,6 +318,10 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 // VELES BEGIN
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
+#if defined(MAC_OSX)
+    throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
+#endif
+
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "gethalvingstatus      *** NEW: Experimental ***\n"
@@ -411,6 +415,10 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
+#if defined(MAC_OSX)
+    throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
+#endif
+
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "getmultialgostatus    *** NEW: Experimental ***\n"
