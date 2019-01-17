@@ -171,7 +171,7 @@ static const CBlockIndex *GetLastAlgoBlock(int32_t nAlgo) {
  * algo, hence in Veles Core we consider this inconsistend information a bug,
  * hence the function below is designed to return last difficulty of algo
  * defined by nAlgo parameter.
- * 
+ *
  */
 static double GetLastAlgoDifficulty(int32_t nAlgo) {
    return (double)GetDifficulty(GetLastAlgoBlock(nAlgo));
@@ -321,21 +321,21 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 #if defined(MAC_OSX)
     throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
 #endif
-
+/*
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "gethalvingstatus      *** NEW: Experimental ***\n"
             "\nReturns a json object containing an information related to block subsidy halving. A halving epoch is time between\n"
             "the start and end of block subsidy halving interval, where maximum block reward is the same for all the blocks\n"
             "within the epoch. If not enough coins are mined during the epoch, the halving will not occur and the epoch will\n"
-            "repeat again. If the halving occurs, the lenght of next epoch is doubled.\n" 
+            "repeat again. If the halving occurs, the lenght of next epoch is doubled.\n"
             "\nResult:\n"
             "{\n"
             "  \"halvings_occured\": nnn,       (numeric) The number of halvings that has already occured\n"
             "  \"epochs_occured\": nnn,         (numeric) The number of intervals that halving might occour\n"
             "  \"halving_interval\": nnn,       (numeric) Interval between the last halving and the next\n"
             "  \"epochs\" : [                     (array) List of halving epochs that has already occured and the current epoch\n"
-            "     {\n" 
+            "     {\n"
             "       \"start_block\": nnn,       (numeric) Fist block of the halving epoch\n"
             "       \"end_block\": nnn,         (numeric) Last block of the epoch\n"
             "       \"start_supply\": nnn,      (numeric) Total supply of VLS before fist block of the epoch\n"
@@ -352,7 +352,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
             + HelpExampleCli("gethalvingstatus", "")
             + HelpExampleRpc("gethalvingstatus", "")
         );
-
+*/
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
     std::vector<std::string> knownEpochs = { "PREMINE", "BOOTSTRAP", "ALPHA" };
     std::string epochName;
@@ -426,7 +426,7 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
             "\nReturns a json object containing information related to multi-algo mining.\n"
             "\nResult:\n"
             "[\n"
-            "  {\n"                
+            "  {\n"
             "    \"algo\": xxxxxx                  (string)  PoW algorithm algorithm name.\n"
             "    \"difficulty\": xxx.xxxxx,        (numeric) The current difficulty\n"
             "    \"networkhashps\": nnn,           (numeric) The network hashes per second\n"
@@ -460,7 +460,7 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
             algoObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks24h)));
             algoObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks7d)));
         }
-        arr.push_back(algoObj);  
+        arr.push_back(algoObj);
     }
 
     return arr;
@@ -619,7 +619,7 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
             "      ,...\n"
             "  ],\n"
             "  \"superblocks_started\" : true|false, (boolean) true, if superblock payments started\n"
-            "  \"superblocks_enabled\" : true|false  (boolean) true, if superblock payments are enabled\n" 
+            "  \"superblocks_enabled\" : true|false  (boolean) true, if superblock payments are enabled\n"
             //
             // FXTC BEGIN
             "  \"founderreward\" : {               (json object) required founder reward that must be included in the next block\n"
