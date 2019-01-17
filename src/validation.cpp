@@ -272,7 +272,7 @@ map<uint256, int64_t> mapRejectedBlocks GUARDED_BY(cs_main);
 //
 
 // VELES BEGIN
-std::map<int, CAmount> totalSupplyIndex;
+std::map<int, std::map<int, CAmount>> totalSupplyIndex;
 // VELES END
 
 /** Constant stuff for coinbase transactions we create: */
@@ -1246,6 +1246,9 @@ CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *hal
     CBlockIndex *pb = chainActive.Tip();
     CAmount nRewards = 0;
 
+    if (totalSupplyIndex.count(nStartBlock) && totalSupplyIndex[nStartBlock].count(nEndBlock))
+        return totalSupplyIndex[nStartBlock][nEndBlock];
+
     // Look up last block mined by the current algo
     while (pb->pprev) {
         if (pb->nHeight < nStartBlock) {
@@ -1262,15 +1265,20 @@ CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *hal
         pb = pb->pprev;
     }
 
-   return nRewards;
+    totalSupplyIndex[nStartBlock][nEndBlock] = nRewards;
+
+    return nRewards;
 }
 
 CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
 {
-    std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
+    //std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
 
-    if (it != totalSupplyIndex.end())
-        return it->second;
+    //if (it != totalSupplyIndex.end())
+    //    return it->second;
+
+     if (totalSupplyIndex.count(0) && totalSupplyIndex[0].count(nHeight))
+        return totalSupplyIndex[0][nHeight];
 
     CAmount nTotalAmount = 0;
     std::unique_ptr<CCoinsViewCursor> pcursor(view->Cursor());
@@ -1304,7 +1312,7 @@ CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
         }
     }
     // Save result to the index
-    totalSupplyIndex[nHeight] = nTotalAmount;
+    totalSupplyIndex[0][nHeight] = nTotalAmount;
 
     return nTotalAmount;
 }
@@ -1649,7 +1657,7 @@ CAmount GetFounderReward(int nHeight, CAmount blockValue)
     int nDecreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START))
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START || nHeight < 5))
         return (CAmount)0;
 
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 

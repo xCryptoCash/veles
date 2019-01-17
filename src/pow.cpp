@@ -445,8 +445,8 @@ unsigned int GetHandbrakeForce(int32_t nVersion, int nHeight)
 {
     int32_t nVersionAlgo = nVersion & ALGO_VERSION_MASK;
 
-    // NIST5 braked and disabled
-    if (nVersionAlgo == ALGO_NIST5)
+    // NIST5 braked and disabled (until VCIP01)
+    if (nVersionAlgo == ALGO_NIST5 && nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START))
     {
         // VELES BEGIN
         //if (nHeight >= 21000) return 4070908800;
