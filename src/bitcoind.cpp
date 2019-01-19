@@ -75,7 +75,11 @@ static bool AppInit(int argc, char* argv[])
 
     // Process help and version before taking care about datadir
     if (HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
-        std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + "\n" + strVelesCoreLogoAscii + "\n";
+        //std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + "\n";
+        // VELES BEGIN
+        std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + 
+            " \"Aged Amnesia\"" + "\n" + strVelesCoreLogoAscii + "\n";
+        // VELES END
 
         if (gArgs.IsArgSet("-version"))
         {

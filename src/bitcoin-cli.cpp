@@ -110,10 +110,10 @@ static int AppInitRPC(int argc, char* argv[])
         return EXIT_FAILURE;
     }
     if (argc < 2 || HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
-        std::string strUsage = PACKAGE_NAME " RPC client version " + FormatFullVersion() + "\n";
+        //std::string strUsage = PACKAGE_NAME " RPC client version " + FormatFullVersion() + "\n";
         // VELES BEGIN
-        // Show ASCII logo header on the top
-        strUsage += strVelesCoreLogoAscii;
+        std::string strUsage = PACKAGE_NAME " RPC client version " + FormatFullVersion() + 
+            " \"Aged Amnesia\"" + "\n" + strVelesCoreLogoAscii + "\n";
         // VELES END
         if (!gArgs.IsArgSet("-version")) {
             strUsage += "\n"
