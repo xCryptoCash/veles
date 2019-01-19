@@ -1285,13 +1285,36 @@ int GetNumCores()
 
 std::string CopyrightHolders(const std::string& strPrefix)
 {
-    std::string strCopyrightHolders = strPrefix + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
+    // VELES edit: Unused
+    //
+
+    // VELES BEGIN
+    // The original notice forked from FXTC forked from Bitcoin Core is not complete
+    // and doesn't include some other project we use the code from. Also we cannot use
+    // the prefix as it's not correct for all contributors.
+
+    std::string strCopyrightHolders = strprintf(_("Copyright (C) %i-%i "), 2018, COPYRIGHT_YEAR) +
+        strprintf(_(COPYRIGHT_HOLDERS), _("Veles Core")) +
+        strprintf(_("\nCopyright (C) %i-%i "), 2018, FXTC_COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _("FXTC")) + 
+        strprintf(_("\nCopyright (C) %i-%i "), 2014, DASH_COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _("Dash Core")) +
+        strprintf(_("\nCopyright (C) %i-%i "), 2009, BITCORE_COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _("Bitcoin Core")) +
+        "\nCopyright (c) 2009-2010 Satoshi Nakamoto";
+
+    return strCopyrightHolders;
+    
+    // VELES END
+    /* 
+    // VELES edit: Unused original code:
+    std::string strCopyrightHolders = strPrefix + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION)); // VELES edit
 
     // Check for untranslated substitution to make sure Bitcoin Core copyright is not removed by accident
     if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION).find("Bitcoin Core") == std::string::npos) {
         strCopyrightHolders += "\n" + strPrefix + "The Bitcoin Core developers";
     }
+
     return strCopyrightHolders;
+    //
+    */
 }
 
 // Obtain the application startup time (used for uptime calculation)

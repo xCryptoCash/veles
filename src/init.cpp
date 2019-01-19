@@ -589,8 +589,8 @@ void SetupServerArgs()
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/veles/veles>";
-    const std::string URL_WEBSITE = "<https://veles.network>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/Velescore>";
+    const std::string URL_WEBSITE = "<http://veles.network>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +
