@@ -33,7 +33,7 @@ static const int SPORK_FXTC_END                                      = 94680031;
 // FXTC END
 // VELES BEGIN
 static const int SPORK_VELES_START                                    = 94690010;
-static const int SPORK_VELES_END                                      = 94690100;
+static const int SPORK_VELES_END                                      = 94690051;
 // VELES END
 
 static const int SPORK_2_INSTANTSEND_ENABLED                            = 10001;
@@ -108,8 +108,8 @@ static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_LYRA2Z_DEFAULT       = 1;    
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_X11_DEFAULT          = 1;            // 1x
 static const int64_t SPORK_FXTC_01_HANDBRAKE_FORCE_X16R_DEFAULT         = 1;            // 1x
 static const int64_t SPORK_FXTC_02_IGNORE_SLIGHTLY_HIGHER_COINBASE_DEFAULT  = 4070908800ULL;// OFF
-static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_CHECK_DEFAULT      = 4070908800ULL;// OFF
-static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_VALUE_DEFAULT      = 4070908800ULL;// OFF
+static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_CHECK_DEFAULT      = 1;            // On since VCIP01
+static const int64_t SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_VALUE_DEFAULT      = 1;            // On since VCIP01
 static const int64_t SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_VALUE_DEFAULT   = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_PAYEE_DEFAULT   = 4070908800ULL;// OFF
 static const int64_t SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START_DEFAULT  = 4070908800ULL;// OFF

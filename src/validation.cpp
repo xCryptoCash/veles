@@ -1657,7 +1657,7 @@ CAmount GetFounderReward(int nHeight, CAmount blockValue)
     int nDecreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START || nHeight < 5))
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_01_FXTC_CHAIN_START))
         return (CAmount)0;
 
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
