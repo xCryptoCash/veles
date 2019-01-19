@@ -353,7 +353,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
         );
 
     HalvingParameters *halvingParams = GetSubsidyHalvingParameters();
-    std::vector<std::string> knownEpochs = { "PREMINE", "BOOTSTRAP", "ALPHA" };
+    std::vector<std::string> knownEpochs = { "COINSWAP", "BOOTSTRAP", "ALPHA" };
     std::string epochName;
     int halvings = 0;
     int epochsAfterHalving = 0;

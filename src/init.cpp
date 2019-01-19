@@ -78,9 +78,9 @@
 //
 //
 // FXTC END
-// Veles
+// VELES BEGIN
 #include "veleslogo.h"
-// 
+// VELES END
 
 #ifndef WIN32
 #include <signal.h>
