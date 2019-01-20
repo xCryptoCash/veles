@@ -178,7 +178,7 @@ public:
         // This is fine at runtime as we'll fall back to using them as a oneshot if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        //vSeeds.emplace_back("list.velesdnsseed.veles.io"); // VELES founder seeds
+        //vSeeds.emplace_back("list.velesdnsseed.veles.network"); // VELES founder seeds
         //vSeeds.emplace_back("velesdnsseed.midnightminer.net"); // VELES MidnightMiner seeds
         //vSeeds.emplace_back("seeds.on.another.domain"); // dns seeds template
 
@@ -331,7 +331,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        //vSeeds.emplace_back("testnet-seed.veles.io");
+        //vSeeds.emplace_back("testnet-seed.veles.network");
         //vSeeds.emplace_back("testnet-veles.midnightminer.net");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
