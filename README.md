@@ -1,7 +1,9 @@
+![Example-Logo](https://i.imgur.com/OP0aW7y.jpg?3)
+
 Veles Core integration/staging tree
 ==================================
 
-https://fixedtradecoin.org
+https://veles.network
 
 Linux Build Instructions and Notes
 ==================================
@@ -32,7 +34,7 @@ Build
 ----------------------
 1.  Clone the source:
 
-        git clone https://github.com/veles/veles.git
+        git clone https://github.com/Velescore/Veles-0.16.git
 
 2.  Build Veles Core:
 
