@@ -5,6 +5,7 @@ src/veles
 src/velesd
 src/veles-cli
 src/veles-tx
+src/veles-testblock
 src/test/test_veles
 src/test/test_veles_fuzzy
 src/qt/test/test_veles-qt
@@ -116,3 +117,6 @@ test/cache/*
 
 libbitcoinconsensus.pc
 contrib/devtools/split-debug.sh
+
+# Output from running db4 installation
+db4/
