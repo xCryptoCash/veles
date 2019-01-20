@@ -34,7 +34,7 @@ Build
 ----------------------
 1.  Clone the source:
 
-        git clone https://github.com/Velescore/Veles-0.16.git
+        git clone https://github.com/Velescore/Veles
 
 2.  Build Veles Core:
 
