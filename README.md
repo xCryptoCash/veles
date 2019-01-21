@@ -1,8 +1,8 @@
 ![Example-Logo](https://i.imgur.com/OP0aW7y.jpg?3)
 
-Veles Core R4 integration/staging tree
+Veles Core integration/staging tree
 ======================================
-Branch "master" is the current stable version, which is: v0.17.0.18 "Aged Amnesia"
+Branch "master" is the current version of Veles Core. The latest official release of Veles Core is Alpha release R4, version v0.17.0.18 "Aged Amnesia".
 
 https://veles.network
 
