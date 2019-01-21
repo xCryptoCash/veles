@@ -1,7 +1,8 @@
 ![Example-Logo](https://i.imgur.com/OP0aW7y.jpg?3)
 
-Veles Core integration/staging tree
-==================================
+Veles Core R4 integration/staging tree
+======================================
+Branch "master" is the current stable version, which is: v0.17.0.18 "Aged Amnesia"
 
 https://veles.network
 
