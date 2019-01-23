@@ -2623,10 +2623,10 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                 }
             }
             if (!FounderPaid) {
-                return state.DoS(0, error("ConnectBlock(INFINEX): no founder reward"), REJECT_INVALID, "no-founder-reward");
+                return state.DoS(0, error("ConnectBlock(VELES): no founder reward"), REJECT_INVALID, "no-founder-reward");
             }
         } else {
-            return state.DoS(0, error("ConnectBlock(INFINEX): invalid founder reward destination"), REJECT_INVALID, "invalid-founder-reward-destination");
+            return state.DoS(0, error("ConnectBlock(VELES): invalid founder reward destination"), REJECT_INVALID, "invalid-founder-reward-destination");
         }
     }
 
