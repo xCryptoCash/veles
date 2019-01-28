@@ -1498,12 +1498,7 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
                 factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R);  
                 break;
             case ALGO_NIST5:
-                // Nist5 bootstraping and reward discovery, bump up nist rewards x5 after block 51k
-                if (nHeight < nNistAlphaBumpUpHeight) 
-                    factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);
-                else
-                    factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5) * nNistAlphaBumpUpFactor;
-
+                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);
                 break;
         }
 
@@ -1534,7 +1529,10 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
                 factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT;  
                 break;
             case ALGO_NIST5:
-                factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;  
+                if (nHeight < nNistAlphaBumpUpHeight)
+                    factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;
+                else
+                    factor = SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT * nNistAlphaBumpUpFactor;
                 break;
         }
 
@@ -1544,6 +1542,9 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
             + SPORK_VELES_05A_ADJUST_COST_FACTOR_X11_DEFAULT
             + SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R_DEFAULT
             + SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT;
+
+        if (nHeight >= nNistAlphaBumpUpHeight)
+            totalAdjustements += SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5_DEFAULT * (nNistAlphaBumpUpFactor - 1);
     }
 
     return factor / (totalAdjustements / 6);
@@ -1563,6 +1564,7 @@ double GetBlockAlgoCostFactor(CBlockHeader *pblock, int nHeight)
 CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Params& consensusParams, bool fSuperblockPartOnly, HalvingParameters *halvingParams)
 {
     CAmount nSubsidy = 0;
+
     //HalvingParameters *halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
     if (halvingParams == nullptr)
         halvingParams = GetSubsidyHalvingParameters(nHeight, consensusParams);
@@ -1607,8 +1609,10 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
             nMaxSubsidy *= consensusParams.nVlsRewardsAlphaMultiplier;
 
             // Sporks to manage emergency situations when dynamic rewards neneds to be adjusted
-            //// BEGIN dirty hack if VCIP01 fucks-up
             int nDynamicSubsidyCorrectionFactor = 300;
+
+            if (nHeight >= 51000)
+                nDynamicSubsidyCorrectionFactor = 350;  // increased to balance-out Nist5 reward increase
 
             if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_START))
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_FACTOR);
@@ -1620,7 +1624,6 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_FACTOR);
 
             nSubsidy *= nDynamicSubsidyCorrectionFactor * 0.01;
-            //// END dirty hack if VCIP01 fucks-up
         }
 
         // Ensure minimum subsidy
