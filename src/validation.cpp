@@ -1611,7 +1611,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
             if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_START))
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06C_DYNAMIC_REWARD_BOOST3_FACTOR);
 
-            nSubsidy *= nDynamicSubsidyCorrectionFactor / 100;
+            nSubsidy *= nDynamicSubsidyCorrectionFactor * 0.01;
             //// END dirty hack if VCIP01 fucks-up
         }
 
@@ -1640,23 +1640,28 @@ double GetSmoothPaymentFactor(int nHeight, int nStartHeight, int nEndHeight, dou
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
+    int nMasternodePaymentFixHeight = 51000; 
     int nIncreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
     if (nHeight < nIncreaseStartHeight) 
         return blockValue * consensus.nMasternodePaymentsLegacyPercent * 0.01;
 
+    if (nHeight < 51000)    // no MN payments during the alpha epoch between blocks 50k and 51k
+        return 0;
+
     return blockValue * GetSmoothPaymentFactor(
         nHeight,
         nIncreaseStartHeight,
         nIncreaseStartHeight + consensus.nMasternodePaymentsIncreasePeriod,
-        consensus.nMasternodePaymentsStartPercent / 100,
-        consensus.nMasternodePaymentsFinalPercent / 100
+        consensus.nMasternodePaymentsStartPercent * 0.01,
+        consensus.nMasternodePaymentsFinalPercent * 0.01
         );
 }
 
 CAmount GetFounderReward(int nHeight, CAmount blockValue)
 {
+    int nMasternodePaymentFixHeight = 51000; 
     int nDecreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
@@ -1666,12 +1671,15 @@ CAmount GetFounderReward(int nHeight, CAmount blockValue)
     if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START)) 
         return blockValue * consensus.nDevFundPaymentsLegacyPercent * 0.01;
 
+     if (nHeight < 51000)    // no DEV fund payments during the alpha epoch between blocks 50k and 51k
+        return 0;
+
     return blockValue * GetSmoothPaymentFactor(
         nHeight,
         nDecreaseStartHeight,
         nDecreaseStartHeight + consensus.nDevFundPaymentsDecreasePeriod,
-        consensus.nDevFundPaymentsStartPercent / 100,
-        consensus.nDevFundPaymentsFinalPercent / 100
+        consensus.nDevFundPaymentsStartPercent * 0.01,
+        consensus.nDevFundPaymentsFinalPercent * 0.01
         );
 }
 // VELES END
