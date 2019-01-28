@@ -1443,6 +1443,9 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
 {
     double factor = 100;
     CAmount totalAdjustements = 0;
+    // Nist5 bootstraping and reward discovery
+    nNistAlphaBumpUpFactor = 5;
+    nNistAlphaBumpUpHeight = 51000;
 
     // We have a possibility to perform 2 more cost factor adjustements, taking 
     // advantage of spork protocol.
@@ -1495,7 +1498,12 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
                 factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_X16R);  
                 break;
             case ALGO_NIST5:
-                factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);  
+                // Nist5 bootstraping and reward discovery, bump up nist rewards x5 after block 51k
+                if (nHeight < nNistAlphaBumpUpHeight) 
+                    factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5);
+                else
+                    factor = sporkManager.GetSporkValue(SPORK_VELES_05A_ADJUST_COST_FACTOR_NIST5) * nNistAlphaBumpUpFactor;
+
                 break;
         }
 
