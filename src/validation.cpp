@@ -1444,8 +1444,8 @@ double GetAlgoCostFactor(int32_t nAlgo, int nHeight)
     double factor = 100;
     CAmount totalAdjustements = 0;
     // Nist5 bootstraping and reward discovery
-    nNistAlphaBumpUpFactor = 5;
-    nNistAlphaBumpUpHeight = 51000;
+    int nNistAlphaBumpUpFactor = 10;
+    int nNistAlphaBumpUpHeight = 51000;
 
     // We have a possibility to perform 2 more cost factor adjustements, taking 
     // advantage of spork protocol.
@@ -1612,7 +1612,7 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
             int nDynamicSubsidyCorrectionFactor = 300;
 
             if (nHeight >= 51000)
-                nDynamicSubsidyCorrectionFactor = 350;  // increased to balance-out Nist5 reward increase
+                nDynamicSubsidyCorrectionFactor = 400;  // increased to balance-out Nist5 reward increase
 
             if (nHeight >= sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_START))
                 nDynamicSubsidyCorrectionFactor = sporkManager.GetSporkValue(SPORK_VELES_06A_DYNAMIC_REWARD_BOOST1_FACTOR);
