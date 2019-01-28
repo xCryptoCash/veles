@@ -4,7 +4,7 @@ define(_CLIENT_VERSION_MAJOR, 0)
 define(_CLIENT_VERSION_MINOR, 17)
 define(_CLIENT_VERSION_REVISION, 0)
 define(_CLIENT_VERSION_BUILD, 19)
-define(_CLIENT_VERSION_IS_RELEASE, false)
+define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2019)
 dnl VELES BEGIN
 dnl We should declare correct copyright years also for other projects our code
@@ -17,7 +17,7 @@ define(_FXTC_COPYRIGHT_YEAR, 2019)
 dnl VELES END
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Veles Core]])
-AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/Velescore/Veles],[bitcoin],[https://veles.network/])
+AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/Velescore],[bitcoin],[http://veles.network/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/bitcoin-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
