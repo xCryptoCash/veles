@@ -1632,6 +1632,9 @@ CAmount GetBlockSubsidy(int nHeight, CBlockHeader pblock, const Consensus::Param
 
 double GetSmoothPaymentFactor(int nHeight, int nStartHeight, int nEndHeight, double nStartFactor, double nEndFactor)
 {
+    if (nHeight <= nStartHeight)
+        return nStartFactor;
+
     return nStartFactor + (nEndFactor - nStartFactor) / ((nEndHeight - nStartHeight) / (nHeight - nStartHeight));
 }
 
