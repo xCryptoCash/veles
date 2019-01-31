@@ -1240,7 +1240,6 @@ double ConvertBitsToDouble(unsigned int nBits)
 //FXTC END
 
 // VELES BEGIN
-
 CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *halvingParams)
 {
     CBlockIndex *pb = chainActive.Tip();
@@ -1249,20 +1248,12 @@ CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *hal
     if (totalSupplyIndex.count(nStartBlock) && totalSupplyIndex[nStartBlock].count(nEndBlock))
         return totalSupplyIndex[nStartBlock][nEndBlock];
 
-    // Look up last block mined by the current algo
     while (pb->pprev) {
-        if (pb->nHeight < nStartBlock) {
-            pb = pb->pprev;
-            break;
-        }
-
-        if (pb->nHeight < nEndBlock) {
-            pb = pb->pprev;
-            continue;
-        }
-
-        nRewards += GetBlockSubsidy(pb->nHeight, pb->GetBlockHeader(), Params().GetConsensus(), false, halvingParams);
         pb = pb->pprev;
+
+        if (pb->nHeight >= nStartBlock && pb->nHeight <= nEndBlock) {
+            nRewards += GetBlockSubsidy(pb->nHeight, pb->GetBlockHeader(), Params().GetConsensus(), false, halvingParams);
+        }
     }
 
     totalSupplyIndex[nStartBlock][nEndBlock] = nRewards;
@@ -1272,13 +1263,13 @@ CAmount CountBlockRewards(int nStartBlock, int nEndBlock, HalvingParameters *hal
 
 CAmount GetTotalSupply(CCoinsView *view, int nHeight/* = 0*/)
 {
-    //std::map<int, CAmount>::const_iterator it = totalSupplyIndex.find(nHeight);
+    std::map<int, CAmount>::const_iterator it = totalSupplyIndex[0].find(nHeight);
 
-    //if (it != totalSupplyIndex.end())
-    //    return it->second;
+    if (it != totalSupplyIndex[0].end())
+        return it->second;
 
-     if (totalSupplyIndex.count(0) && totalSupplyIndex[0].count(nHeight))
-        return totalSupplyIndex[0][nHeight];
+    //if (totalSupplyIndex.count(0) && totalSupplyIndex[0].count(nHeight))
+    //    return totalSupplyIndex[0][nHeight];
 
     CAmount nTotalAmount = 0;
     std::unique_ptr<CCoinsViewCursor> pcursor(view->Cursor());
@@ -1325,8 +1316,8 @@ CAmount GetTotalSupply(int nHeight)
 
 HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Params& consensusParams)
 {
-    const double nMinSupplyTarget = 0.75;
-    const double nMinBoostTarget = 0.50;
+    const double nMinSupplyTarget = 0.80;
+    const double nMinBoostTarget = 0.60;
 
     int nHeightOffset = (int)sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     int nCurrentEpoch = 0;
@@ -1424,6 +1415,11 @@ HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Par
         params->epochs[nCurrentEpoch].nEndBlock = params->epochs[nCurrentEpoch - 1].nEndBlock + params->nHalvingInterval;
         // update halving params
         params->nDynamicRewardsBoostFactor = params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor;
+    }
+
+    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) {
+        params->nHalvingCount = 0;
+        params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
     }
 
     return params;
@@ -1651,7 +1647,7 @@ double GetSmoothPaymentFactor(int nHeight, int nStartHeight, int nEndHeight, dou
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 {
-    int nMasternodePaymentFixHeight = 51000; 
+    //int nMasternodePaymentFixHeight = 51000; 
     int nIncreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
@@ -1672,7 +1668,7 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue)
 
 CAmount GetFounderReward(int nHeight, CAmount blockValue)
 {
-    int nMasternodePaymentFixHeight = 51000; 
+    //int nMasternodePaymentFixHeight = 51000; 
     int nDecreaseStartHeight = sporkManager.GetSporkValue(SPORK_VELES_04_REWARD_UPGRADE_ALPHA_START);
     const Consensus::Params consensus = Params().GetConsensus();
 
