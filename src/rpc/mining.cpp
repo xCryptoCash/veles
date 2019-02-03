@@ -398,11 +398,12 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     obj.pushKV("blocks_to_next_epoch", halvingParams->epochs.back().nEndBlock - chainActive.Height());
 
     if (strMode == "full" || strMode == "dev") {
-        obj.pushKV("min_halving_target_supply", std::to_string((int)(HALVING_MIN_SUPPLY_TARGET * 100)) + "\%");
-        obj.pushKV("max_boost_target_supply", std::to_string((int)(HALVING_MIN_BOOST_SUPPLY_TARGET * 100)) + "\%");
+        obj.pushKV("min_halving_target", std::to_string((int)(HALVING_MIN_SUPPLY_TARGET * 100)) + "\%");
 
-        if (strMode == "dev")
-            obj.pushKV("rewards_boost_step", std::to_string((int)(HALVING_MAX_BOOST_STEP * 100)) + "\%");
+        if (strMode == "dev") {
+            obj.pushKV("max_reward_increase_target", std::to_string((int)(HALVING_MIN_BOOST_SUPPLY_TARGET * 100)) + "\%");
+            obj.pushKV("rewards_increase_step", std::to_string((int)(HALVING_MAX_BOOST_STEP * 100)) + "\%");
+        }
     }
 
     // list of mining epochs
@@ -423,15 +424,15 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
             epochName = "ALPHA_H" + std::to_string(nHalvings) + "_E" + std::to_string(nEpochsAfterHalving);
             childObj.pushKV("epoch_name", epochName);
         }
+        childObj.pushKV("started_by_halving", halvingParams->epochs[i].fIsSubsidyHalved);
         childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
         childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
+        childObj.pushKV("max_block_subsidy", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
+        //childObj.pushKV("has_ended", halvingParams->epochs[i].fHasEnded);
         childObj.pushKV("start_supply", ValueFromAmount(halvingParams->epochs[i].nStartSupply));
         childObj.pushKV("end_supply", (halvingParams->epochs[i].fHasEnded)
             ? ValueFromAmount(halvingParams->epochs[i].nEndSupply)
             : false);
-        childObj.pushKV("max_block_subsidy", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
-        childObj.pushKV("is_subsidy_halved", halvingParams->epochs[i].fIsSubsidyHalved);
-        childObj.pushKV("has_ended", halvingParams->epochs[i].fHasEnded);
 
         if (strMode == "full" || strMode == "dev") {
             nEpochMaxSupply = halvingParams->epochs[i].nMaxBlockSubsidy 
@@ -445,17 +446,16 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
                     );
             nSupplySinceHalving += nEpochRealSupply;
 
-            childObj.pushKV("max_supply", ValueFromAmount(nEpochMaxSupply));
-            childObj.pushKV("real_supply", ValueFromAmount(nEpochRealSupply));
+            childObj.pushKV("supply_target", ValueFromAmount(nEpochMaxSupply));
+            childObj.pushKV("supply_this_epoch", ValueFromAmount(nEpochRealSupply));
+            childObj.pushKV("supply_since_halving", ValueFromAmount(nSupplySinceHalving));
             childObj.pushKV("supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
-                / ((double)nEpochMaxSupply * (nEpochsAfterHalving + 1)) * 100)) + "\%");
+                / ((double)nEpochMaxSupply) * 100)) + "\%");
 
-            if (strMode == "dev") {
-                if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
-                    childObj.pushKV("dynamic_rewards_boost", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
-                else
-                    childObj.pushKV("dynamic_rewards_boost", false);
-            }
+            if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
+                childObj.pushKV("dynamic_rewards_increase", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
+            else
+                childObj.pushKV("dynamic_rewards_increase", false);
         }
         childArr.push_back(childObj);
         //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)
