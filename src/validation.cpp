@@ -1362,11 +1362,6 @@ HalvingParameters *GetSubsidyHalvingParameters(int nHeight, const Consensus::Par
         params->nDynamicRewardsBoostFactor = params->epochs[nCurrentEpoch].nDynamicRewardsBoostFactor;
     }
 
-    if (nHeight < sporkManager.GetSporkValue(SPORK_VELES_03_NO_SUBSIDY_HALVING_START)) {
-        params->nHalvingCount = 0;
-        params->nHalvingInterval = consensusParams.nSubsidyHalvingInterval;
-    }
-
     return params;
 }
 
@@ -2572,6 +2567,9 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
                                REJECT_INVALID, "bad-cb-amount");
 
     // FXTC BEGIN
+    // VELES EDIT: Check disabled, made optional
+    // VELES TODO: remove in next release
+    /*
     CAmount founderReward = GetFounderReward(pindex->nHeight, block.vtx[0]->GetValueOut());
     if (!sporkManager.IsSporkActive(SPORK_FXTC_02_IGNORE_FOUNDER_REWARD_CHECK) && founderReward > 0) {
         CTxDestination destination = DecodeDestination(Params().FounderAddress());
@@ -2592,7 +2590,7 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
             return state.DoS(0, error("ConnectBlock(VELES): invalid founder reward destination"), REJECT_INVALID, "invalid-founder-reward-destination");
         }
     }
-
+    */
     // FXTC END
 
     // DASH : MODIFIED TO CHECK MASTERNODE PAYMENTS AND SUPERBLOCKS
