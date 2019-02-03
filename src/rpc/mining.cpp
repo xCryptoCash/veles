@@ -435,7 +435,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
             childObj.pushKV("max_supply", ValueFromAmount(nEpochMaxSupply));
             childObj.pushKV("real_supply", ValueFromAmount(nEpochRealSupply));
-            childObj.pushKV("max_supply_reached", std::to_string(floor((double)nEpochRealSupply / (double)nEpochMaxSupply 
+            childObj.pushKV("max_supply_reached", std::to_string((int)floor((double)nEpochRealSupply / (double)nEpochMaxSupply 
                 * 100)) + "\%");
 
             if (strMode == "dev") {
