@@ -387,6 +387,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     UniValue childArr(UniValue::VARR);
     CAmount nEpochMaxSupply;
     CAmount nEpochRealSupply;
+    CAmount nSupplySinceHalving = 0;
 
     //LOCK(cs_main);
     FlushStateToDisk();
@@ -409,8 +410,18 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
         if (halvingParams->epochs[i].fIsSubsidyHalved) {
             nHalvings++;
             nEpochsAfterHalving = 0;
+            nSupplySinceHalving = 0;
         } else {
             nEpochsAfterHalving++;
+        }
+
+        if (i < (int)knownEpochs.size()) {
+            childObj.pushKV("epoch_name", knownEpochs[i]);
+            nEpochsAfterHalving = 0;    // make sure first numbered epoch starts after special epochs
+            nSupplySinceHalving = 0;    // and this counter starts from when halving coutner starts (block 50k)
+        } else {
+            epochName = "ALPHA_H" + std::to_string(nHalvings) + "_E" + std::to_string(nEpochsAfterHalving);
+            childObj.pushKV("epoch_name", epochName);
         }
         childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
         childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
@@ -432,11 +443,12 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
                     chainActive.Height(), 
                     GetSubsidyHalvingParameters(chainActive.Height(), Params().GetConsensus())
                     );
+            nSupplySinceHalving += nEpochRealSupply;
 
             childObj.pushKV("max_supply", ValueFromAmount(nEpochMaxSupply));
             childObj.pushKV("real_supply", ValueFromAmount(nEpochRealSupply));
-            childObj.pushKV("max_supply_reached", std::to_string((int)floor((double)nEpochRealSupply / (double)nEpochMaxSupply 
-                * 100)) + "\%");
+            childObj.pushKV("supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
+                / ((double)nEpochMaxSupply * (nEpochsAfterHalving + 1)) * 100)) + "\%");
 
             if (strMode == "dev") {
                 if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
@@ -444,14 +456,6 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
                 else
                     childObj.pushKV("dynamic_rewards_boost", false);
             }
-        }
-
-        if (i < (int)knownEpochs.size()) {
-            childObj.pushKV("epoch_name", knownEpochs[i]);
-            nEpochsAfterHalving = 0; // make sure first numbered epoch starts after special epochs
-        } else {
-            epochName = "ALPHA_H" + std::to_string(nHalvings) + "_E" + std::to_string(nEpochsAfterHalving);
-            childObj.pushKV("epoch_name", epochName);
         }
         childArr.push_back(childObj);
         //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)

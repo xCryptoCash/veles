@@ -48,10 +48,12 @@ void CSporkManager::LoadSporksFromDB()
         // attempt to read spork from sporkDB
         CSporkMessage spork;
         if (!pSporkDB->ReadSpork(i, spork)) {
+            // VELES EDIT: disabled annoying log message if not compiled in debug mode
+#ifdef DEBUG
             LogPrintf("%s : no previous value for %s found in database\n", __func__, strSpork);
+#endif
             continue;
         }
-
         // add spork to memory
         mapSporks[spork.GetHash()] = spork;
         mapSporksActive[spork.nSporkID] = spork;
