@@ -335,7 +335,7 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
 #if defined(MAC_OSX)
-    throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
+    throw std::runtime_error("gethalvingstatus                   *** Temporary disabled on Mac OSX ***\n");
 #else
     std::string strMode = "basic";
 
@@ -343,7 +343,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 
     if (request.fHelp || request.params.size() > 1 || (strMode != "basic" && strMode != "full" && strMode != "dev"))
         throw std::runtime_error(
-            "gethalvingstatus      *** NEW: Experimental ***\n"
+            "gethalvingstatus ( \"mode\" )      *** NEW: Experimental ***\n"
             "\nReturns a json object containing an information related to block subsidy halving. A halving epoch is time between\n"
             "the start and end of block subsidy halving interval, where maximum block reward is the same for all the blocks\n"
             "within the epoch. If not enough coins are mined during the epoch, the halving will not occur and the epoch will\n"
@@ -424,15 +424,6 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
             epochName = "ALPHA_H" + std::to_string(nHalvings) + "_E" + std::to_string(nEpochsAfterHalving);
             childObj.pushKV("epoch_name", epochName);
         }
-        childObj.pushKV("started_by_halving", halvingParams->epochs[i].fIsSubsidyHalved);
-        childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
-        childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
-        childObj.pushKV("max_block_subsidy", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
-        //childObj.pushKV("has_ended", halvingParams->epochs[i].fHasEnded);
-        childObj.pushKV("start_supply", ValueFromAmount(halvingParams->epochs[i].nStartSupply));
-        childObj.pushKV("end_supply", (halvingParams->epochs[i].fHasEnded)
-            ? ValueFromAmount(halvingParams->epochs[i].nEndSupply)
-            : false);
 
         if (strMode == "full" || strMode == "dev") {
             nEpochMaxSupply = halvingParams->epochs[i].nMaxBlockSubsidy 
@@ -445,17 +436,31 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
                     GetSubsidyHalvingParameters(chainActive.Height(), Params().GetConsensus())
                     );
             nSupplySinceHalving += nEpochRealSupply;
+        }
 
+        childObj.pushKV("started_by_halving", halvingParams->epochs[i].fIsSubsidyHalved);
+        childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
+        childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
+        childObj.pushKV("max_block_reward", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
+
+        if (strMode == "full" || strMode == "dev") {
+            if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
+                childObj.pushKV("dynamic_rewards_increase", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
+            else
+                childObj.pushKV("dynamic_rewards_increase", false);
+        }
+
+        childObj.pushKV("start_supply", ValueFromAmount(halvingParams->epochs[i].nStartSupply));
+        childObj.pushKV("end_supply", (halvingParams->epochs[i].fHasEnded)
+            ? ValueFromAmount(halvingParams->epochs[i].nEndSupply)
+            : false);
+
+        if (strMode == "full" || strMode == "dev") {
             childObj.pushKV("supply_target", ValueFromAmount(nEpochMaxSupply));
             childObj.pushKV("supply_this_epoch", ValueFromAmount(nEpochRealSupply));
             childObj.pushKV("supply_since_halving", ValueFromAmount(nSupplySinceHalving));
             childObj.pushKV("supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
                 / ((double)nEpochMaxSupply) * 100)) + "\%");
-
-            if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
-                childObj.pushKV("dynamic_rewards_increase", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
-            else
-                childObj.pushKV("dynamic_rewards_increase", false);
         }
         childArr.push_back(childObj);
         //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)
@@ -470,11 +475,11 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
 #if defined(MAC_OSX)
-    throw std::runtime_error("gethalvingstatus      *** Temporary disabled on Mac OSX ***\n");
+    throw std::runtime_error("gethalvingstatus                   *** Temporary disabled on Mac OSX ***\n");
 #else
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getmultialgostatus    *** NEW: Experimental ***\n"
+            "getmultialgostatus                 *** NEW: Experimental ***\n"
             "\n*** Experimental: Use at your own risk, might be a subject to change any time. ***\n"
             "\nReturns a json object containing information related to multi-algo mining.\n"
             "\nResult:\n"
