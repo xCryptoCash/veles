@@ -335,39 +335,47 @@ static UniValue getmininginfo(const JSONRPCRequest& request)
 static UniValue gethalvingstatus(const JSONRPCRequest& request)
 {
 #if defined(MAC_OSX)
-    throw std::runtime_error("gethalvingstatus                   *** Temporary disabled on Mac OSX ***\n");
+    throw std::runtime_error("(gethalvingstatus)                 *** Temporary disabled on Mac OSX ***\n");
 #else
-    std::string strMode = "basic";
+    //std::string strMode = "basic";    // no selectable modes in this release
 
-    if (request.params.size() >= 1) strMode = request.params[0].get_str();
+    //if (request.params.size() >= 1) strMode = request.params[0].get_str();
 
-    if (request.fHelp || request.params.size() > 1 || (strMode != "basic" && strMode != "full" && strMode != "dev"))
+    if (request.fHelp || request.params.size() != 0)    // || (strMode != "basic" && strMode != "full" && strMode != "dev"))
         throw std::runtime_error(
-            "gethalvingstatus ( \"mode\" )      *** NEW: Experimental ***\n"
-            "\nReturns a json object containing an information related to block subsidy halving. A halving epoch is time between\n"
+            "gethalvingstatus                   *** NEW: Experimental ***\n"    // ( \"mode\" )
+            "\nReturns a json object containing an information related to block reward halving. A halving epoch is time between\n"
             "the start and end of block subsidy halving interval, where maximum block reward is the same for all the blocks\n"
-            "within the epoch. If not enough coins are mined during the epoch, the halving will not occur and the epoch will\n"
-            "repeat again. If the halving occurs, the lenght of next epoch is doubled.\n"
-            "\nArguments:\n"
-            "1. \"mode\"      (string, optional) The mode to show status in\n"
-            "\nAvailable modes:\n"
-            "  basic  - Print just a basic information about halving epochs\n"
-            "  full   - Print all the information related to subsidy halving and halving epochs\n"
+            "within the epoch. If not enough coins are mined during the epoch, the halving will not occur and the current epoch\n"
+            "will repeat again (with the same interval and maximum block reward). When the halving eventually occurs, the minimal\n"
+            "interval between halvings increases twofold.\n"
+            //"\nArguments:\n"
+            //"1. \"mode\"      (string, optional) The mode to show status in\n"
+            //"\nAvailable modes:\n"
+            //"  basic  - Print just a basic information about halving epochs\n"
+            //"  full   - Print all the information related to subsidy halving and halving epochs\n"
             "\nResult:\n"
             "{\n"
-            "  \"halvings_occured\": nnn,       (numeric) The number of halvings that has already occured\n"
-            "  \"epochs_occured\": nnn,         (numeric) The number of intervals that halving might occour\n"
-            "  \"halving_interval\": nnn,       (numeric) Interval between the last halving and the next\n"
-            "  \"epochs\" : [                     (array) List of halving epochs that has already occured and the current epoch\n"
+            "  \"halvings_occured\": nnn,           (numeric) The number of successful halvings that has occured\n"
+            "  \"epochs_occured\": nnn,             (numeric) The number of halving epochs that has occured\n"
+            "  \"halving_interval\": nnn,           (numeric) Interval between the last halving and the next potential one\n"
+            "  \"blocks_to_next_epoch\": nnn,       (numeric) Number of blocks to be fund until the start of another halving epoch\n"
+            "  \"epoch_supply_target_reached\": xxx, (string) Ratio between theoretical and actual number of coins to be mined this halving period, see also description of 'supply_target_reached'.\n"
+            "  \"min_epoch_supply_to_halve\": xxx,   (string) Minimum ratio between theoretical and actual coin supply during halving period required for another halving to occur\n"
+            "  \"epochs\" : [                         (array) List of halving epochs that has already occured and the current epoch\n"
             "     {\n"
-            "       \"start_block\": nnn,       (numeric) Fist block of the halving epoch\n"
-            "       \"end_block\": nnn,         (numeric) Last block of the epoch\n"
-            "       \"start_supply\": nnn,      (numeric) Total supply of VLS before fist block of the epoch\n"
-            "       \"end_supply\": nnn,  (numeric|false) Total supply of VLS at the last vlock of the epoch \n"
-            "       \"max_block_subsidy\": nnn, (numeric) Maximum possible number of new coins mined within a single block, the sum of PoW, Masternode and Dev fund reward.\n"
-            "       \"is_subsidy_halved\": nnn, (boolean) If true, the amount of block reward has been halved at the start of current epoch\n"
-            "       \"has_ended\": nnn,         (boolean) Whehther the epoch has already ended\n"
-            "       \"epoch_name\": nnn,         (string) Unique name of the epoch\n"
+            "       \"epoch_name\": xxx,             (string) Unique name of the epoch\n"
+            "       \"started_by_halving\": xx,     (boolean) If true, the amount of block reward has been halved at the start of current epoch\n"
+            "       \"start_block\": nnn,           (numeric) Height of fist block in the halving epoch\n"
+            "       \"end_block\": nnn,             (numeric) Height of last block of the epoch\n"
+            "       \"max_block_reward\": nnn,      (numeric) Maximum possible number of new coins mined within a single block, the sum of PoW, Masternode and Dev fund reward.\n"
+            "       \"dynamic_rewards_boost\": xxx, (string|false) Percentage of increase in dynamic block rewards (within the max_block_reward limit) if coin supply released during the last epoch was less than " + std::to_string((int)(HALVING_MIN_BOOST_SUPPLY_TARGET * 100)) + "\% of the target\n"
+            "       \"start_supply\": nnn,          (numeric) Total number of coins in circulation before fist block of the epoch\n"
+            "       \"end_supply\": nnn,      (numeric|false) Total number of coins in circulation at the last block of the epoch \n"
+            "       \"supply_target\": nnn,         (numeric) Maximum number of coins that can theoretically be released to the circulation during the epoch\n"
+            "       \"supply_this_epoch\": nnn,     (numeric) Actual number of coins that were released to the circulation during the epoch\n"
+            "       \"supply_since_halving\": nnn,  (numeric) Actual number of coins that were released to the circulation since the last halving\n"
+            "       \"supply_target_reached\" xxx,   (string) Ratio between supply_target and supply_since_halving in percents\n"
             "     },"
             "     ...\n"
             "   ]\n"
@@ -397,15 +405,6 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
     obj.pushKV("halving_interval", halvingParams->nHalvingInterval);
     obj.pushKV("blocks_to_next_epoch", halvingParams->epochs.back().nEndBlock - chainActive.Height());
 
-    if (strMode == "full" || strMode == "dev") {
-        obj.pushKV("min_halving_target", std::to_string((int)(HALVING_MIN_SUPPLY_TARGET * 100)) + "\%");
-
-        if (strMode == "dev") {
-            obj.pushKV("max_reward_increase_target", std::to_string((int)(HALVING_MIN_BOOST_SUPPLY_TARGET * 100)) + "\%");
-            obj.pushKV("rewards_increase_step", std::to_string((int)(HALVING_MAX_BOOST_STEP * 100)) + "\%");
-        }
-    }
-
     // list of mining epochs
     for (int i = 0; i < (int)halvingParams->epochs.size(); i++) {
         if (halvingParams->epochs[i].fIsSubsidyHalved) {
@@ -425,47 +424,49 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
             childObj.pushKV("epoch_name", epochName);
         }
 
-        if (strMode == "full" || strMode == "dev") {
-            nEpochMaxSupply = halvingParams->epochs[i].nMaxBlockSubsidy 
-                * (halvingParams->epochs[i].nEndBlock - halvingParams->epochs[i].nStartBlock + 1);
-            nEpochRealSupply = (halvingParams->epochs[i].fHasEnded)
-                ? halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply
-                : CountBlockRewards(
-                    halvingParams->epochs[i].nStartBlock, 
-                    chainActive.Height(), 
-                    GetSubsidyHalvingParameters(chainActive.Height(), Params().GetConsensus())
-                    );
-            nSupplySinceHalving += nEpochRealSupply;
-        }
+        nEpochMaxSupply = halvingParams->epochs[i].nMaxBlockSubsidy 
+            * (halvingParams->epochs[i].nEndBlock - halvingParams->epochs[i].nStartBlock + 1);
+        nEpochRealSupply = (halvingParams->epochs[i].fHasEnded)
+            ? halvingParams->epochs[i].nEndSupply - halvingParams->epochs[i].nStartSupply
+            : CountBlockRewards(
+                halvingParams->epochs[i].nStartBlock, 
+                chainActive.Height(), 
+                GetSubsidyHalvingParameters(chainActive.Height(), Params().GetConsensus())
+                );
+        nSupplySinceHalving += nEpochRealSupply;
 
         childObj.pushKV("started_by_halving", halvingParams->epochs[i].fIsSubsidyHalved);
         childObj.pushKV("start_block", halvingParams->epochs[i].nStartBlock);
         childObj.pushKV("end_block", halvingParams->epochs[i].nEndBlock);
         childObj.pushKV("max_block_reward", ValueFromAmount(halvingParams->epochs[i].nMaxBlockSubsidy));
 
-        if (strMode == "full" || strMode == "dev") {
-            if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
-                childObj.pushKV("dynamic_rewards_increase", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
-            else
-                childObj.pushKV("dynamic_rewards_increase", false);
-        }
+        //if (strMode == "full") {
+        if (halvingParams->epochs[i].nDynamicRewardsBoostFactor > 0)
+            childObj.pushKV("dynamic_rewards_boost", "+" + std::to_string((int)(halvingParams->epochs[i].nDynamicRewardsBoostFactor * 100)) + "\%");
+        else
+            childObj.pushKV("dynamic_rewards_boost", false);
 
         childObj.pushKV("start_supply", ValueFromAmount(halvingParams->epochs[i].nStartSupply));
         childObj.pushKV("end_supply", (halvingParams->epochs[i].fHasEnded)
             ? ValueFromAmount(halvingParams->epochs[i].nEndSupply)
             : false);
-
-        if (strMode == "full" || strMode == "dev") {
-            childObj.pushKV("supply_target", ValueFromAmount(nEpochMaxSupply));
-            childObj.pushKV("supply_this_epoch", ValueFromAmount(nEpochRealSupply));
-            childObj.pushKV("supply_since_halving", ValueFromAmount(nSupplySinceHalving));
-            childObj.pushKV("supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
-                / ((double)nEpochMaxSupply) * 100)) + "\%");
-        }
+        //}
+        childObj.pushKV("supply_target", ValueFromAmount(nEpochMaxSupply));
+        childObj.pushKV("supply_this_epoch", ValueFromAmount(nEpochRealSupply));
+        childObj.pushKV("supply_since_halving", ValueFromAmount(nSupplySinceHalving));
+        childObj.pushKV("supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
+            / ((double)nEpochMaxSupply) * 100)) + "\%");
+        
         childArr.push_back(childObj);
-        //obj.push_back(Pair(std::to_string(i).c_str(), childObj));   //std::to_string(i)
-        //childObj.clear();
     }
+
+    //if (strMode == "full") {
+    obj.pushKV("epoch_supply_target_reached", std::to_string((int)floor((double)nSupplySinceHalving 
+            / ((double)nEpochMaxSupply) * 100)) + "\%");
+    obj.pushKV("min_epoch_supply_to_halve", std::to_string((int)(HALVING_MIN_SUPPLY_TARGET * 100)) + "\%");
+    //obj.pushKV("max_supply_target_to_boost", std::to_string((int)(HALVING_MIN_BOOST_SUPPLY_TARGET * 100)) + "\%");
+    //}
+
     obj.push_back(Pair("epochs", childArr));
 
     return obj;
@@ -475,7 +476,7 @@ static UniValue gethalvingstatus(const JSONRPCRequest& request)
 static UniValue getmultialgostatus(const JSONRPCRequest& request)
 {
 #if defined(MAC_OSX)
-    throw std::runtime_error("gethalvingstatus                   *** Temporary disabled on Mac OSX ***\n");
+    throw std::runtime_error("(getmultialgostatus)               *** Temporary disabled on Mac OSX ***\n");
 #else
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
@@ -487,8 +488,8 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
             "  {\n"
             "    \"algo\": xxxxxx                  (string)  PoW algorithm algorithm name.\n"
             "    \"difficulty\": xxx.xxxxx,        (numeric) The current difficulty\n"
-            "    \"networkhashps\": nnn,           (numeric) The network hashes per second\n"
-            "    \"last_block_index\" : n          (numeric) Number of the last block generated by the algorithm\n"
+            "    \"hashrate\": xxx.xxxxx,          (numeric) The network hashes per second\n"
+            "    \"last_block_index\" : xx         (numeric) Number of the last block generated by the algorithm\n"
             "  },\n"
             "   ..."
             "]\n"
@@ -503,8 +504,8 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
 
     UniValue arr(UniValue::VARR);
     UniValue algoObj(UniValue::VOBJ);
-    int nBlocks24h = (24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
-    int nBlocks7d = (7 * 24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
+    //int nBlocks24h = (24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
+    //int nBlocks7d = (7 * 24 * 3600) / Params().GetConsensus().nPowTargetSpacing;
     std::vector<int32_t> algos = {ALGO_SHA256D, ALGO_SCRYPT, ALGO_LYRA2Z, ALGO_X11, ALGO_X16R, ALGO_NIST5};
 
     for(int i = 0; i < (int)algos.size(); i++) {
@@ -513,11 +514,11 @@ static UniValue getmultialgostatus(const JSONRPCRequest& request)
         algoObj.pushKV("hashrate",   GetNetworkHashPS(120, -1, algos[i]));
         algoObj.pushKV("last_block_index", (int)GetLastAlgoBlock(algos[i])->nHeight);
         // Yet undocumented extended info, experimental
-        if (request.strMethod == "devmultialgostatus") {
-            algoObj.pushKV("cost_factor", GetAlgoCostFactor(algos[i]));
-            algoObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks24h)));
-            algoObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks7d)));
-        }
+        //if (request.strMethod == "devmultialgostatus") {
+        //    algoObj.pushKV("cost_factor", GetAlgoCostFactor(algos[i]));
+        //    algoObj.pushKV("block_rewards_24h", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks24h)));
+        //    algoObj.pushKV("block_rewards_7d", ValueFromAmount(CountAlgoBlockRewards(algos[i], nBlocks7d)));
+        //}
         arr.push_back(algoObj);
     }
 
@@ -1325,9 +1326,9 @@ static const CRPCCommand commands[] =
     { "mining",             "getnetworkhashps",       &getnetworkhashps,       {"nblocks","height"} },
     { "mining",             "getmininginfo",          &getmininginfo,          {} },
 // VELES BEGIN
-    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {"mode"} },
+    { "mining",             "gethalvingstatus",       &gethalvingstatus,       {} },  // {"mode"} },
     { "mining",             "getmultialgostatus",     &getmultialgostatus,     {} },
-    { "hidden",             "devmultialgostatus",     &getmultialgostatus,     {} },    // hidden
+//    { "hidden",             "devmultialgostatus",     &getmultialgostatus,     {} },    // to be replaced by getminingstatistic
 // VELES END
     { "mining",             "prioritisetransaction",  &prioritisetransaction,  {"txid","dummy","fee_delta"} },
     { "mining",             "getblocktemplate",       &getblocktemplate,       {"template_request"} },
