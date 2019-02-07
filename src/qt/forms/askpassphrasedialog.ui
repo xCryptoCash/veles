@@ -25,6 +25,11 @@
   <property name="windowTitle">
    <string>Passphrase Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="sizeConstraint">
     <enum>QLayout::SetMinimumSize</enum>
@@ -59,6 +64,11 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="passEdit1">
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -73,6 +83,11 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="passEdit2">
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -87,6 +102,11 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="passEdit3">
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -103,8 +123,11 @@
       <widget class="QLabel" name="capsLabel">
        <property name="font">
         <font>
-         <weight>75</weight>
-         <bold>true</bold>
+         <family>Uroob</family>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -115,11 +138,13 @@
        </property>
       </widget>
      </item>
-     <!-- Dash -->
      <item row="4" column="0">
       <widget class="QCheckBox" name="mixingOnlyCheckBox">
        <property name="enabled">
         <bool>true</bool>
+       </property>
+       <property name="visible">
+        <bool>false</bool>
        </property>
        <property name="toolTip">
         <string>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</string>
@@ -127,12 +152,8 @@
        <property name="text">
         <string>Only for mixing via PrivateSend</string>
        </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
       </widget>
      </item>
-     <!--      -->
     </layout>
    </item>
    <item>

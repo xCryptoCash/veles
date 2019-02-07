@@ -5561,7 +5561,10 @@ int CMerkleTx::GetBlocksToMaturity() const
         chain_depth = 0;
     // FXTC END
     assert(chain_depth >= 0); // coinbase tx should not be conflicted
-    return std::max(0, (COINBASE_MATURITY+1) - chain_depth);
+    // VELES BEGIN
+    //return std::max(0, (COINBASE_MATURITY+1) - chain_depth);
+    return std::max(0, (COINBASE_MATURITY_850k+1) - chain_depth);
+    // VELES END
 }
 
 

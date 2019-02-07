@@ -7,11 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>526</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Send Coins</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(56, 56, 56);;
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0">
    <property name="bottomMargin">
@@ -30,6 +35,11 @@
        <width>16777215</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -79,7 +89,10 @@
             </property>
             <property name="font">
              <font>
+              <family>Uroob</family>
+              <pointsize>12</pointsize>
               <weight>75</weight>
+              <italic>false</italic>
               <bold>true</bold>
              </font>
             </property>
@@ -128,7 +141,10 @@
            <widget class="QLabel" name="labelCoinControlInsuffFunds">
             <property name="font">
              <font>
+              <family>Uroob</family>
+              <pointsize>12</pointsize>
               <weight>75</weight>
+              <italic>false</italic>
               <bold>true</bold>
              </font>
             </property>
@@ -220,8 +236,11 @@
                 <widget class="QLabel" name="labelCoinControlQuantityText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -255,8 +274,11 @@
                 <widget class="QLabel" name="labelCoinControlBytesText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -303,8 +325,11 @@
                 <widget class="QLabel" name="labelCoinControlAmountText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -335,8 +360,11 @@
                 <widget class="QLabel" name="labelCoinControlLowOutputText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -383,8 +411,11 @@
                 <widget class="QLabel" name="labelCoinControlFeeText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -434,8 +465,11 @@
                 <widget class="QLabel" name="labelCoinControlAfterFeeText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -466,8 +500,11 @@
                 <widget class="QLabel" name="labelCoinControlChangeText">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
+                   <family>Uroob</family>
+                   <pointsize>12</pointsize>
+                   <weight>9</weight>
+                   <italic>false</italic>
+                   <bold>false</bold>
                   </font>
                  </property>
                  <property name="text">
@@ -533,6 +570,11 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+            </property>
            </widget>
           </item>
           <item>
@@ -588,7 +630,7 @@
         <x>0</x>
         <y>0</y>
         <width>830</width>
-        <height>104</height>
+        <height>68</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
@@ -641,6 +683,11 @@
        <width>16777215</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -716,7 +763,10 @@
                 </property>
                 <property name="font">
                  <font>
+                  <family>Uroob</family>
+                  <pointsize>12</pointsize>
                   <weight>75</weight>
+                  <italic>false</italic>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -761,14 +811,17 @@
           </item>
           <item>
            <widget class="QLabel" name="fallbackFeeWarningLabel">
+            <property name="font">
+             <font>
+              <family>Uroob</family>
+              <pointsize>12</pointsize>
+              <weight>9</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
             <property name="toolTip">
              <string>Using the fallbackfee can result in sending a transaction that will take several hours or days (or never) to confirm. Consider choosing your fee manually or wait until you have validated the complete chain.</string>
-            </property>
-            <property name="font">
-            <font>
-                <weight>75</weight>
-                <bold>true</bold>
-            </font>
             </property>
             <property name="text">
              <string>Warning: Fee estimation is currently not possible.</string>
@@ -850,7 +903,7 @@
                    <property name="toolTip">
                     <string>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
 
-Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis per kB" for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</string>
+Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satoshis per kB&quot; for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</string>
                    </property>
                    <property name="text">
                     <string>per kilobyte</string>
@@ -858,7 +911,13 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
                   </widget>
                  </item>
                  <item>
-                  <widget class="BitcoinAmountField" name="customFee"/>
+                  <widget class="BitcoinAmountField" name="customFee">
+                   <property name="styleSheet">
+                    <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_6">
@@ -880,7 +939,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
                  <item>
                   <widget class="QCheckBox" name="checkBoxMinimumFee">
                    <property name="toolTip">
-                    <string>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks. But be aware that this can end up in a never confirming transaction once there is more demand for fxtcoin transactions than the network can process.</string>
+                    <string>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks. But be aware that this can end up in a never confirming transaction once there is more demand for Veles transactions than the network can process.</string>
                    </property>
                    <property name="text">
                     <string/>
@@ -893,7 +952,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
                     <bool>true</bool>
                    </property>
                    <property name="toolTip">
-                    <string>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks. But be aware that this can end up in a never confirming transaction once there is more demand for fxtcoin transactions than the network can process.</string>
+                    <string>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks. But be aware that this can end up in a never confirming transaction once there is more demand for Veles transactions than the network can process.</string>
                    </property>
                    <property name="text">
                     <string>(read the tooltip)</string>
@@ -1109,11 +1168,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
            </item>
            <item>
             <widget class="QCheckBox" name="optInRBF">
-             <property name="text">
-              <string>Enable Replace-By-Fee</string>
-             </property>
              <property name="toolTip">
               <string>With Replace-By-Fee (BIP-125) you can increase a transaction's fee after it is sent. Without this, a higher fee may be recommended to compensate for increased transaction delay risk.</string>
+             </property>
+             <property name="text">
+              <string>Enable Replace-By-Fee</string>
              </property>
             </widget>
            </item>
@@ -1151,6 +1210,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
        <property name="toolTip">
         <string>Confirm the send action</string>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+       </property>
        <property name="text">
         <string>S&amp;end</string>
        </property>
@@ -1177,6 +1241,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
        <property name="toolTip">
         <string>Clear all fields of the form.</string>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+       </property>
        <property name="text">
         <string>Clear &amp;All</string>
        </property>
@@ -1193,6 +1262,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
       <widget class="QPushButton" name="addButton">
        <property name="toolTip">
         <string>Send to multiple recipients at once</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
        </property>
        <property name="text">
         <string>Add &amp;Recipient</string>

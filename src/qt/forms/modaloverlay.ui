@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>385</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,9 +50,9 @@
       <item>
        <widget class="QWidget" name="contentWidget" native="true">
         <property name="styleSheet">
-         <string notr="true">#contentWidget { background: rgba(255,255,255,240); border-radius: 6px; }
-
-QLabel { color: rgb(40,40,40);  }</string>
+         <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayoutSub" stretch="1,0,0,0">
          <property name="spacing">
@@ -130,7 +130,7 @@ QLabel { color: rgb(40,40,40);  }</string>
              <item>
               <widget class="QLabel" name="infoText">
                <property name="text">
-                <string>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the fxtcoin network, as detailed below.</string>
+                <string>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the Veles network, as detailed below.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -144,12 +144,15 @@ QLabel { color: rgb(40,40,40);  }</string>
               <widget class="QLabel" name="infoTextStrong">
                <property name="font">
                 <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
+                 <family>Uroob</family>
+                 <pointsize>12</pointsize>
+                 <weight>9</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
                 </font>
                </property>
                <property name="text">
-                <string>Attempting to spend fxtcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</string>
+                <string>Attempting to spend Veless that are affected by not-yet-displayed transactions will not be accepted by the network.</string>
                </property>
                <property name="textFormat">
                 <enum>Qt::RichText</enum>
@@ -207,8 +210,11 @@ QLabel { color: rgb(40,40,40);  }</string>
             <widget class="QLabel" name="labelNumberOfBlocksLeft">
              <property name="font">
               <font>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>Uroob</family>
+               <pointsize>12</pointsize>
+               <weight>9</weight>
+               <italic>false</italic>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -227,8 +233,11 @@ QLabel { color: rgb(40,40,40);  }</string>
             <widget class="QLabel" name="labelLastBlockTime">
              <property name="font">
               <font>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>Uroob</family>
+               <pointsize>12</pointsize>
+               <weight>9</weight>
+               <italic>false</italic>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -253,8 +262,11 @@ QLabel { color: rgb(40,40,40);  }</string>
             <widget class="QLabel" name="labelSyncDone">
              <property name="font">
               <font>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>Uroob</family>
+               <pointsize>12</pointsize>
+               <weight>9</weight>
+               <italic>false</italic>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -287,8 +299,11 @@ QLabel { color: rgb(40,40,40);  }</string>
             <widget class="QLabel" name="labelProgressIncrease">
              <property name="font">
               <font>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>Uroob</family>
+               <pointsize>12</pointsize>
+               <weight>9</weight>
+               <italic>false</italic>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -307,8 +322,11 @@ QLabel { color: rgb(40,40,40);  }</string>
             <widget class="QLabel" name="labelEstimatedTimeLeft">
              <property name="font">
               <font>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>Uroob</family>
+               <pointsize>12</pointsize>
+               <weight>9</weight>
+               <italic>false</italic>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -348,11 +366,16 @@ QLabel { color: rgb(40,40,40);  }</string>
            </item>
            <item>
             <widget class="QPushButton" name="closeButton">
-             <property name="text">
-              <string>Hide</string>
-             </property>
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Hide</string>
              </property>
              <property name="default">
               <bool>true</bool>

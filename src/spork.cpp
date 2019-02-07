@@ -33,8 +33,12 @@ void CSporkManager::LoadSporksFromDB()
 {
     // FXTC BEGIN
     //for (int i = SPORK_START; i <= SPORK_END; ++i) {
-    for (int i = SPORK_START; i <= SPORK_FXTC_END; ++i) {
+    // VELES BEGIN
+    //for (int i = SPORK_START; i <= SPORK_FXTC_END; ++i) {
+    for (int i = SPORK_START; i <= SPORK_VELES_END; ++i) {
         if (i > SPORK_END && i < SPORK_FXTC_START) i = SPORK_FXTC_START;
+        if (i > SPORK_FXTC_END && i < SPORK_VELES_START) i = SPORK_VELES_START;
+    // VELES END
     // FXTC END
         // Since not all spork IDs are in use, we have to exclude undefined IDs
         std::string strSpork = sporkManager.GetSporkNameByID(i);
@@ -202,6 +206,11 @@ bool CSporkManager::IsSporkActive(int nSporkID)
 
             case SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START:   r = SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START_DEFAULT; break;
             // FXTC END
+            // VELES BEGIN
+            case SPORK_VELES_01_FXTC_CHAIN_START:                    r = SPORK_VELES_01_FXTC_CHAIN_START_DEFAULT; break;
+            case SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START:       r = SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START_DEFAULT; break;
+            case SPORK_VELES_03_NO_SUBSIDY_HALVING_START:            r = SPORK_VELES_03_NO_SUBSIDY_HALVING_START_DEFAULT; break;
+            // VELES END
             default:
                 LogPrint(BCLog::SPORK, "CSporkManager::IsSporkActive -- Unknown Spork ID %d\n", nSporkID);
                 r = 4070908800ULL; // 2099-1-1 i.e. off by default
@@ -245,6 +254,11 @@ int64_t CSporkManager::GetSporkValue(int nSporkID)
 
         case SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START:   return SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START_DEFAULT;
         // FXTC END
+        // VELES BEGIN
+        case SPORK_VELES_01_FXTC_CHAIN_START:                    return SPORK_VELES_01_FXTC_CHAIN_START_DEFAULT;
+        case SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START:       return SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START_DEFAULT;
+        case SPORK_VELES_03_NO_SUBSIDY_HALVING_START:            return SPORK_VELES_03_NO_SUBSIDY_HALVING_START_DEFAULT;
+        // FXTC END
         default:
             LogPrint(BCLog::SPORK, "CSporkManager::GetSporkValue -- Unknown Spork ID %d\n", nSporkID);
             return -1;
@@ -280,6 +294,11 @@ int CSporkManager::GetSporkIDByName(std::string strName)
 
     if (strName == "SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START")   return SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START;
     // FXTC END
+    // VELES BEGIN
+    if (strName == "SPORK_VELES_01_FXTC_CHAIN_START")                    return SPORK_VELES_01_FXTC_CHAIN_START;
+    if (strName == "SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START")       return SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START;
+    if (strName == "SPORK_VELES_03_NO_SUBSIDY_HALVING_START")            return SPORK_VELES_03_NO_SUBSIDY_HALVING_START;
+    // VELES END
 
     LogPrint(BCLog::SPORK, "CSporkManager::GetSporkIDByName -- Unknown Spork name '%s'\n", strName);
     return -1;
@@ -314,6 +333,11 @@ std::string CSporkManager::GetSporkNameByID(int nSporkID)
 
         case SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START:   return "SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START";
         // FXTC END
+        // VELES BEGIN
+        case SPORK_VELES_01_FXTC_CHAIN_START:                    return "SPORK_VELES_01_FXTC_CHAIN_START";
+        case SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START:       return "SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START";
+        case SPORK_VELES_03_NO_SUBSIDY_HALVING_START:            return "SPORK_VELES_03_NO_SUBSIDY_HALVING_START";
+        // VELES END
         default:
             LogPrint(BCLog::SPORK, "CSporkManager::GetSporkNameByID -- Unknown Spork ID %d\n", nSporkID);
             return "Unknown";

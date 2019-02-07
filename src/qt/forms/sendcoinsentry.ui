@@ -16,6 +16,11 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+  </property>
   <widget class="QFrame" name="SendCoins">
    <property name="toolTip">
     <string>This is a normal payment.</string>
@@ -57,7 +62,12 @@
       <item>
        <widget class="QValidatedLineEdit" name="payTo">
         <property name="toolTip">
-         <string>The FxTCoin address to send the payment to</string>
+         <string>The Veles address to send the payment to</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
         </property>
        </widget>
       </item>
@@ -147,6 +157,11 @@
       <property name="toolTip">
        <string>Enter a label for this address to add it to the list of used addresses</string>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+      </property>
      </widget>
     </item>
     <item row="2" column="0">
@@ -165,12 +180,18 @@
     <item row="2" column="1">
      <layout class="QHBoxLayout" name="horizontalLayoutAmount" stretch="0,1,0">
       <item>
-       <widget class="BitcoinAmountField" name="payAmount"/>
+       <widget class="BitcoinAmountField" name="payAmount">
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="checkboxSubtractFeeFromAmount">
         <property name="toolTip">
-         <string>The fee will be deducted from the amount being sent. The recipient will receive less fxtcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</string>
+         <string>The fee will be deducted from the amount being sent. The recipient will receive less Veless than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</string>
         </property>
         <property name="text">
          <string>S&amp;ubtract fee from amount</string>
@@ -199,7 +220,12 @@
     <item row="3" column="1">
      <widget class="QLabel" name="messageTextLabel">
       <property name="toolTip">
-       <string>A message that was attached to the fxtcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the FxTCoin network.</string>
+       <string>A message that was attached to the Veles: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Veles network.</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::PlainText</enum>
@@ -222,18 +248,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -276,9 +302,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -294,27 +320,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>255</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -359,18 +385,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -413,9 +439,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -431,27 +457,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>255</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -496,18 +522,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>127</red>
-         <green>127</green>
-         <blue>63</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -550,9 +576,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>127</red>
-         <green>127</green>
-         <blue>63</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -568,27 +594,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>127</red>
-         <green>127</green>
-         <blue>63</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>255</green>
-         <blue>127</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -635,7 +661,7 @@
     <string>This is an unauthenticated payment request.</string>
    </property>
    <property name="autoFillBackground">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
@@ -724,18 +750,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -778,9 +804,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -796,27 +822,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>119</red>
-         <green>255</green>
-         <blue>233</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -870,18 +896,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -924,9 +950,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -942,27 +968,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>0</red>
-         <green>0</green>
-         <blue>0</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>119</red>
-         <green>255</green>
-         <blue>233</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -1016,18 +1042,18 @@
       <colorrole role="WindowText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>70</red>
-         <green>116</green>
-         <blue>59</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -1070,9 +1096,9 @@
       <colorrole role="Text">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>70</red>
-         <green>116</green>
-         <blue>59</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
@@ -1088,27 +1114,27 @@
       <colorrole role="ButtonText">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>70</red>
-         <green>116</green>
-         <blue>59</blue>
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>140</red>
-         <green>232</green>
-         <blue>119</blue>
+         <red>70</red>
+         <green>81</green>
+         <blue>86</blue>
         </color>
        </brush>
       </colorrole>
@@ -1164,7 +1190,7 @@
     <string>This is an authenticated payment request.</string>
    </property>
    <property name="autoFillBackground">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
@@ -1261,6 +1287,7 @@
    <class>BitcoinAmountField</class>
    <extends>QLineEdit</extends>
    <header>qt/bitcoinamountfield.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

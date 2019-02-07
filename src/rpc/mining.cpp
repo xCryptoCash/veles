@@ -91,6 +91,9 @@ static UniValue GetNetworkHashPS(int lookup, int height, int32_t nAlgo) {
             workDiff = pb->nChainWorkSha256d - pb0->nChainWorkSha256d;
             break;
         case ALGO_SCRYPT:
+            // VELES BEGIN
+            if (pb->nChainWorkScrypt > 0)
+            // VELES END
             workDiff = pb->nChainWorkScrypt - pb0->nChainWorkScrypt;
             break;
         case ALGO_NIST5:
@@ -191,7 +194,7 @@ static UniValue generatetoaddress(const JSONRPCRequest& request)
             "\nMine blocks immediately to a specified address (before the RPC call returns)\n"
             "\nArguments:\n"
             "1. nblocks      (numeric, required) How many blocks are generated immediately.\n"
-            "2. address      (string, required) The address to send the newly generated fxtcoin to.\n"
+            "2. address      (string, required) The address to send the newly generated Veles to.\n"
             "3. maxtries     (numeric, optional) How many iterations to try (default = 1000000).\n"
             "\nResult:\n"
             "[ blockhashes ]     (array) hashes of blocks generated\n"
@@ -495,10 +498,10 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
         throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
 
     if (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "FxTCoin is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Veles is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "FxTCoin is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Veles is downloading blocks...");
 
     // Dash
     // when enforcement is on we need information about a masternode payee or otherwise our block is going to be orphaned by the network

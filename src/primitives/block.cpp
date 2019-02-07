@@ -17,6 +17,10 @@
 #include <crypto/x11.h>
 #include <crypto/x16r.h>
 
+// VELES BEGIN
+#include <versionbits.h>
+// VELES END
+
 uint256 CBlockHeader::GetHash() const
 {
     return SerializeHash(*this);
@@ -25,6 +29,13 @@ uint256 CBlockHeader::GetHash() const
 uint256 CBlockHeader::GetPoWHash() const
 {
     uint256 powHash = uint256S("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+  // VELES BEGIN
+  if ((nVersion & VERSIONBITS_TOP_MASK) != VERSIONBITS_TOP_BITS)
+      scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(powHash));
+  else
+  {
+  // VELES END
 
     switch (nVersion & ALGO_VERSION_MASK)
     {
@@ -37,20 +48,54 @@ uint256 CBlockHeader::GetPoWHash() const
         default:           break; // FXTC TODO: we should not be here
     }
 
+  // VELES BEGIN
+  }
+  // VELES END
     return powHash;
 }
 
 unsigned int CBlockHeader::GetAlgoEfficiency(int nBlockHeight) const
 {
+  int alphaActiveOnBlock = 50000;
+
     switch (nVersion & ALGO_VERSION_MASK)
     {
+        // VELES BEGIN
+        //case ALGO_SHA256D: return       1;
         case ALGO_SHA256D: return       1;
-        case ALGO_SCRYPT:  return   13747;
-        case ALGO_NIST5:   return    2631;
-        case ALGO_LYRA2Z:  return 2014035;
-        case ALGO_X11:     return     477;
-        case ALGO_X16R:    return  263100;
+        //case ALGO_SCRYPT:  return   13747;
+        case ALGO_SCRYPT:  return   12984;
+        //case ALGO_NIST5:   return    2631;
+        case ALGO_NIST5:   return  298735;
+        //case ALGO_LYRA2Z:  return 2014035;
+        case ALGO_LYRA2Z:  return 1973648;
+        //case ALGO_X11:     return     477;
+        case ALGO_X11:     return     513;
+        //case ALGO_X16R:    return  263100;
+        case ALGO_X16R:    return  257849;
+        // VELES END
         default:           return       1; // FXTC TODO: we should not be here
+    }
+
+    if (nBlockHeight >= alphaActiveOnBlock) {
+        switch (nVersion & ALGO_VERSION_MASK)
+        {
+            // VELES BEGIN
+            //case ALGO_SHA256D: return       1;
+            case ALGO_SHA256D: return       10;
+            //case ALGO_SCRYPT:  return   12984;
+            case ALGO_SCRYPT:  return   32460;
+            //case ALGO_NIST5:   return    2631;
+            case ALGO_NIST5:   return  746837;
+            //case ALGO_LYRA2Z:  return 1973648;
+            case ALGO_LYRA2Z:  return 96551;
+            //case ALGO_X11:     return     477;
+            case ALGO_X11:     return     513;
+            //case ALGO_X16R:    return  263100;
+            case ALGO_X16R:    return  257849;
+            // VELES END
+            default:           return       1; // FXTC TODO: we should not be here
+        }
     }
 
     return 1; // FXTC TODO: we should not be here

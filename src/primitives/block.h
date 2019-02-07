@@ -39,6 +39,9 @@ class CBlockHeader
 {
 public:
     // header
+    // VELES BEGIN
+    static const int32_t CURRENT_VERSION = 4;
+    // VELES END
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
@@ -65,7 +68,10 @@ public:
 
     void SetNull()
     {
-        nVersion = 0;
+        // VELES BEGIN
+        //nVersion = 0;
+        nVersion = CBlockHeader::CURRENT_VERSION;
+        // VELES END
         hashPrevBlock.SetNull();
         hashMerkleRoot.SetNull();
         nTime = 0;

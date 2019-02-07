@@ -13,6 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(56, 56, 56);;
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+  </property>
   <layout class="QVBoxLayout" name="topLayout">
    <item>
     <widget class="QLabel" name="labelAlerts">
@@ -39,6 +44,11 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QFrame" name="frame">
+         <property name="styleSheet">
+          <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -52,8 +62,11 @@
              <widget class="QLabel" name="label_5">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -73,13 +86,13 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>The displayed information may be out of date. Your wallet automatically synchronizes with the FxTCoin network after a connection is established, but this process has not completed yet.</string>
+               <string>The displayed information may be out of date. Your wallet automatically synchronizes with the Veles network after a connection is established, but this process has not completed yet.</string>
               </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../bitcoin.qrc">
+               <iconset>
                 <normaloff>:/icons/warning</normaloff>
                 <disabledoff>:/icons/warning</disabledoff>:/icons/warning</iconset>
               </property>
@@ -118,8 +131,11 @@
              <widget class="QLabel" name="labelWatchPending">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -143,8 +159,11 @@
              <widget class="QLabel" name="labelUnconfirmed">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -168,8 +187,11 @@
              <widget class="QLabel" name="labelWatchImmature">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -226,8 +248,11 @@
              <widget class="QLabel" name="labelImmature">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -271,8 +296,11 @@
              <widget class="QLabel" name="labelTotal">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -296,8 +324,11 @@
              <widget class="QLabel" name="labelWatchTotal">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -338,8 +369,11 @@
              <widget class="QLabel" name="labelBalance">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -363,8 +397,11 @@
              <widget class="QLabel" name="labelWatchAvailable">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="cursor">
@@ -425,6 +462,11 @@
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QFrame" name="frame_2">
+         <property name="styleSheet">
+          <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -438,8 +480,11 @@
              <widget class="QLabel" name="label_4">
               <property name="font">
                <font>
-                <weight>75</weight>
-                <bold>true</bold>
+                <family>Uroob</family>
+                <pointsize>12</pointsize>
+                <weight>9</weight>
+                <italic>false</italic>
+                <bold>false</bold>
                </font>
               </property>
               <property name="text">
@@ -459,13 +504,13 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>The displayed information may be out of date. Your wallet automatically synchronizes with the FxTCoin network after a connection is established, but this process has not completed yet.</string>
+               <string>The displayed information may be out of date. Your wallet automatically synchronizes with the Veles network after a connection is established, but this process has not completed yet.</string>
               </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../bitcoin.qrc">
+               <iconset>
                 <normaloff>:/icons/warning</normaloff>
                 <disabledoff>:/icons/warning</disabledoff>:/icons/warning</iconset>
               </property>
@@ -498,7 +543,9 @@
           <item>
            <widget class="QListView" name="listTransactions">
             <property name="styleSheet">
-             <string notr="true">QListView { background: transparent; }</string>
+             <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>

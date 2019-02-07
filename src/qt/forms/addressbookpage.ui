@@ -10,6 +10,11 @@
     <height>380</height>
    </rect>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(70, 81, 86);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="labelExplanation">
@@ -23,6 +28,11 @@
    </item>
    <item>
     <widget class="QLineEdit" name="searchLineEdit">
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
+     </property>
      <property name="placeholderText">
       <string>Enter address or label to search</string>
      </property>
@@ -35,6 +45,11 @@
      </property>
      <property name="toolTip">
       <string>Right-click to edit address or label</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(98, 104, 118);
+color:rgb(211, 215, 207);
+font: 75 12pt &quot;Uroob&quot;;</string>
      </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>

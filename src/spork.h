@@ -30,6 +30,10 @@ static const int SPORK_END                                              = 10013;
 static const int SPORK_FXTC_START                                    = 94680010;
 static const int SPORK_FXTC_END                                      = 94680031;
 // FXTC END
+// VELES BEGIN
+static const int SPORK_VELES_START                                    = 94690010;
+static const int SPORK_VELES_END                                      = 94690030;
+// VELES END
 
 static const int SPORK_2_INSTANTSEND_ENABLED                            = 10001;
 static const int SPORK_3_INSTANTSEND_BLOCK_FILTERING                    = 10002;
@@ -57,11 +61,16 @@ static const int SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_PAYEE        = 94680025;
 
 static const int SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START     = 94680031;
 // FXTC END
+// VELES BEGIN
+static const int SPORK_VELES_01_FXTC_CHAIN_START                      = 94690010;
+static const int SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START         = 94690020;
+static const int SPORK_VELES_03_NO_SUBSIDY_HALVING_START              = 94690030;
+// VELES END
 
 static const int64_t SPORK_2_INSTANTSEND_ENABLED_DEFAULT                = 0;            // ON
 static const int64_t SPORK_3_INSTANTSEND_BLOCK_FILTERING_DEFAULT        = 0;            // ON
-static const int64_t SPORK_5_INSTANTSEND_MAX_VALUE_DEFAULT              = 1000;         // 1000 FxTC
-static const int64_t SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT_DEFAULT     = 4070908800ULL;// OFF
+static const int64_t SPORK_5_INSTANTSEND_MAX_VALUE_DEFAULT              = 1000;         // 1000 Veles
+static const int64_t SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT_DEFAULT     = 1539964282;   // OFF
 static const int64_t SPORK_9_SUPERBLOCKS_ENABLED_DEFAULT                = 4070908800ULL;// OFF
 static const int64_t SPORK_10_MASTERNODE_PAY_UPDATED_NODES_DEFAULT      = 4070908800ULL;// OFF
 static const int64_t SPORK_12_RECONSIDER_BLOCKS_DEFAULT                 = 0;            // 0 BLOCKS
@@ -84,6 +93,11 @@ static const int64_t SPORK_FXTC_02_IGNORE_MASTERNODE_REWARD_PAYEE_DEFAULT   = 40
 
 static const int64_t SPORK_FXTC_03_BLOCK_REWARD_SMOOTH_HALVING_START_DEFAULT  = 4070908800ULL;// OFF
 // FXTC END
+// VELES BEGIN
+static const int64_t SPORK_VELES_01_FXTC_CHAIN_START_DEFAULT                 = 11;// OFF
+static const int64_t SPORK_VELES_02_UNLIMITED_BLOCK_SUBSIDY_START_DEFAULT    = 4070908800ULL;// OFF
+static const int64_t SPORK_VELES_03_NO_SUBSIDY_HALVING_START_DEFAULT         = 4070908800ULL;// OFF
+// VELES END
 
 extern std::map<uint256, CSporkMessage> mapSporks;
 extern CSporkManager sporkManager;
