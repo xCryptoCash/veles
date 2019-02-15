@@ -23,7 +23,7 @@
 // Dash
 #ifdef ENABLE_WALLET
 #include <masternodeconfig.h>
-#endif
+#endif // ENABLE_WALLET
 //
 
 #include <QNetworkProxy>
@@ -88,8 +88,10 @@ void OptionsModel::Init(bool resetSettings)
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
 
     // Dash
+#ifdef ENABLE_WALLET
     if (!settings.contains("fShowMasternodesTab"))
     settings.setValue("fShowMasternodesTab", masternodeConfig.getCount());
+#endif // ENABLE_WALLET
     //
 
     // These are shared with the core or have a command-line parameter
