@@ -3,8 +3,8 @@ AC_PREREQ([2.60])
 define(_CLIENT_VERSION_MAJOR, 0)
 define(_CLIENT_VERSION_MINOR, 17)
 define(_CLIENT_VERSION_REVISION, 0)
-define(_CLIENT_VERSION_BUILD, 22)
-define(_CLIENT_VERSION_IS_RELEASE, true)
+define(_CLIENT_VERSION_BUILD, 99)
+define(_CLIENT_VERSION_IS_RELEASE, false)
 define(_COPYRIGHT_YEAR, 2019)
 dnl VELES BEGIN
 dnl We should declare correct copyright years also for other projects our code
