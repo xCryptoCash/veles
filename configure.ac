@@ -12,7 +12,7 @@ dnl is based on, and update it any time we import/merge changes from
 dnl those projects. Only Satoshi's copyright year will remain hard-coded until
 dnl the real Satoshi Nakamoto reveals himself and we import his new code.
 define(_BITCORE_COPYRIGHT_YEAR, 2019)
-define(_DASH_COPYRIGHT_YEAR, 2017)
+define(_DASH_COPYRIGHT_YEAR, 2018)
 define(_FXTC_COPYRIGHT_YEAR, 2019)
 dnl VELES END
 define(_COPYRIGHT_HOLDERS,[The %s developers])

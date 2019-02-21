@@ -1293,9 +1293,9 @@ std::string CopyrightHolders(const std::string& strPrefix)
     // the same copytight years as the're different for all contributors.
 
     std::string strCopyrightHolders = "Copyright (C) 2018-" + std::to_string(COPYRIGHT_YEAR) + " The Veles Core developers"
-        + "\nCopyright (C) 2018-" + std::to_string(FXTC_COPYRIGHT_YEAR) + "The FXTC developers"
-        + "\nCopyright (C) 2014-" + std::to_string(DASH_COPYRIGHT_YEAR) + "The Dash Core developers"
-        + "\nCopyright (C) 2009-" + std::to_string(BITCORE_COPYRIGHT_YEAR) + "The Bitcoin Core developers"
+        + "\nCopyright (C) 2018-" + std::to_string(FXTC_COPYRIGHT_YEAR) + " The FXTC developers"
+        + "\nCopyright (C) 2014-" + std::to_string(DASH_COPYRIGHT_YEAR) + " The Dash Core developers"
+        + "\nCopyright (C) 2009-" + std::to_string(BITCORE_COPYRIGHT_YEAR) + " The Bitcoin Core developers"
         + "\nCopyright (c) 2009-2010 Satoshi Nakamoto";
 
     return strCopyrightHolders;
