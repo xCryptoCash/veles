@@ -33,6 +33,9 @@ SplashScreen::SplashScreen(interfaces::Node& node, Qt::WindowFlags f, const Netw
     int paddingTop              = 50;
     int titleVersionVSpace      = 17;
     int titleCopyrightVSpace    = 40;
+    // VE:ES BEGIN
+    int titleCopyrightWidth     = 330;
+    // VELES END
 
     float fontFactor            = 1.0;
     float devicePixelRatio      = 1.0;
@@ -57,8 +60,8 @@ SplashScreen::SplashScreen(interfaces::Node& node, Qt::WindowFlags f, const Netw
     QPixmap splashPixmap;
     QRect splashRect(QPoint(0,0), QSize(480,320));
     // Break the line at semantically correct possition
-    copyrightText.replace("The ", " -\n  The ");
-    copyrightText.replace("Satoshi ", " -\n  Satoshi ");
+    //copyrightText.replace("The ", " -\n  The ");
+    //copyrightText.replace("Satoshi ", " -\n  Satoshi ");
     // VELES END
 
     // create a bitmap according to device pixelratio
@@ -117,9 +120,12 @@ SplashScreen::SplashScreen(interfaces::Node& node, Qt::WindowFlags f, const Netw
         pixPaint.setFont(QFont(font, 10*fontFactor));
         titleVersionVSpace -= 5;
     }
-    pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight+2,paddingTop+titleVersionVSpace,versionText);
+    pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight+2,paddingTop+titleVersionVSpace,versionText + " \n\"" + CLIENT_VERSION_CODENAME + "\"");
 
     // draw copyright stuff
+    // VELES BEGIN
+    titleTextWidth = titleCopyrightWidth;
+    // VELES END
     {
         pixPaint.setFont(QFont(font, 10*fontFactor));
         const int x = pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight;
