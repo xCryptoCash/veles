@@ -7,17 +7,13 @@ define(_CLIENT_VERSION_BUILD, 99)
 define(_CLIENT_VERSION_IS_RELEASE, false)
 define(_COPYRIGHT_YEAR, 2019)
 dnl VELES BEGIN
-dnl We should declare correct copyright years also for other projects our code
-dnl is based on, and update it any time we import/merge changes from 
-dnl those projects. Only Satoshi's copyright year will remain hard-coded until
-dnl the real Satoshi Nakamoto reveals himself and we import his new code.
 define(_BITCORE_COPYRIGHT_YEAR, 2019)
 define(_DASH_COPYRIGHT_YEAR, 2018)
 define(_FXTC_COPYRIGHT_YEAR, 2019)
 dnl VELES END
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Veles Core]])
-AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/Velescore/Veles/issues],[bitcoin],[https://veles.network/])
+AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/velescore/veles/issues],[veles],[https://veles.network/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/bitcoin-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
