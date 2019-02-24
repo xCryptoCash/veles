@@ -79,7 +79,7 @@ static bool AppInit(int argc, char* argv[])
         //std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + "\n";
         // VELES BEGIN
         std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + 
-            " \"Aged Amnesia\"" + "\n" + strVelesCoreLogoAscii + "\n";
+            " \"" + CLIENT_VERSION_CODENAME + "\"\n" + strVelesCoreLogoAscii + "\n";
         // VELES END
 
         if (gArgs.IsArgSet("-version"))

@@ -7,17 +7,14 @@ define(_CLIENT_VERSION_BUILD, 0)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2019)
 dnl VELES BEGIN
-dnl We should declare correct copyright years also for other projects our code
-dnl is based on, and update it any time we import/merge changes from 
-dnl those projects. Only Satoshi's copyright year will remain hard-coded until
-dnl the real Satoshi Nakamoto reveals himself and we import his new code.
+define(_CLIENT_VERSION_CODENAME, [Aged Amnesia])
 define(_BITCORE_COPYRIGHT_YEAR, 2019)
 define(_DASH_COPYRIGHT_YEAR, 2018)
 define(_FXTC_COPYRIGHT_YEAR, 2019)
 dnl VELES END
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Veles Core]])
-AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/Velescore/Veles/issues],[bitcoin],[https://veles.network/])
+AC_INIT([Veles Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[https://github.com/velescore/veles/issues],[veles],[https://veles.network/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/bitcoin-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -1354,6 +1351,7 @@ AC_DEFINE(CLIENT_VERSION_BUILD, _CLIENT_VERSION_BUILD, [Version Build])
 AC_DEFINE(CLIENT_VERSION_IS_RELEASE, _CLIENT_VERSION_IS_RELEASE, [Version is release])
 AC_DEFINE(COPYRIGHT_YEAR, _COPYRIGHT_YEAR, [Veles Core copyright year])
 dnl VELES BEGIN
+AC_DEFINE(CLIENT_VERSION_CODENAME, "_CLIENT_VERSION_CODENAME", [Major version codename])
 AC_DEFINE(BITCORE_COPYRIGHT_YEAR, _BITCORE_COPYRIGHT_YEAR, [Bitcoin Core copyright year])
 AC_DEFINE(DASH_COPYRIGHT_YEAR, _DASH_COPYRIGHT_YEAR, [Dash copyright year])
 AC_DEFINE(FXTC_COPYRIGHT_YEAR, _FXTC_COPYRIGHT_YEAR, [FXTC copyright year])
@@ -1369,6 +1367,7 @@ AC_SUBST(CLIENT_VERSION_BUILD, _CLIENT_VERSION_BUILD)
 AC_SUBST(CLIENT_VERSION_IS_RELEASE, _CLIENT_VERSION_IS_RELEASE)
 AC_SUBST(COPYRIGHT_YEAR, _COPYRIGHT_YEAR)
 dnl VELES BEGIN
+AC_SUBST(CLIENT_VERSION_CODENAME, _CLIENT_VERSION_CODENAME)
 AC_SUBST(BITCORE_COPYRIGHT_YEAR, _BITCORE_COPYRIGHT_YEAR)
 AC_SUBST(DASH_COPYRIGHT_YEAR, _DASH_COPYRIGHT_YEAR)
 AC_SUBST(FXTC_COPYRIGHT_YEAR, _FXTC_COPYRIGHT_YEAR)
