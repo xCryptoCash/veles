@@ -388,7 +388,8 @@ endif
 # VELES BEGIN
 RES_IMAGES = \
   qt/res/images/splash.png \
-  qt/res/images/splash_testnet.png
+  qt/res/images/splash_testnet.png \
+  qt/res/images/splash_prerelease.png
 # VELES END
 
 RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)

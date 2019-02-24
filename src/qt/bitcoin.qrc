@@ -100,6 +100,7 @@
     <qresource prefix="/images">
         <file alias="splash">res/images/splash.png</file>
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
+        <file alias="splash_prerelease">res/images/splash_prerelease.png</file>
     </qresource>
     <!-- VELES END -->
 </RCC>
