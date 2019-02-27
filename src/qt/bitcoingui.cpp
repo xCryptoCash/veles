@@ -88,7 +88,9 @@ BitcoinGUI::BitcoinGUI(interfaces::Node& node, const PlatformStyle *_platformSty
     // Veles style upgrade - uncomment to ignore platform style's window  color
     //QMainWindow *mainWindow = (QMainWindow *)this;
     //mainWindow->setStyleSheet("background-color: rgb(56, 56, 56); color: rgb(211, 215, 207); font: 75 12pt 'Uroob';");
-
+    
+    /* Dash port: Open CSS when configured */
+    this->setStyleSheet(GUIUtil::loadStyleSheet());
 
     QString windowTitle = tr(PACKAGE_NAME) + " - ";
 #ifdef ENABLE_WALLET
