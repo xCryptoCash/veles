@@ -5,12 +5,8 @@ QMainWindow {
 }
 
 /* Main horisontal toolbar with buttons */
-
-
-/* Main horisontal toolbar with buttons */
-
 QToolBar {
-    background-image: url('bg.png');
+    background-image: url(':/images/header_bg');
 	border:0px solid #000;
 	padding: 5px 0px 0px;
 	margin:0;
@@ -41,17 +37,10 @@ QToolBar > QToolButton:checked {
 	border-top: 3px solid #eea236;
 }
 
-/*QToolBar > QToolButton:hover {
-	border-top: 3px solid #eea236;
-}*/
-
-
 /* Menu on the top */
 QMenuBar {
 	background-color: #131313;
 	color: #bbb;
-	/*#f3c8ab;*/
-	/*background-image: url('bg.png');*/
 }
 
 QMenuBar::item {
@@ -63,36 +52,12 @@ QMenuBar::item:selected {
 	color: #fff;
 }
 
-/*
-QMenu {
-	background-color:#f8f6f6;
-}
-
-QMenu::item {
-	color:#333;
-}
-
-QMenu::item:selected {
-	background-color:#a0826f;
-	color:#333;
-}
-
-qproperty-toolButtonStyle: ToolButtonIconOnly;
-
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-    	stop: 0 #e3b89b, stop: 1 #f3d8bb);
-
-
-*/
-
 QMenu::item:selected {
 	background-color: #333;
 	color: #fff;
 }
 
-/* Bootstrap style button */
-/* colors: green - 5cb85c border 4cae4c */
-/* Veles brand color button */
+/* Bootstrap style button, default */
 QPushButton {
 	color: #fff;
 	background-color: #333;
@@ -100,24 +65,15 @@ QPushButton {
 	border-radius: 4px;
 	padding: 6px 12px;
 	min-width: 80px;
-	qproperty-icon: url(" ");
+	qproperty-icon: url(" ");	/* hide icons */
 }
 
 QPushButton:hover {
-	background-color: #aaa;
+	background-color: #444;
 }
 
 QPushButton:pressed {
-	background-color: #888;
-}
-
-
-QPushButton#warningIcon, 
-QPushButton#labelTransactionsStatus, 
-QPushButton#labelWalletStatus {
-	qproperty-icon: url(":/icons/warning");
-	background-color: transparent;
-	border: none;
+	background-color: #555;
 }
 
 
@@ -126,7 +82,7 @@ QPushButton#okButton,
 QPushButton#sendButton {
 	color: #EEE;
 	background-color: #5cb85c;
-	border: 2px solid #4cae4c;
+	border: 1px solid #4cae4c;
 }
 
 QPushButton#okButton:hover, 
@@ -146,7 +102,7 @@ QPushButton#removeRequestButton,
 QPushButton#clearButton {
 	color: #EEE;
 	background-color: #d9534f;
-	border: 2px solid #c9433f;
+	border: 1px solid #c9433f;
 }
 
 QPushButton#cancelButton:hover, 
@@ -167,7 +123,7 @@ QPushButton#resetButton,
 QPushButton#clearButton {
 	color: #EEE;
 	background-color: #f0ad4e;
-	border: 2px solid #eea236;
+	border: 1px solid #eea236;
 }
 
 QPushButton#resetButton:hover, 
@@ -184,6 +140,14 @@ QPushButton#clearButton:pressed {
 /* Special-style buttons */
 QPushButton#openBitcoinConfButton {
 	width: 200px;
+}
+
+QPushButton#warningIcon, 
+QPushButton#labelTransactionsStatus, 
+QPushButton#labelWalletStatus {
+	qproperty-icon: url(":/icons/warning");
+	background-color: transparent;
+	border: none;
 }
 
 /* Transparent, fake buttons */
@@ -207,3 +171,29 @@ QWidget#OverviewPage > QFrame {
 	color: transparent;
 	border: none;
 }
+
+
+/*
+useful
+
+
+QMenu {
+	background-color:#f8f6f6;
+}
+
+QMenu::item {
+	color:#333;
+}
+
+QMenu::item:selected {
+	background-color:#a0826f;
+	color:#333;
+}
+
+qproperty-toolButtonStyle: ToolButtonIconOnly;
+
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+    	stop: 0 #e3b89b, stop: 1 #f3d8bb);
+
+
+*/

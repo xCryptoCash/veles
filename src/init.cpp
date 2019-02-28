@@ -409,7 +409,7 @@ void SetupServerArgs()
         "-allowselfsignedrootcertificates", "-choosedatadir", "-lang=<lang>", "-min", "-resetguisettings", "-rootcertificates=<file>", "-splash", "-uiplatform",
         // VELES BEGIN
         // GUI args
-        "-testcss"
+        "-loadcss", "-dumpcss"
         // VELES END
     };
 

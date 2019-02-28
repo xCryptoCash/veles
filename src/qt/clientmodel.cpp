@@ -177,7 +177,14 @@ enum BlockSource ClientModel::getBlockSource() const
 
 QString ClientModel::getStatusBarWarnings() const
 {
-    return QString::fromStdString(m_node.getWarnings("gui"));
+    // VELES BEGIN
+    // Add dev-related warnings if custom CSS from local path is used
+    QString warnings = QString::fromStdString(m_node.getWarnings("gui"));
+    QString customCss = QString::fromStdString(gArgs.GetArg("-customcss", ""));
+
+    return (customCss == "") ? warnings : warnings + "\n" + "[dev] Using custom stylesheet file from path: " + customCss;
+    // VELES END
+    // return QString::fromStdString(gArgs.GetArg("-customcss", ""));
 }
 
 OptionsModel *ClientModel::getOptionsModel()
