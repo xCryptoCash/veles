@@ -389,7 +389,8 @@ endif
 RES_IMAGES = \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
-  qt/res/images/splash_prerelease.png
+  qt/res/images/splash_prerelease.png \
+  qt/res/images/header_bg.png
 
 RES_CSS = \
   qt/res/css/dark.css \

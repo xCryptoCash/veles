@@ -101,6 +101,7 @@
         <file alias="splash">res/images/splash.png</file>
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
         <file alias="splash_prerelease">res/images/splash_prerelease.png</file>
+        <file alias="header_bg">res/images/header_bg.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="dark">res/css/dark.css</file>

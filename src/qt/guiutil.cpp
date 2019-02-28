@@ -795,8 +795,7 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 
 #endif
 
-// Veles (inspired by Dash)
-// Open CSS when configured
+// VELES BEGIN
 QString loadStyleSheet()
 {
     QString styleSheet;
@@ -804,14 +803,14 @@ QString loadStyleSheet()
     QString cssName;
     QString theme = settings.value("theme", "").toString();
 
-    //if(gArgs.GetBoolArg("-qsstest", false)) {
+    if(gArgs.GetBoolArg("-testcss", false)) {
         cssName = QString("test.qss");
-    //} else if(!theme.isEmpty()){
-    //    cssName = QString(":/css/") + theme; 
-    //} else {
-    //    cssName = QString(":/css/dark");  
-    //    settings.setValue("theme", "dark");
-    //}
+    } else if(!theme.isEmpty()){
+        cssName = QString(":/css/") + theme; 
+    } else {
+        cssName = QString(":/css/light");  
+        settings.setValue("theme", "light");
+    }
     
     QFile qFile(cssName);      
     if (qFile.open(QFile::ReadOnly)) {
@@ -820,7 +819,7 @@ QString loadStyleSheet()
         
     return styleSheet;
 }
-//
+// VELES END
 
 void setClipboard(const QString& str)
 {
