@@ -31,6 +31,10 @@
 #include <privatesend.h>
 //
 
+// VELES BEGIN
+#include <QFileInfo>
+// VELES END
+
 #include <stdint.h>
 
 #include <QDebug>
@@ -175,16 +179,40 @@ enum BlockSource ClientModel::getBlockSource() const
     return BlockSource::NONE;
 }
 
+// VELES BEGIN
+QString ClientModel::appendQtWarnings(QString warnings) const
+{
+    QString loadCssPath = QString::fromStdString(gArgs.GetArg("-loadcss", ""));
+    QString dumpCssPath = QString::fromStdString(gArgs.GetArg("-dumpcss", ""));
+
+    if (loadCssPath != "") {
+        QFileInfo checkInputFile(loadCssPath);
+
+        if (checkInputFile.exists() && checkInputFile.isFile())
+            warnings += (warnings.isEmpty() ? "" : "\n") + "[debug] Loaded stylesheet from file: " + loadCssPath;
+        else
+            warnings += (warnings.isEmpty() ? "" : "\n") + "[warning] Cannot load stylesheet - file not found: " + loadCssPath;
+    }
+
+    if (dumpCssPath != "") {
+        QFileInfo checkOutputFile(dumpCssPath);
+
+        if (checkOutputFile.exists() && checkOutputFile.isFile())
+            warnings += (warnings.isEmpty() ? "" : "\n") + "[debug] Dumped current stylesheet to file: " + dumpCssPath;
+        else
+            warnings += (warnings.isEmpty() ? "" : "\n") + "[warning] Cannot dump stylesheet - path not found: " + dumpCssPath;
+    }
+
+    return warnings;
+}
+// VELES END
+
 QString ClientModel::getStatusBarWarnings() const
 {
     // VELES BEGIN
-    // Add dev-related warnings if custom CSS from local path is used
-    QString warnings = QString::fromStdString(m_node.getWarnings("gui"));
-    QString customCss = QString::fromStdString(gArgs.GetArg("-customcss", ""));
-
-    return (customCss == "") ? warnings : warnings + "\n" + "[dev] Using custom stylesheet file from path: " + customCss;
+    // Append Qt wallet development warnings if available
+    return appendQtWarnings(QString::fromStdString(m_node.getWarnings("gui")));
     // VELES END
-    // return QString::fromStdString(gArgs.GetArg("-customcss", ""));
 }
 
 OptionsModel *ClientModel::getOptionsModel()
