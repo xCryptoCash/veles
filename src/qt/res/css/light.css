@@ -79,20 +79,23 @@ QPushButton:pressed {
 
 /* Green button */
 QPushButton#okButton, 
-QPushButton#sendButton {
+QPushButton#sendButton,
+QPushButton#receiveButton {
 	color: #EEE;
 	background-color: #5cb85c;
 	border: 1px solid #4cae4c;
 }
 
 QPushButton#okButton:hover, 
-QPushButton#sendButton:hover {
+QPushButton#sendButton:hover
+QPushButton#receiveButton:hover {
 	background-color: #4cae4c;
 	border: 1px solid #3c983c;
 }
 
 QPushButton#okButton:pressed, 
-QPushButton#sendButon:pressed {
+QPushButton#sendButon:pressed
+QPushButton#receiveButton:pressed {
 	background-color: #3c983c;
 }
 
