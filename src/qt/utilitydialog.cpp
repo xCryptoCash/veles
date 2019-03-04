@@ -65,8 +65,12 @@ HelpMessageDialog::HelpMessageDialog(interfaces::Node& node, QWidget *parent, bo
 
         ui->aboutMessage->setTextFormat(Qt::RichText);
         ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        text = version + "\n" + licenseInfo;
-        ui->aboutMessage->setText(version + "<br><br>" + licenseInfoHTML);
+        // VELES BEGIN
+        text = version + "\n\"" + CLIENT_VERSION_CODENAME + "\"\n\n" + licenseInfo;
+        ui->aboutMessage->setText(version + "<br>\"" + CLIENT_VERSION_CODENAME + "\"<br><br>" + licenseInfoHTML);
+        //text = version + "\n\n" + licenseInfo;
+        //ui->aboutMessage->setText(version + "<br><br>" + licenseInfoHTML);
+        // VELES END
         ui->aboutMessage->setWordWrap(true);
         ui->helpMessage->setVisible(false);
     } else {
