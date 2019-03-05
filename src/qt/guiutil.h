@@ -194,6 +194,9 @@ namespace GUIUtil
     /* Convert OS specific boost path to QString through UTF-8 */
     QString boostPathToQString(const fs::path &path);
 
+    /** Dash port: Load global CSS theme */
+    QString loadStyleSheet();
+
     /* Convert seconds into a QString with days, hours, mins, secs */
     QString formatDurationStr(int secs);
 

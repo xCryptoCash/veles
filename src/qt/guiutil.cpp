@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2014-2017 The Dash Core developers
 // Copyright (c) 2018 FXTC developers
+// Copyright (c) 2018-2019 The Veles Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -55,6 +56,9 @@
 #include <QLineEdit>
 #include <QSettings>
 #include <QTextDocument> // for Qt::mightBeRichText
+// VELES BEGIN
+#include <QTextStream>   // for CSS dumping
+// VELES END
 #include <QThread>
 #include <QUrlQuery>
 #include <QMouseEvent>
@@ -793,6 +797,48 @@ bool GetStartOnSystemStartup() { return false; }
 bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 
 #endif
+
+// VELES BEGIN
+QString loadStyleSheet()
+{
+    //
+    // Load the stylesheet according to settings, overrid with -loadcss parameter,
+    // dump the currently loaded stylesheet with -outcss.
+    //
+    QString styleSheet;
+    QSettings settings;
+    QString cssName;
+    QString theme = settings.value("theme", "").toString();
+    QString customCssPath = QString::fromStdString(gArgs.GetArg("-loadcss", ""));
+    QString dumpCssPath = QString::fromStdString(gArgs.GetArg("-dumpcss", ""));
+
+    if(customCssPath != "") {
+        cssName = customCssPath;                // load custom CSS for dev / testing purposes
+    } else if(!theme.isEmpty()){
+        cssName = QString(":/css/") + theme;    // custom style from settings
+    } else {
+        cssName = QString(":/css/light");       // default style
+        settings.setValue("theme", "light");
+    }
+    
+    // load the css
+    QFile qFile(cssName);      
+    if (qFile.open(QFile::ReadOnly)) {
+        styleSheet = QLatin1String(qFile.readAll());
+    }
+
+    // dump the css if rewuired
+    if(dumpCssPath != "") {
+        QFile outFile(dumpCssPath);
+        if (outFile.open(QFile::WriteOnly | QFile::Truncate)) {
+            QTextStream out(&outFile);
+            out << styleSheet;
+        }
+    }
+        
+    return styleSheet;
+}
+// VELES END
 
 void setClipboard(const QString& str)
 {
