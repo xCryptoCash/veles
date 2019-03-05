@@ -189,18 +189,18 @@ QString ClientModel::appendQtWarnings(QString warnings) const
         QFileInfo checkInputFile(loadCssPath);
 
         if (checkInputFile.exists() && checkInputFile.isFile())
-            warnings += (warnings.isEmpty() ? "" : "\n") + "[debug] Loaded stylesheet from file: " + loadCssPath;
+            warnings += QString(warnings.isEmpty() ? "" : "\n") + "[debug] Loaded stylesheet from file: " + loadCssPath;
         else
-            warnings += (warnings.isEmpty() ? "" : "\n") + "[warning] Cannot load stylesheet - file not found: " + loadCssPath;
+            warnings += QString(warnings.isEmpty() ? "" : "\n") + "[warning] Cannot load stylesheet - file not found: " + loadCssPath;
     }
 
     if (dumpCssPath != "") {
         QFileInfo checkOutputFile(dumpCssPath);
 
         if (checkOutputFile.exists() && checkOutputFile.isFile())
-            warnings += (warnings.isEmpty() ? "" : "\n") + "[debug] Dumped current stylesheet to file: " + dumpCssPath;
+            warnings += QString(warnings.isEmpty() ? "" : "\n") + "[debug] Dumped current stylesheet to file: " + dumpCssPath;
         else
-            warnings += (warnings.isEmpty() ? "" : "\n") + "[warning] Cannot dump stylesheet - path not found: " + dumpCssPath;
+            warnings += QString(warnings.isEmpty() ? "" : "\n") + "[warning] Cannot dump stylesheet - path not found: " + dumpCssPath;
     }
 
     return warnings;
