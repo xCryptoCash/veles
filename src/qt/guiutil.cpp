@@ -802,7 +802,7 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 QString loadStyleSheet()
 {
     //
-    // Load the stylesheet according to settings, overrid with -loadcss parameter,
+    // Load the stylesheet according to settings, override with -loadcss parameter,
     // dump the currently loaded stylesheet with -outcss.
     //
     QString styleSheet;
@@ -814,8 +814,11 @@ QString loadStyleSheet()
 
     if(customCssPath != "") {
         cssName = customCssPath;                // load custom CSS for dev / testing purposes
+
+    /* Not used yet:
     } else if(!theme.isEmpty()){
         cssName = QString(":/css/") + theme;    // custom style from settings
+    */                             
     } else {
         cssName = QString(":/css/light");       // default style
         settings.setValue("theme", "light");
