@@ -363,22 +363,22 @@ void CMasternodeMan::CheckRemoteActivation(CConnman& connman)
             continue;
         }
 
-        if (strStatus == "PRE_ENABLED") {
+        if (strStatus != "ENABLED") {
             std::string strError;
             CMasternodeBroadcast mnb;
 
             bool fResult = CMasternodeBroadcast::Create(mne.getIp(), mne.getPrivKey(), mne.getTxHash(), mne.getOutputIndex(), strError, mnb);
 
             if(fResult) {
-                LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Rebroadcasting of activation message for PRE_ENABLED masternode: SUCCESS - alias=%s\n", mne.getAlias());
+                LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Rebroadcasting of activation message for not ENABLED masternode: SUCCESS - alias=%s\n", mne.getAlias());
                 UpdateMasternodeList(mnb, connman);
                 mnb.Relay(connman);
             } else {
-                LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Rebroadcasting of activation message for PRE_ENABLED masternode: FAIL - alias=%s, error=%s\n", mne.getAlias(), strError);
+                LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Rebroadcasting of activation message for not ENABLED masternode: FAIL - alias=%s, error=%s\n", mne.getAlias(), strError);
             }
             NotifyMasternodeUpdates(connman);
         } else {
-            LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Skipping entry in other than PRE_ENABLED state - alias=%s, status=%s\n", mne.getAlias(), strStatus);
+            LogPrint(BCLog::MASTERNODE, "CMasternodeMan::CheckRemoteActivation -- Skipping entry in ENABLED state - alias=%s, status=%s\n", mne.getAlias(), strStatus);
         }
     }
 }
