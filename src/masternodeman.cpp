@@ -18,7 +18,9 @@
 #include <script/standard.h>
 #include <util.h>
 // VELES BEGIN
+#if defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
 #include <masternodeconfig.h>
+#endif // defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
 // VELES END
 
 /** Masternode manager */
@@ -350,7 +352,7 @@ void CMasternodeMan::CheckAndRemove(CConnman& connman)
 }
 
 // VELES BEGIN
-#ifdef ENABLE_WALLET
+#if defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
 void CMasternodeMan::CheckRemoteActivation(CConnman& connman)
 {
     LogPrintf("CMasternodeMan::CheckRemoteActivation\n");
@@ -386,7 +388,7 @@ void CMasternodeMan::CheckRemoteActivation(CConnman& connman)
     }
 }
 // VELES END
-#endif // ENABLE_WALLET
+#endif // defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
 
 void CMasternodeMan::Clear()
 {
