@@ -471,11 +471,11 @@ void ThreadCheckPrivateSend(CConnman& connman)
             mnodeman.Check();
 
             // VELES BEGIN
-#ifdef ENABLE_WALLET
+#if defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
             // check whether remote masternodes in PRE_ENABLED state need to be re-activated, fixes veles#20
             if(nTick % (MASTERNODE_MIN_MNP_SECONDS / 4) == 30)
                 mnodeman.CheckRemoteActivation(connman);
-#endif // ENABLE_WALLET
+#endif // defined(ENABLE_WALLET) && defined(ENABLE_MN_HELPER)
             // VELES END
 
             // check if we should activate or ping every few minutes,
