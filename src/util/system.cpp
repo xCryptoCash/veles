@@ -95,7 +95,7 @@ bool fLiteMode = false;
 int nWalletBackups = 10;
 //
 
-const char * const BITCOIN_CONF_FILENAME = "fxtc.conf";
+const char * const BITCOIN_CONF_FILENAME = "veles.conf";
 
 const char * const MASTERNODE_CONF_FILENAME_ARG = "-mnconf";
 const char * const MASTERNODE_CONF_FILENAME = "masternode.conf";
@@ -252,7 +252,7 @@ public:
         std::pair<bool,std::string> found_result(false, std::string());
 
         // We pass "true" to GetArgHelper in order to return the last
-        // argument value seen from the command line (so "fxtcd -foo=bar
+        // argument value seen from the command line (so "velesd -foo=bar
         // -foo=baz" gives GetArg(am,"foo")=={true,"baz"}
         found_result = GetArgHelper(am.m_override_args, arg, true);
         if (found_result.first) {
@@ -705,7 +705,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(nullptr, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "fxtc";
+    const char* pszModule = "veles";
 #endif
     if (pex)
         return strprintf(
@@ -724,13 +724,13 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 fs::path GetDefaultDataDir()
 {
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\FxTC
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\FxTC
-    // Mac: ~/Library/Application Support/FxTC
-    // Unix: ~/.fxtc
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Veles
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Veles
+    // Mac: ~/Library/Application Support/Veles
+    // Unix: ~/.veles
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "FxTC";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Veles";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -740,10 +740,10 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // Mac
-    return pathRet / "Library/Application Support/FxTC";
+    return pathRet / "Library/Application Support/Veles";
 #else
     // Unix
-    return pathRet / ".fxtc";
+    return pathRet / ".veles";
 #endif
 #endif
 }
@@ -1282,6 +1282,7 @@ std::string CopyrightHolders(const std::string& strPrefix)
 {
     // FXTC BEGIN
     //std::string strCopyrightHolders = strPrefix + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
+    /*
     std::string strCopyrightHolders = strPrefix + strprintf(" %u-%u ", 2009, COPYRIGHT_YEAR) + "The Bitcoin Core developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, 2018) + "The Dash Core developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, 2018) + "The Talkcoin developers";
@@ -1289,7 +1290,18 @@ std::string CopyrightHolders(const std::string& strPrefix)
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2017, 2018) + "The PIVX developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2018, 2019) + "The Veles Core developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2018, COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
+    */
     // FXTC END
+    // VELES BEGIN
+    std::string strCopyrightHolders = strPrefix + strprintf(" %u-%u ", 2018, COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2009, BITCORE_COPYRIGHT_YEAR) + "The Bitcoin Core developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2018, FXTC_COPYRIGHT_YEAR) + "The FxTC developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, DASH_COPYRIGHT_YEAR) + "The Dash Core developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, 2018) + "The Talkcoin developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2017, 2018) + "The Zcoin developers";`
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2017, 2018) + "The PIVX developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2009, 2010) + "Satoshi Nakamoto";
+    // VELES END
 
     // Check for untranslated substitution to make sure Bitcoin Core copyright is not removed by accident
     if (strCopyrightHolders.find("Bitcoin Core") == std::string::npos) {
