@@ -1295,7 +1295,7 @@ std::string CopyrightHolders(const std::string& strPrefix)
     // VELES BEGIN
     std::string strCopyrightHolders = strPrefix + strprintf(" %u-%u ", 2018, COPYRIGHT_YEAR) + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2009, BITCORE_COPYRIGHT_YEAR) + "The Bitcoin Core developers";
-    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2018, FXTC_COPYRIGHT_YEAR) + "The FxTC developers";
+    strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2018, FXTC_COPYRIGHT_YEAR) + "The Veles developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, DASH_COPYRIGHT_YEAR) + "The Dash Core developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2014, 2018) + "The Talkcoin developers";
     strCopyrightHolders += "\n" + strPrefix + strprintf(" %u-%u ", 2017, 2018) + "The Zcoin developers";`

@@ -1,14 +1,14 @@
 *.tar.gz
 
 *.exe
-src/fxtc
-src/fxtcd
-src/fxtc-cli
-src/fxtc-tx
-src/fxtc-wallet
-src/test/test_fxtc
-src/test/test_fxtc_fuzzy
-src/qt/test/test_fxtc-qt
+src/veles
+src/velesd
+src/veles-cli
+src/veles-tx
+src/veles-wallet
+src/test/test_veles
+src/test/test_veles_fuzzy
+src/qt/test/test_veles-qt
 
 # autoreconf
 Makefile.in
@@ -82,13 +82,13 @@ src/qt/bitcoin-qt.includes
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-fxtc-qt
-FxTC-Qt.app
+veles-qt
+Veles-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
-fxtc-qt_test
+veles-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -101,7 +101,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_fxtc.coverage/
+test_veles.coverage/
 total.coverage/
 coverage_percent.txt
 

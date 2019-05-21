@@ -29,16 +29,16 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>FxTC-Qt</string>
+  <string>Veles-Qt</string>
   
   <key>CFBundleName</key>
-  <string>FxTC-Qt</string>
+  <string>Veles-Qt</string>
 
   <key>LSHasLocalizedDisplayName</key>
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.fxtcoinfoundation.FxTC-Qt</string>
+  <string>org.fxtcoinfoundation.Veles-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -46,7 +46,7 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>org.fxtcoin.FxTCoinPayment</string>
+      <string>org.fxtcoin.VelesPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
         <string>fxtcoin</string>
@@ -60,7 +60,7 @@
       <key>UTTypeIdentifier</key>
       <string>org.fxtcoin.paymentrequest</string>
       <key>UTTypeDescription</key>
-      <string>FxTCoin payment request</string>
+      <string>Veles payment request</string>
       <key>UTTypeConformsTo</key>
       <array>
         <string>public.data</string>

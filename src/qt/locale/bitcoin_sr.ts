@@ -66,12 +66,12 @@
         <translation>Адресе за примање</translation>
     </message>
     <message>
-        <source>These are your FxTCoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Ово су ваше FxTCоин адресе за слање уплата. Увек добро проверите износ и адресу на коју шаљете пре него што пошаљете уплату.</translation>
+        <source>These are your Veles addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Ово су ваше Velesоин адресе за слање уплата. Увек добро проверите износ и адресу на коју шаљете пре него што пошаљете уплату.</translation>
     </message>
     <message>
-        <source>These are your FxTCoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Ово су ваше FxTCоин адресе за примање уплате. Препоручује се да се за сваку трансакцију користи нова адреса.</translation>
+        <source>These are your Veles addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Ово су ваше Velesоин адресе за примање уплате. Препоручује се да се за сваку трансакцију користи нова адреса.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -338,8 +338,8 @@
         <translation>Прокси је &lt;b&gt;омогућен&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a FxTCoin address</source>
-        <translation>Пошаљите новац на FxTCоин адресу</translation>
+        <source>Send coins to a Veles address</source>
+        <translation>Пошаљите новац на Velesоин адресу</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -362,8 +362,8 @@
         <translation>&amp;Верификовање поруке...</translation>
     </message>
     <message>
-        <source>FxTCoin</source>
-        <translation>FxTCоин</translation>
+        <source>Veles</source>
+        <translation>Velesоин</translation>
     </message>
     <message>
         <source>&amp;Send</source>
@@ -386,12 +386,12 @@
         <translation>Шифрирај приватни клуљ који припада новчанику.</translation>
     </message>
     <message>
-        <source>Sign messages with your FxTCoin addresses to prove you own them</source>
-        <translation>Потписуј поруку са своје FxTCоин адресе као доказ да си њихов власник</translation>
+        <source>Sign messages with your Veles addresses to prove you own them</source>
+        <translation>Потписуј поруку са своје Velesоин адресе као доказ да си њихов власник</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified FxTCoin addresses</source>
-        <translation>Верификуј поруке и утврди да ли су потписане од стране спецификованих FxTCоин адреса</translation>
+        <source>Verify messages to ensure they were signed with specified Veles addresses</source>
+        <translation>Верификуј поруке и утврди да ли су потписане од стране спецификованих Velesоин адреса</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -410,8 +410,8 @@
         <translation>Трака са картицама</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and fxtcoin: URIs)</source>
-        <translation>Затражи плаћање (генерише QR кодове и FxTCоин: URI-е)</translation>
+        <source>Request payments (generates QR codes and velesoin: URIs)</source>
+        <translation>Затражи плаћање (генерише QR кодове и Velesоин: URI-е)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -422,16 +422,16 @@
         <translation>Прегледајте листу коришћених адреса и етикета за пријем уплата</translation>
     </message>
     <message>
-        <source>Open a fxtcoin: URI or payment request</source>
-        <translation>Отворите FxTCоин: URI или захтев за плаћање</translation>
+        <source>Open a velesoin: URI or payment request</source>
+        <translation>Отворите Velesоин: URI или захтев за плаћање</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>&amp;Опције командне линије</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to FxTCoin network</source>
-        <translation><numerusform>%n aктивна веза са FxTCоин мрежом</numerusform><numerusform>%n aктивних веза са FxTCоин мрежом</numerusform><numerusform>%n aктивних веза са FxTCоин мрежом</numerusform></translation>
+        <source>%n active connection(s) to Veles network</source>
+        <translation><numerusform>%n aктивна веза са Velesоин мрежом</numerusform><numerusform>%n aктивних веза са Velesоин мрежом</numerusform><numerusform>%n aктивних веза са FxTCоин мрежом</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -474,8 +474,8 @@
         <translation>Ажурно</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible FxTCoin command-line options</source>
-        <translation>Прикажи  поруку помоћи %1 за листу са могућим опцијама FxTCоин командне линије</translation>
+        <source>Show the %1 help message to get a list with possible Veles command-line options</source>
+        <translation>Прикажи  поруку помоћи %1 за листу са могућим опцијама Velesоин командне линије</translation>
     </message>
     <message>
         <source>default wallet</source>
@@ -550,8 +550,8 @@
         <translation>Новчаник јс &lt;b&gt;шифрован&lt;/b&gt; и тренутно &lt;b&gt;закључан&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>A fatal error occurred. FxTCoin can no longer continue safely and will quit.</source>
-        <translation>Дошло је до критичне грешке. FxTCоин не може безбедно да настави са радом и искључиће се.</translation>
+        <source>A fatal error occurred. Veles can no longer continue safely and will quit.</source>
+        <translation>Дошло је до критичне грешке. Velesоин не може безбедно да настави са радом и искључиће се.</translation>
     </message>
 </context>
 <context>
@@ -806,8 +806,8 @@
         <translation>Користите прилагођени директоријум података:</translation>
     </message>
     <message>
-        <source>FxTCoin</source>
-        <translation>FxTCоин</translation>
+        <source>Veles</source>
+        <translation>Velesоин</translation>
     </message>
     <message>
         <source>Error</source>
