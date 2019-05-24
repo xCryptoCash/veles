@@ -2,6 +2,7 @@
 // Copyright (c) 2018 FXTC developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// This is an edidt for personal reasons
 
 #include <activemasternode.h>
 #include <addrman.h>
